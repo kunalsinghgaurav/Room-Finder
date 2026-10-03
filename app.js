@@ -1,48 +1,52 @@
-let roomsData = JSON.parse(localStorage.getItem("myRooms")) || [
-  {
-    id: 1,
-    title: "Single Room Near Coaching Hub",
-    location: "Kankarbagh / Main Market",
-    type: "Boys",
-    rent: 3000,
-    isRented: false,
-    image: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=600&q=80",
-    phone: "919876543210",
-    amenities: ["Wi-Fi", "RO Water", "No Restrictions"]
-  },
-  {
-    id: 2,
-    title: "1 BHK Flat for Girls/Students",
-    location: "Near Girls College",
-    type: "Girls",
-    rent: 4500,
-    isRented: false,
-    image: "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=600&q=80",
-    phone: "919876543211",
-    amenities: ["Attached Washroom", "Safe Gated", "CCTV"]
-  }
-];
+// Supabase Configuration
+const SUPABASE_URL = "https://ndegekylfrhroyyhumyo.supabase.co";
+const SUPABASE_KEY = "sb_publishable_hwBUpVWGEoWrQgiiG8ZgBw_ZM_aJyH2";
 
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let roomsData = [];
+
+// SQL Table se Rooms Fetch Karna
+async function fetchRooms() {
+  const container = document.getElementById("roomContainer");
+  container.innerHTML = `<p class="col-span-full text-center text-gray-500 py-8">SQL Database se rooms load ho rahe hain...</p>`;
+
+  const { data, error } = await db
+    .from('rooms')
+    .select('*')
+    .order('id', { ascending: false });
+
+  if (error) {
+    console.error("Error fetching rooms:", error);
+    container.innerHTML = `<p class="col-span-full text-center text-red-500 py-8">Database connect karne me dikkat aayi.</p>`;
+    return;
+  }
+
+  roomsData = data || [];
+  applyFilters();
+}
+
+// Display Cards
 function displayRooms(rooms) {
   const container = document.getElementById("roomContainer");
   container.innerHTML = "";
 
   if (rooms.length === 0) {
-    container.innerHTML = `<p class="col-span-full text-center text-gray-500 py-8 font-medium">Aapke search ke hisab se koi room nahi mila.</p>`;
+    container.innerHTML = `<p class="col-span-full text-center text-gray-500 py-8 font-medium">Abhi koi room available nahi hai ya search se match nahi hua.</p>`;
     return;
   }
 
   rooms.forEach(room => {
     const message = encodeURIComponent(`Namaste, maine RoomDekho par aapka room dekha: "${room.title}". Kya ye abhi khali hai?`);
     const whatsappUrl = `https://wa.me/${room.phone}?text=${message}`;
+    const amenitiesList = Array.isArray(room.amenities) ? room.amenities : [];
 
     const card = `
-      <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition flex flex-col relative ${room.isRented ? 'opacity-60 grayscale' : ''}">
+      <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition flex flex-col relative ${room.is_rented ? 'opacity-60 grayscale' : ''}">
         
-        <!-- Status Badge -->
-        ${room.isRented ? '<span class="absolute top-3 left-3 bg-red-600 text-white text-xs px-2.5 py-1 rounded-md font-bold uppercase z-10 shadow">Rented Out</span>' : ''}
+        ${room.is_rented ? '<span class="absolute top-3 left-3 bg-red-600 text-white text-xs px-2.5 py-1 rounded-md font-bold uppercase z-10 shadow">Rented Out</span>' : ''}
 
-        <img src="${room.image}" alt="${room.title}" class="h-48 w-full object-cover">
+        <img src="${room.image}" alt="${room.title}" class="h-48 w-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=600'">
         
         <div class="p-5 flex-1 flex flex-col justify-between">
           <div>
@@ -55,13 +59,12 @@ function displayRooms(rooms) {
             <p class="text-sm text-gray-500 mb-3">📍 ${room.location}</p>
             
             <div class="flex flex-wrap gap-1 mb-4">
-              ${room.amenities.map(tag => `<span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">${tag}</span>`).join('')}
+              ${amenitiesList.map(tag => `<span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">${tag}</span>`).join('')}
             </div>
           </div>
 
           <div class="space-y-2">
-            <!-- WhatsApp Button -->
-            ${!room.isRented ? `
+            ${!room.is_rented ? `
               <a href="${whatsappUrl}" target="_blank" class="w-full bg-green-500 hover:bg-green-600 text-white font-medium py-2 rounded-lg text-center flex items-center justify-center gap-2 transition">
                 <span>Owner Se WhatsApp Karein</span>
               </a>
@@ -71,10 +74,9 @@ function displayRooms(rooms) {
               </button>
             `}
 
-            <!-- Action Controls (Toggle Rented / Delete) -->
             <div class="flex gap-2 pt-2 border-t text-xs">
-              <button onclick="toggleRented(${room.id})" class="flex-1 py-1.5 rounded border border-gray-300 hover:bg-gray-100 text-gray-600 font-medium">
-                ${room.isRented ? 'Mark Available' : 'Mark as Rented'}
+              <button onclick="toggleRented(${room.id}, ${room.is_rented})" class="flex-1 py-1.5 rounded border border-gray-300 hover:bg-gray-100 text-gray-600 font-medium">
+                ${room.is_rented ? 'Mark Available' : 'Mark as Rented'}
               </button>
               <button onclick="deleteRoom(${room.id})" class="px-3 py-1.5 rounded border border-red-200 text-red-500 hover:bg-red-50 font-medium">
                 Delete
@@ -90,61 +92,85 @@ function displayRooms(rooms) {
 }
 
 function toggleForm() {
-  const formSection = document.getElementById("formSection");
-  formSection.classList.toggle("hidden");
+  document.getElementById("formSection").classList.toggle("hidden");
 }
 
-function addNewRoom(event) {
+// SQL Table me Insert Karna
+async function addNewRoom(event) {
   event.preventDefault();
+  const btn = document.getElementById("submitBtn");
+  btn.innerText = "Saving to SQL Database...";
+  btn.disabled = true;
+
+  const rawAmenities = document.getElementById("amenities").value;
+  const amenitiesArray = rawAmenities ? rawAmenities.split(",").map(i => i.trim()).filter(Boolean) : [];
 
   const newRoom = {
-    id: Date.now(),
     title: document.getElementById("title").value,
     location: document.getElementById("location").value,
     rent: parseInt(document.getElementById("rent").value),
     type: document.getElementById("type").value,
     phone: document.getElementById("phone").value,
     image: document.getElementById("image").value,
-    isRented: false,
-    amenities: document.getElementById("amenities").value.split(",").map(item => item.trim())
+    is_rented: false,
+    amenities: amenitiesArray
   };
 
-  roomsData.unshift(newRoom);
-  saveAndRefresh();
+  const { error } = await db.from('rooms').insert([newRoom]);
+
+  btn.innerText = "Save & Publish Room";
+  btn.disabled = false;
+
+  if (error) {
+    alert("Room save karne me error aaya: " + error.message);
+    return;
+  }
 
   document.getElementById("roomForm").reset();
   toggleForm();
+  fetchRooms();
 }
 
-function toggleRented(id) {
-  roomsData = roomsData.map(room => {
-    if (room.id === id) {
-      return { ...room, isRented: !room.isRented };
-    }
-    return room;
-  });
-  saveAndRefresh();
+// SQL Table me Update (Toggle Rented)
+async function toggleRented(id, currentStatus) {
+  const { error } = await db
+    .from('rooms')
+    .update({ is_rented: !currentStatus })
+    .eq('id', id);
+
+  if (error) {
+    alert("Update fail hua: " + error.message);
+    return;
+  }
+  fetchRooms();
 }
 
-function deleteRoom(id) {
+// SQL Table se Delete
+async function deleteRoom(id) {
   if (confirm("Kya aap sach me is room ko delete karna chahte hain?")) {
-    roomsData = roomsData.filter(room => room.id !== id);
-    saveAndRefresh();
+    const { error } = await db
+      .from('rooms')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      alert("Delete fail hua: " + error.message);
+      return;
+    }
+    fetchRooms();
   }
 }
 
-function saveAndRefresh() {
-  localStorage.setItem("myRooms", JSON.stringify(roomsData));
-  applyFilters();
-}
-
+// Filters
 function applyFilters() {
   const search = document.getElementById("searchInput").value.toLowerCase();
   const selectedType = document.getElementById("typeFilter").value;
   const maxBudget = parseInt(document.getElementById("budgetFilter").value);
 
   const filtered = roomsData.filter(room => {
-    const matchesSearch = room.location.toLowerCase().includes(search) || room.title.toLowerCase().includes(search);
+    const titleMatch = room.title ? room.title.toLowerCase().includes(search) : false;
+    const locMatch = room.location ? room.location.toLowerCase().includes(search) : false;
+    const matchesSearch = titleMatch || locMatch;
     const matchesType = selectedType === "All" || room.type === selectedType;
     const matchesBudget = room.rent <= maxBudget;
 
@@ -154,5 +180,5 @@ function applyFilters() {
   displayRooms(filtered);
 }
 
-// Initial render
-applyFilters();
+// App start hote hi Database se load karein
+fetchRooms();
