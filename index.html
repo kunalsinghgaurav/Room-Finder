@@ -7,6 +7,9 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Supabase CDN Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4f46e5">
 </head>
 <body class="bg-gray-100 font-sans text-gray-800">
 
@@ -15,22 +18,28 @@
     <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
       <div>
         <h1 class="text-2xl font-bold text-indigo-600">🏠 RoomDekho</h1>
-        <p class="text-xs text-gray-400">Patna Rental Hub - Direct Owner Contact</p>
+        <p class="text-xs text-gray-400">Direct Owner Contact • 0 Brokerage</p>
       </div>
-      <button onclick="toggleForm()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition shadow">
-        + Apna Room List Karein
-      </button>
+      <div class="flex gap-2">
+        <!-- PWA Install Button (Mobile/Desktop) -->
+        <button id="installAppBtn" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-2 rounded-lg transition shadow">
+          📲 Install App
+        </button>
+        <button onclick="toggleForm()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-semibold px-3 sm:px-4 py-2 rounded-lg transition shadow">
+          + Room List Karein
+        </button>
+      </div>
     </div>
   </header>
 
-  <!-- Add Room Form Modal/Section -->
+  <!-- Add Room Form Modal -->
   <section id="formSection" class="hidden max-w-2xl mx-auto px-4 py-6">
     <div class="bg-white p-6 rounded-xl shadow-lg border border-indigo-100">
-      <h3 class="text-xl font-bold text-gray-800 mb-4">Naya Room Cloud Database Me Add Karein</h3>
+      <h3 class="text-xl font-bold text-gray-800 mb-4">Naya Room List Karein</h3>
       <form id="roomForm" onsubmit="addNewRoom(event)" class="space-y-4">
         <div>
           <label class="block text-xs font-semibold text-gray-600 mb-1">Room Title</label>
-          <input type="text" id="title" required placeholder="e.g. Furnished 1BHK / Single Room near Station" class="w-full border p-2 rounded-lg bg-gray-50 focus:outline-indigo-500">
+          <input type="text" id="title" required placeholder="e.g. Furnished Single Room near Station" class="w-full border p-2 rounded-lg bg-gray-50 focus:outline-indigo-500">
         </div>
         
         <div class="grid grid-cols-2 gap-4">
@@ -46,10 +55,6 @@
 
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-semibold text-gray-600 mb-1">Security Deposit (₹)</label>
-            <input type="number" id="deposit" placeholder="e.g. 4500 (Optional)" class="w-full border p-2 rounded-lg bg-gray-50 focus:outline-indigo-500">
-          </div>
-          <div>
             <label class="block text-xs font-semibold text-gray-600 mb-1">Tenant Type</label>
             <select id="type" class="w-full border p-2 rounded-lg bg-gray-50 focus:outline-indigo-500">
               <option value="Boys">Boys</option>
@@ -57,16 +62,16 @@
               <option value="Family">Family</option>
             </select>
           </div>
+          <div>
+            <label class="block text-xs font-semibold text-gray-600 mb-1">WhatsApp / Calling Number</label>
+            <input type="tel" id="phone" required placeholder="e.g. 9876543210" class="w-full border p-2 rounded-lg bg-gray-50 focus:outline-indigo-500">
+          </div>
         </div>
 
+        <!-- Direct Gallery Photo Upload -->
         <div>
-          <label class="block text-xs font-semibold text-gray-600 mb-1">Phone / WhatsApp Number (10 Digits)</label>
-          <input type="tel" id="phone" required placeholder="e.g. 9876543210" class="w-full border p-2 rounded-lg bg-gray-50 focus:outline-indigo-500">
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-gray-600 mb-1">Room Image URL</label>
-          <input type="url" id="image" required placeholder="Paste image link here" class="w-full border p-2 rounded-lg bg-gray-50 focus:outline-indigo-500">
+          <label class="block text-xs font-semibold text-gray-600 mb-1">Room Photo (Phone Gallery / Files se select karein)</label>
+          <input type="file" id="imageFile" accept="image/*" required class="w-full border p-2 rounded-lg bg-gray-50 text-sm file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
         </div>
 
         <div>
@@ -86,12 +91,11 @@
     </div>
   </section>
 
-  <!-- Hero Section & Filters -->
+  <!-- Filters & Search -->
   <section class="max-w-6xl mx-auto px-4 py-8">
     <h2 class="text-3xl font-extrabold text-center mb-2">Apne Budget Me Room Dhundhein</h2>
-    <p class="text-center text-gray-500 mb-6">Direct Google Map Navigation & Instant Call/WhatsApp</p>
+    <p class="text-center text-gray-500 mb-6">Direct Navigation • Instant Call • Verified Listings</p>
 
-    <!-- Search & Filter Controls -->
     <div class="bg-white p-4 rounded-xl shadow-md space-y-4">
       <div>
         <input type="text" id="searchInput" oninput="applyFilters()" placeholder="🔍 Area ya landmark search karein (e.g. Boring Road, Kankarbagh)..." class="w-full border p-2.5 rounded-lg bg-gray-50 focus:outline-indigo-500">
@@ -100,17 +104,16 @@
       <!-- Quick Area Chips -->
       <div class="flex flex-wrap gap-2 items-center">
         <span class="text-xs font-semibold text-gray-500 mr-1">Popular:</span>
-        <button onclick="setAreaFilter('')" class="chip-btn text-xs bg-indigo-50 text-indigo-700 font-medium px-3 py-1.5 rounded-full hover:bg-indigo-100 transition border border-indigo-200">Sabhi (All)</button>
-        <button onclick="setAreaFilter('Boring Road')" class="chip-btn text-xs bg-gray-100 text-gray-700 font-medium px-3 py-1.5 rounded-full hover:bg-gray-200 transition">Boring Road</button>
-        <button onclick="setAreaFilter('Kankarbagh')" class="chip-btn text-xs bg-gray-100 text-gray-700 font-medium px-3 py-1.5 rounded-full hover:bg-gray-200 transition">Kankarbagh</button>
-        <button onclick="setAreaFilter('Rajendra Nagar')" class="chip-btn text-xs bg-gray-100 text-gray-700 font-medium px-3 py-1.5 rounded-full hover:bg-gray-200 transition">Rajendra Nagar</button>
-        <button onclick="setAreaFilter('Patna Junction')" class="chip-btn text-xs bg-gray-100 text-gray-700 font-medium px-3 py-1.5 rounded-full hover:bg-gray-200 transition">Patna Junction</button>
-        <button onclick="setAreaFilter('Danapur')" class="chip-btn text-xs bg-gray-100 text-gray-700 font-medium px-3 py-1.5 rounded-full hover:bg-gray-200 transition">Danapur</button>
+        <button onclick="setAreaFilter('')" class="text-xs bg-indigo-50 text-indigo-700 font-medium px-3 py-1.5 rounded-full border border-indigo-200">Sabhi (All)</button>
+        <button onclick="setAreaFilter('Boring Road')" class="text-xs bg-gray-100 text-gray-700 font-medium px-3 py-1.5 rounded-full hover:bg-gray-200">Boring Road</button>
+        <button onclick="setAreaFilter('Kankarbagh')" class="text-xs bg-gray-100 text-gray-700 font-medium px-3 py-1.5 rounded-full hover:bg-gray-200">Kankarbagh</button>
+        <button onclick="setAreaFilter('Rajendra Nagar')" class="text-xs bg-gray-100 text-gray-700 font-medium px-3 py-1.5 rounded-full hover:bg-gray-200">Rajendra Nagar</button>
+        <button onclick="setAreaFilter('Patna Junction')" class="text-xs bg-gray-100 text-gray-700 font-medium px-3 py-1.5 rounded-full hover:bg-gray-200">Patna Junction</button>
       </div>
 
       <div class="flex flex-wrap gap-4 items-center justify-between border-t pt-3">
         <div class="flex-1 min-w-[150px]">
-          <label class="block text-xs font-semibold text-gray-500 mb-1">Kis ke liye chahiye?</label>
+          <label class="block text-xs font-semibold text-gray-500 mb-1">Tenant Type</label>
           <select id="typeFilter" onchange="applyFilters()" class="w-full border p-2 rounded-lg bg-gray-50 focus:outline-indigo-500">
             <option value="All">Sabhi (All)</option>
             <option value="Boys">Boys</option>
@@ -120,7 +123,7 @@
         </div>
 
         <div class="flex-1 min-w-[150px]">
-          <label class="block text-xs font-semibold text-gray-500 mb-1">Max Monthly Rent</label>
+          <label class="block text-xs font-semibold text-gray-500 mb-1">Max Budget</label>
           <select id="budgetFilter" onchange="applyFilters()" class="w-full border p-2 rounded-lg bg-gray-50 focus:outline-indigo-500">
             <option value="100000">No Limit</option>
             <option value="10000">Upto ₹10,000</option>
@@ -133,19 +136,16 @@
     </div>
   </section>
 
-  <!-- Room Cards Grid -->
+  <!-- Room Cards -->
   <main class="max-w-6xl mx-auto px-4 pb-16">
     <div id="roomContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-      <p class="col-span-full text-center text-gray-500 py-8">SQL Database se rooms load ho rahe hain...</p>
+      <p class="col-span-full text-center text-gray-500 py-8">Rooms load ho rahe hain...</p>
     </div>
   </main>
 
-  <!-- Fullscreen Image Preview Lightbox Modal -->
-  <div id="imageModal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 cursor-pointer" onclick="closeImageModal()">
-    <div class="relative max-w-4xl max-h-[90vh]">
-      <img id="modalImg" src="" alt="Room Preview" class="max-w-full max-h-[85vh] rounded-lg shadow-2xl object-contain">
-      <p class="text-white text-center text-xs mt-2">Kahin bhi click karke band karein</p>
-    </div>
+  <!-- Fullscreen Modal -->
+  <div id="imageModal" class="hidden fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 cursor-pointer" onclick="closeImageModal()">
+    <img id="modalImg" src="" alt="Room Preview" class="max-w-full max-h-[85vh] rounded-lg shadow-2xl object-contain">
   </div>
 
   <script src="app.js"></script>
