@@ -1,15 +1,23 @@
 {
   "name": "RoomDekho - Zero Brokerage Rooms",
   "short_name": "RoomDekho",
-  "start_url": "./index.html",
+  "start_url": "/Room-Finder/",
+  "scope": "/Room-Finder/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#4f46e5",
   "icons": [
     {
+      "src": "https://cdn-icons-png.flaticon.com/192/619/619153.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
       "src": "https://cdn-icons-png.flaticon.com/512/619/619153.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
