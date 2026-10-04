@@ -1,7 +1,7 @@
 // Supabase Configuration
 const SUPABASE_URL = "https://ndegekylfrhroyyhumyo.supabase.co";
 const SUPABASE_KEY = "sb_publishable_hwBUpVWGEoWrQgiiG8ZgBw_ZM_aJyH2";
-const ADMIN_PIN = "1234"; // Aap yahan apna pasandeeda 4-digit PIN rakh sakte hain
+const ADMIN_PIN = "1234";
 
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 let roomsData = [];
@@ -88,7 +88,7 @@ function displayRooms(rooms) {
             </button>
           `}
 
-          <!-- Admin Protected Actions -->
+          <!-- Admin Actions -->
           <div class="flex gap-2 pt-2 border-t text-[11px]">
             <button onclick="adminToggleRented(${room.id}, ${room.is_rented})" class="flex-1 py-1 rounded border border-gray-300 hover:bg-gray-100 text-gray-600 font-medium">
               ${room.is_rented ? 'Mark Available (Admin)' : 'Mark as Rented (Admin)'}
@@ -108,7 +108,7 @@ function toggleForm() {
   document.getElementById("formSection").classList.toggle("hidden");
 }
 
-// Direct Gallery File Upload to Supabase Storage
+// Direct Gallery File Upload to Supabase Storage ('Room finder' bucket)
 async function addNewRoom(event) {
   event.preventDefault();
   const btn = document.getElementById("submitBtn");
@@ -127,16 +127,16 @@ async function addNewRoom(event) {
     const fileExt = file.name.split('.').pop();
     const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
 
-    // Upload to Supabase Bucket
+    // Bucket name fixed to 'Room finder'
     const { error: uploadError } = await db.storage
-      .from('room-images')
+      .from('Room finder')
       .upload(fileName, file);
 
     if (uploadError) throw uploadError;
 
     // Get Public Image URL
     const { data: publicUrlData } = db.storage
-      .from('room-images')
+      .from('Room finder')
       .getPublicUrl(fileName);
 
     btn.innerText = "Database me save ho raha hai...";
@@ -169,7 +169,7 @@ async function addNewRoom(event) {
   }
 }
 
-// Admin PIN Protected Rented Status
+// Admin PIN Protection
 async function adminToggleRented(id, currentStatus) {
   const pin = prompt("Admin PIN enter karein status badalne ke liye:");
   if (pin !== ADMIN_PIN) {
@@ -182,7 +182,6 @@ async function adminToggleRented(id, currentStatus) {
   else fetchRooms();
 }
 
-// Admin PIN Protected Delete
 async function adminDeleteRoom(id) {
   const pin = prompt("Admin PIN enter karein room delete karne ke liye:");
   if (pin !== ADMIN_PIN) {
@@ -230,7 +229,7 @@ function closeImageModal() {
   document.getElementById("imageModal").classList.add("hidden");
 }
 
-// PWA Service Worker Registration & Install Prompt
+// PWA Support
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js');
 }
@@ -241,18 +240,20 @@ const installBtn = document.getElementById('installAppBtn');
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
-  installBtn.classList.remove('hidden');
+  if (installBtn) installBtn.classList.remove('hidden');
 });
 
-installBtn.addEventListener('click', async () => {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === 'accepted') {
-      installBtn.classList.add('hidden');
+if (installBtn) {
+  installBtn.addEventListener('click', async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        installBtn.classList.add('hidden');
+      }
+      deferredPrompt = null;
     }
-    deferredPrompt = null;
-  }
-});
+  });
+}
 
 fetchRooms();
