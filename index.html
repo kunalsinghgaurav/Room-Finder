@@ -11,37 +11,44 @@
 <body class="bg-gray-100 font-sans text-gray-800">
 
   <!-- Header -->
-  <header class="bg-white shadow sticky top-0 z-50">
+  <header class="bg-white shadow sticky top-0 z-40">
     <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-      <h1 class="text-2xl font-bold text-indigo-600">🏠 RoomDekho</h1>
-      <button onclick="toggleForm()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition">
+      <div>
+        <h1 class="text-2xl font-bold text-indigo-600">🏠 RoomDekho</h1>
+        <p class="text-xs text-gray-400">Patna Rental Hub - Direct Owner Contact</p>
+      </div>
+      <button onclick="toggleForm()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition shadow">
         + Apna Room List Karein
       </button>
     </div>
   </header>
 
-  <!-- Add Room Form -->
+  <!-- Add Room Form Modal/Section -->
   <section id="formSection" class="hidden max-w-2xl mx-auto px-4 py-6">
     <div class="bg-white p-6 rounded-xl shadow-lg border border-indigo-100">
       <h3 class="text-xl font-bold text-gray-800 mb-4">Naya Room Cloud Database Me Add Karein</h3>
       <form id="roomForm" onsubmit="addNewRoom(event)" class="space-y-4">
         <div>
           <label class="block text-xs font-semibold text-gray-600 mb-1">Room Title</label>
-          <input type="text" id="title" required placeholder="e.g. Single Room near Station" class="w-full border p-2 rounded-lg bg-gray-50 focus:outline-indigo-500">
+          <input type="text" id="title" required placeholder="e.g. Furnished 1BHK / Single Room near Station" class="w-full border p-2 rounded-lg bg-gray-50 focus:outline-indigo-500">
         </div>
         
         <div class="grid grid-cols-2 gap-4">
           <div>
             <label class="block text-xs font-semibold text-gray-600 mb-1">Location / Area</label>
-            <input type="text" id="location" required placeholder="e.g. Kankarbagh, Boring Road" class="w-full border p-2 rounded-lg bg-gray-50 focus:outline-indigo-500">
+            <input type="text" id="location" required placeholder="e.g. Boring Road, Patna" class="w-full border p-2 rounded-lg bg-gray-50 focus:outline-indigo-500">
           </div>
           <div>
             <label class="block text-xs font-semibold text-gray-600 mb-1">Monthly Rent (₹)</label>
-            <input type="number" id="rent" required placeholder="e.g. 3500" class="w-full border p-2 rounded-lg bg-gray-50 focus:outline-indigo-500">
+            <input type="number" id="rent" required placeholder="e.g. 4500" class="w-full border p-2 rounded-lg bg-gray-50 focus:outline-indigo-500">
           </div>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-gray-600 mb-1">Security Deposit (₹)</label>
+            <input type="number" id="deposit" placeholder="e.g. 4500 (Optional)" class="w-full border p-2 rounded-lg bg-gray-50 focus:outline-indigo-500">
+          </div>
           <div>
             <label class="block text-xs font-semibold text-gray-600 mb-1">Tenant Type</label>
             <select id="type" class="w-full border p-2 rounded-lg bg-gray-50 focus:outline-indigo-500">
@@ -50,10 +57,11 @@
               <option value="Family">Family</option>
             </select>
           </div>
-          <div>
-            <label class="block text-xs font-semibold text-gray-600 mb-1">WhatsApp Number</label>
-            <input type="text" id="phone" required placeholder="e.g. 919876543210" class="w-full border p-2 rounded-lg bg-gray-50 focus:outline-indigo-500">
-          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">Phone / WhatsApp Number (10 Digits)</label>
+          <input type="tel" id="phone" required placeholder="e.g. 9876543210" class="w-full border p-2 rounded-lg bg-gray-50 focus:outline-indigo-500">
         </div>
 
         <div>
@@ -63,7 +71,7 @@
 
         <div>
           <label class="block text-xs font-semibold text-gray-600 mb-1">Suvidhayein (Comma se alag karein)</label>
-          <input type="text" id="amenities" placeholder="e.g. Wi-Fi, RO Water, Bed" class="w-full border p-2 rounded-lg bg-gray-50 focus:outline-indigo-500">
+          <input type="text" id="amenities" placeholder="e.g. Wi-Fi, RO Water, Bed, Attached Washroom" class="w-full border p-2 rounded-lg bg-gray-50 focus:outline-indigo-500">
         </div>
 
         <div class="flex gap-2">
@@ -81,15 +89,26 @@
   <!-- Hero Section & Filters -->
   <section class="max-w-6xl mx-auto px-4 py-8">
     <h2 class="text-3xl font-extrabold text-center mb-2">Apne Budget Me Room Dhundhein</h2>
-    <p class="text-center text-gray-500 mb-6">Bina broker aur bina commission ke direct owner se baat karein</p>
+    <p class="text-center text-gray-500 mb-6">Direct Google Map Navigation & Instant Call/WhatsApp</p>
 
-    <!-- Search & Filter Bar -->
-    <div class="bg-white p-4 rounded-xl shadow-md space-y-3">
+    <!-- Search & Filter Controls -->
+    <div class="bg-white p-4 rounded-xl shadow-md space-y-4">
       <div>
-        <input type="text" id="searchInput" oninput="applyFilters()" placeholder="🔍 Area ya location likh kar search karein (e.g. Boring Road, Station)..." class="w-full border p-2.5 rounded-lg bg-gray-50 focus:outline-indigo-500">
+        <input type="text" id="searchInput" oninput="applyFilters()" placeholder="🔍 Area ya landmark search karein (e.g. Boring Road, Kankarbagh)..." class="w-full border p-2.5 rounded-lg bg-gray-50 focus:outline-indigo-500">
       </div>
 
-      <div class="flex flex-wrap gap-4 items-center justify-between">
+      <!-- Quick Area Chips -->
+      <div class="flex flex-wrap gap-2 items-center">
+        <span class="text-xs font-semibold text-gray-500 mr-1">Popular:</span>
+        <button onclick="setAreaFilter('')" class="chip-btn text-xs bg-indigo-50 text-indigo-700 font-medium px-3 py-1.5 rounded-full hover:bg-indigo-100 transition border border-indigo-200">Sabhi (All)</button>
+        <button onclick="setAreaFilter('Boring Road')" class="chip-btn text-xs bg-gray-100 text-gray-700 font-medium px-3 py-1.5 rounded-full hover:bg-gray-200 transition">Boring Road</button>
+        <button onclick="setAreaFilter('Kankarbagh')" class="chip-btn text-xs bg-gray-100 text-gray-700 font-medium px-3 py-1.5 rounded-full hover:bg-gray-200 transition">Kankarbagh</button>
+        <button onclick="setAreaFilter('Rajendra Nagar')" class="chip-btn text-xs bg-gray-100 text-gray-700 font-medium px-3 py-1.5 rounded-full hover:bg-gray-200 transition">Rajendra Nagar</button>
+        <button onclick="setAreaFilter('Patna Junction')" class="chip-btn text-xs bg-gray-100 text-gray-700 font-medium px-3 py-1.5 rounded-full hover:bg-gray-200 transition">Patna Junction</button>
+        <button onclick="setAreaFilter('Danapur')" class="chip-btn text-xs bg-gray-100 text-gray-700 font-medium px-3 py-1.5 rounded-full hover:bg-gray-200 transition">Danapur</button>
+      </div>
+
+      <div class="flex flex-wrap gap-4 items-center justify-between border-t pt-3">
         <div class="flex-1 min-w-[150px]">
           <label class="block text-xs font-semibold text-gray-500 mb-1">Kis ke liye chahiye?</label>
           <select id="typeFilter" onchange="applyFilters()" class="w-full border p-2 rounded-lg bg-gray-50 focus:outline-indigo-500">
@@ -101,12 +120,13 @@
         </div>
 
         <div class="flex-1 min-w-[150px]">
-          <label class="block text-xs font-semibold text-gray-500 mb-1">Max Budget (₹/month)</label>
+          <label class="block text-xs font-semibold text-gray-500 mb-1">Max Monthly Rent</label>
           <select id="budgetFilter" onchange="applyFilters()" class="w-full border p-2 rounded-lg bg-gray-50 focus:outline-indigo-500">
             <option value="100000">No Limit</option>
             <option value="10000">Upto ₹10,000</option>
-            <option value="5000">Upto ₹5,000</option>
-            <option value="3500">Upto ₹3,500</option>
+            <option value="6000">Upto ₹6,000</option>
+            <option value="4000">Upto ₹4,000</option>
+            <option value="2500">Upto ₹2,500</option>
           </select>
         </div>
       </div>
@@ -114,11 +134,19 @@
   </section>
 
   <!-- Room Cards Grid -->
-  <main class="max-w-6xl mx-auto px-4 pb-12">
+  <main class="max-w-6xl mx-auto px-4 pb-16">
     <div id="roomContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
       <p class="col-span-full text-center text-gray-500 py-8">SQL Database se rooms load ho rahe hain...</p>
     </div>
   </main>
+
+  <!-- Fullscreen Image Preview Lightbox Modal -->
+  <div id="imageModal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 cursor-pointer" onclick="closeImageModal()">
+    <div class="relative max-w-4xl max-h-[90vh]">
+      <img id="modalImg" src="" alt="Room Preview" class="max-w-full max-h-[85vh] rounded-lg shadow-2xl object-contain">
+      <p class="text-white text-center text-xs mt-2">Kahin bhi click karke band karein</p>
+    </div>
+  </div>
 
   <script src="app.js"></script>
 </body>
