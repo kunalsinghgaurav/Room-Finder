@@ -1,7 +1,7 @@
 // Supabase Configuration
 const SUPABASE_URL = "https://ndegekylfrhroyyhumyo.supabase.co";
 const SUPABASE_KEY = "sb_publishable_hwBUpVWGEoWrQgiiG8ZgBw_ZM_aJyH2";
-const ADMIN_PIN = "1234";
+const MASTER_ADMIN_PIN = "1234"; // Aapka apna master password (hamesha chalega)
 
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 let roomsData = [];
@@ -88,12 +88,12 @@ function displayRooms(rooms) {
             </button>
           `}
 
-          <!-- Admin Actions -->
+          <!-- Owner PIN Verification Actions -->
           <div class="flex gap-2 pt-2 border-t text-[11px]">
-            <button onclick="adminToggleRented(${room.id}, ${room.is_rented})" class="flex-1 py-1 rounded border border-gray-300 hover:bg-gray-100 text-gray-600 font-medium">
-              ${room.is_rented ? 'Mark Available (Admin)' : 'Mark as Rented (Admin)'}
+            <button onclick="handleRentedToggle(${room.id}, ${room.is_rented})" class="flex-1 py-1 rounded border border-gray-300 hover:bg-gray-100 text-gray-600 font-medium">
+              ${room.is_rented ? 'Mark Available' : 'Mark as Rented'}
             </button>
-            <button onclick="adminDeleteRoom(${room.id})" class="px-2.5 py-1 rounded border border-red-200 text-red-500 hover:bg-red-50 font-medium">
+            <button onclick="handleDeleteRoom(${room.id})" class="px-2.5 py-1 rounded border border-red-200 text-red-500 hover:bg-red-50 font-medium">
               Delete
             </button>
           </div>
@@ -108,7 +108,7 @@ function toggleForm() {
   document.getElementById("formSection").classList.toggle("hidden");
 }
 
-// Direct Gallery File Upload to Supabase Storage ('Room finder' bucket)
+// Add Room with Owner's Secret PIN
 async function addNewRoom(event) {
   event.preventDefault();
   const btn = document.getElementById("submitBtn");
@@ -127,14 +127,12 @@ async function addNewRoom(event) {
     const fileExt = file.name.split('.').pop();
     const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
 
-    // Bucket name fixed to 'Room finder'
     const { error: uploadError } = await db.storage
       .from('Room finder')
       .upload(fileName, file);
 
     if (uploadError) throw uploadError;
 
-    // Get Public Image URL
     const { data: publicUrlData } = db.storage
       .from('Room finder')
       .getPublicUrl(fileName);
@@ -150,6 +148,7 @@ async function addNewRoom(event) {
       rent: parseInt(document.getElementById("rent").value),
       type: document.getElementById("type").value,
       phone: document.getElementById("phone").value,
+      pin: document.getElementById("ownerPin").value, // Owner ka apna PIN save hoga
       image: publicUrlData.publicUrl,
       is_rented: false,
       amenities: amenitiesArray
@@ -158,6 +157,7 @@ async function addNewRoom(event) {
     const { error: insertError } = await db.from('rooms').insert([newRoom]);
     if (insertError) throw insertError;
 
+    alert("Room successfully publish ho gaya! Apna set kiya hua 4-digit PIN yaad rakhein.");
     document.getElementById("roomForm").reset();
     toggleForm();
     fetchRooms();
@@ -169,30 +169,38 @@ async function addNewRoom(event) {
   }
 }
 
-// Admin PIN Protection
-async function adminToggleRented(id, currentStatus) {
-  const pin = prompt("Admin PIN enter karein status badalne ke liye:");
-  if (pin !== ADMIN_PIN) {
-    alert("Galat PIN! Access denied.");
-    return;
-  }
+// Owner PIN Verification for Rented
+async function handleRentedToggle(id, currentStatus) {
+  const room = roomsData.find(r => r.id === id);
+  const inputPin = prompt("Room add karte waqt jo 4-digit PIN banaya tha, use enter karein:");
+  
+  if (!inputPin) return;
 
-  const { error } = await db.from('rooms').update({ is_rented: !currentStatus }).eq('id', id);
-  if (error) alert("Error: " + error.message);
-  else fetchRooms();
-}
-
-async function adminDeleteRoom(id) {
-  const pin = prompt("Admin PIN enter karein room delete karne ke liye:");
-  if (pin !== ADMIN_PIN) {
-    alert("Galat PIN! Sirf Admin delete kar sakta hai.");
-    return;
-  }
-
-  if (confirm("Kya aap sach me delete karna chahte hain?")) {
-    const { error } = await db.from('rooms').delete().eq('id', id);
+  // Owner ka apna PIN match hoga YA Master PIN (1234)
+  if (inputPin === room.pin || inputPin === MASTER_ADMIN_PIN) {
+    const { error } = await db.from('rooms').update({ is_rented: !currentStatus }).eq('id', id);
     if (error) alert("Error: " + error.message);
     else fetchRooms();
+  } else {
+    alert("❌ Galat PIN! Sirf wahi owner jisne room dala tha ise mark kar sakta hai.");
+  }
+}
+
+// Owner PIN Verification for Delete
+async function handleDeleteRoom(id) {
+  const room = roomsData.find(r => r.id === id);
+  const inputPin = prompt("Room delete karne ke liye apna 4-digit PIN enter karein:");
+
+  if (!inputPin) return;
+
+  if (inputPin === room.pin || inputPin === MASTER_ADMIN_PIN) {
+    if (confirm("Kya aap sach me is room ko hamesha ke liye delete karna chahte hain?")) {
+      const { error } = await db.from('rooms').delete().eq('id', id);
+      if (error) alert("Error: " + error.message);
+      else fetchRooms();
+    }
+  } else {
+    alert("❌ Galat PIN! Aap kisi aur ka room delete nahi kar sakte.");
   }
 }
 
