@@ -5,22 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RoomDekho - Zero Brokerage Rooms in Patna</title>
 
-  <!-- SEO Meta Tags for Google Search -->
+  <!-- SEO Meta Tags -->
   <meta name="description" content="Find zero brokerage student rooms, flats, and PGs in Patna (Boring Road, Kankarbagh, Rajendra Nagar). Direct owner contact and instant Google Maps route.">
   <meta name="keywords" content="rooms in patna, flat in patna, boring road rooms, kankarbagh pg, zero brokerage patna, room finder bihar">
   <meta name="author" content="RoomDekho">
 
-  <!-- WhatsApp / Social Media Share Preview (OpenGraph) -->
+  <!-- WhatsApp / Social Share Preview -->
   <meta property="og:title" content="RoomDekho - Zero Brokerage Rooms in Patna">
-  <meta property="og:description" content="Direct owner contact, Google Maps location, and verified budget rooms across Patna without brokers.">
+  <meta property="og:description" content="Direct owner contact, multiple room photos, Google Maps and verified budget rooms.">
   <meta property="og:image" content="https://img.icons8.com/color/512/home--v1.png">
   <meta property="og:url" content="https://kunalsinghgaurav.github.io/Room-Finder/">
   <meta property="og:type" content="website">
 
-  <!-- Favicon / Browser Tab Icon -->
+  <!-- Favicon -->
   <link rel="icon" type="image/png" href="https://img.icons8.com/color/192/home--v1.png">
 
-  <!-- Tailwind CSS & Supabase Client -->
+  <!-- Tailwind & Supabase -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -37,7 +37,11 @@
         <h1 class="text-2xl font-bold text-indigo-600">🏠 RoomDekho</h1>
         <p class="text-xs text-gray-400">Direct Owner Contact • 0 Brokerage • Patna Hub</p>
       </div>
-      <div class="flex gap-2">
+      <div class="flex items-center gap-2">
+        <!-- Wishlist Filter Button -->
+        <button id="favFilterBtn" onclick="toggleFavoritesOnly()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-semibold px-3 py-2 rounded-lg transition border border-rose-200 flex items-center gap-1">
+          ❤️ Saved (<span id="favCount">0</span>)
+        </button>
         <button id="installAppBtn" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-2 rounded-lg transition shadow">
           📲 Install App
         </button>
@@ -84,17 +88,18 @@
           </div>
         </div>
 
-        <!-- Owner Personal Secret PIN -->
+        <!-- Owner Personal PIN -->
         <div>
-          <label class="block text-xs font-semibold text-indigo-700 mb-1">🔒 Apna 4-Digit Secret PIN Banayein (Baad me rented/delete karne ke liye)</label>
-          <input type="password" id="ownerPin" maxlength="4" required placeholder="Apna koi 4-digit code chunein (e.g. 4321)" class="w-full border-2 border-indigo-200 p-2 rounded-lg bg-indigo-50/30 focus:outline-indigo-600">
-          <p class="text-[11px] text-gray-400 mt-1">Ye PIN yaad rakhein, bina iske aapke alawa koi dusra room delete ya rented nahi kar payega.</p>
+          <label class="block text-xs font-semibold text-indigo-700 mb-1">🔒 Apna 4-Digit Secret PIN Banayein</label>
+          <input type="password" id="ownerPin" maxlength="4" required placeholder="Apna koi 4-digit code (e.g. 4321)" class="w-full border-2 border-indigo-200 p-2 rounded-lg bg-indigo-50/30 focus:outline-indigo-600">
+          <p class="text-[11px] text-gray-400 mt-1">Ye PIN yaad rakhein, bina iske room delete ya rented out nahi hoga.</p>
         </div>
 
-        <!-- Direct Gallery Photo Upload -->
+        <!-- Feature 1: Multiple Photos Upload -->
         <div>
-          <label class="block text-xs font-semibold text-gray-600 mb-1">Room Photo (Gallery se select karein)</label>
-          <input type="file" id="imageFile" accept="image/*" required class="w-full border p-2 rounded-lg bg-gray-50 text-sm file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+          <label class="block text-xs font-semibold text-gray-600 mb-1">Room Photos (1 se 4 photos select kar sakte hain)</label>
+          <input type="file" id="imageFiles" accept="image/*" multiple required class="w-full border p-2 rounded-lg bg-gray-50 text-sm file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+          <p class="text-[11px] text-gray-400 mt-1">Gallery se ek sath room, bathroom, kitchen ki photos select karein.</p>
         </div>
 
         <div>
@@ -114,7 +119,7 @@
     </div>
   </section>
 
-  <!-- Filters & Search -->
+  <!-- Filters & Sorting -->
   <section class="max-w-6xl mx-auto px-4 py-8">
     <h2 class="text-3xl font-extrabold text-center mb-2">Apne Budget Me Room Dhundhein</h2>
     <p class="text-center text-gray-500 mb-6">Direct Navigation • Instant Call • Verified Listings in Patna</p>
@@ -134,8 +139,8 @@
         <button onclick="setAreaFilter('Patna Junction')" class="text-xs bg-gray-100 text-gray-700 font-medium px-3 py-1.5 rounded-full hover:bg-gray-200">Patna Junction</button>
       </div>
 
-      <div class="flex flex-wrap gap-4 items-center justify-between border-t pt-3">
-        <div class="flex-1 min-w-[150px]">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 border-t pt-3">
+        <div>
           <label class="block text-xs font-semibold text-gray-500 mb-1">Tenant Type</label>
           <select id="typeFilter" onchange="applyFilters()" class="w-full border p-2 rounded-lg bg-gray-50 focus:outline-indigo-500">
             <option value="All">Sabhi (All)</option>
@@ -145,7 +150,7 @@
           </select>
         </div>
 
-        <div class="flex-1 min-w-[150px]">
+        <div>
           <label class="block text-xs font-semibold text-gray-500 mb-1">Max Budget</label>
           <select id="budgetFilter" onchange="applyFilters()" class="w-full border p-2 rounded-lg bg-gray-50 focus:outline-indigo-500">
             <option value="100000">No Limit</option>
@@ -153,6 +158,16 @@
             <option value="6000">Upto ₹6,000</option>
             <option value="4000">Upto ₹4,000</option>
             <option value="2500">Upto ₹2,500</option>
+          </select>
+        </div>
+
+        <!-- Feature 5: Sorting Dropdown -->
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 mb-1">Sort Karein</label>
+          <select id="sortBy" onchange="applyFilters()" class="w-full border p-2 rounded-lg bg-gray-50 focus:outline-indigo-500">
+            <option value="newest">Sabse Naya (Newest First)</option>
+            <option value="low_high">Rent: Kam se Jyada (Low to High)</option>
+            <option value="high_low">Rent: Jyada se Kam (High to Low)</option>
           </select>
         </div>
       </div>
@@ -166,9 +181,15 @@
     </div>
   </main>
 
-  <!-- Fullscreen Modal -->
-  <div id="imageModal" class="hidden fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 cursor-pointer" onclick="closeImageModal()">
-    <img id="modalImg" src="" alt="Room Preview" class="max-w-full max-h-[85vh] rounded-lg shadow-2xl object-contain">
+  <!-- Fullscreen Modal / Gallery Viewer -->
+  <div id="imageModal" class="hidden fixed inset-0 bg-black/90 z-50 flex flex-col items-center justify-center p-4">
+    <button onclick="closeImageModal()" class="absolute top-4 right-4 text-white text-2xl font-bold bg-black/50 w-10 h-10 rounded-full">&times;</button>
+    <div class="relative max-w-3xl w-full flex items-center justify-center">
+      <button onclick="prevImage(event)" class="absolute left-2 text-white bg-black/60 p-3 rounded-full hover:bg-black/80 font-bold">&#10094;</button>
+      <img id="modalImg" src="" alt="Room Preview" class="max-w-full max-h-[75vh] rounded-lg shadow-2xl object-contain">
+      <button onclick="nextImage(event)" class="absolute right-2 text-white bg-black/60 p-3 rounded-full hover:bg-black/80 font-bold">&#10095;</button>
+    </div>
+    <p id="imageCounter" class="text-white text-xs mt-3 bg-black/40 px-3 py-1 rounded-full"></p>
   </div>
 
   <script src="app.js"></script>
