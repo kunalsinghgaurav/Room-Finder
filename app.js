@@ -3,11 +3,19 @@ const SUPABASE_URL = "https://ndegekylfrhroyyhumyo.supabase.co";
 const SUPABASE_KEY = "sb_publishable_hwBUpVWGEoWrQgiiG8ZgBw_ZM_aJyH2";
 const MASTER_ADMIN_PIN = "1234";
 
-const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
+// Global Variables
+window.db = null;
 let roomsData = [];
-let favorites = JSON.parse(localStorage.getItem("roomdekho_favs") || "[]");
-let myCreatedPins = JSON.parse(localStorage.getItem("roomdekho_mypins") || "[]");
+let favorites = [];
+let myCreatedPins = [];
+
+try {
+  favorites = JSON.parse(localStorage.getItem("roomdekho_favs") || "[]");
+  myCreatedPins = JSON.parse(localStorage.getItem("roomdekho_mypins") || "[]");
+} catch (e) {
+  favorites = [];
+  myCreatedPins = [];
+}
 
 let currentLanguage = localStorage.getItem("roomdekho_lang") || "hi";
 let selectedCategory = "All";
@@ -15,17 +23,14 @@ let selectedOwnerPhone = null;
 let showFavoritesOnly = false;
 let showMyListingsOnly = false;
 
-// Gallery Modal State
 let currentImages = [];
 let currentImageIndex = 0;
 
-// Safe Text Update Helper (Taaki kabhi crash na ho)
 function safeSetText(id, text) {
   const el = document.getElementById(id);
   if (el) el.innerText = text;
 }
 
-// Translations
 const translations = {
   en: {
     langBtn: "हिन्दी",
@@ -67,22 +72,30 @@ const translations = {
   }
 };
 
-// Fetch All Properties
+// Safe Database Fetch
 async function fetchRooms() {
   const container = document.getElementById("roomContainer");
-  try {
-    const { data, error } = await db.from('rooms').select('*').order('id', { ascending: false });
+  if (!window.supabase) {
+    if (container) container.innerHTML = `<p class="col-span-full text-center text-red-500 py-8">Supabase library load nahi hui. Refresh karein.</p>`;
+    return;
+  }
 
+  if (!window.db) {
+    window.db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  }
+
+  try {
+    const { data, error } = await window.db.from('rooms').select('*').order('id', { ascending: false });
     if (error) throw error;
+
     roomsData = data || [];
-    
     applyLanguageUI();
     updateHeaderCounts();
     applyFilters();
   } catch (err) {
     console.error(err);
     if (container) {
-      container.innerHTML = `<p class="col-span-full text-center text-red-500 py-8 font-medium">Database connect nahi ho paya. Refresh karein.</p>`;
+      container.innerHTML = `<p class="col-span-full text-center text-red-500 py-8">Data load nahi hua: ${err.message || 'Error'}. Refresh karein.</p>`;
     }
   }
 }
@@ -93,7 +106,6 @@ function updateHeaderCounts() {
   safeSetText("myCount", myRooms.length);
 }
 
-// Language Switcher
 function toggleLanguage() {
   currentLanguage = currentLanguage === "hi" ? "en" : "hi";
   localStorage.setItem("roomdekho_lang", currentLanguage);
@@ -113,22 +125,20 @@ function applyLanguageUI() {
   safeSetText("currentViewTitle", t.availableListings);
 }
 
-// Display Cards
 function displayRooms(rooms) {
   const container = document.getElementById("roomContainer");
   if (!container) return;
 
   const t = translations[currentLanguage];
   safeSetText("resultsCount", `${rooms.length} listings`);
-
   container.innerHTML = "";
 
   if (rooms.length === 0) {
     container.innerHTML = `
       <div class="col-span-full text-center py-12 bg-white rounded-xl border border-gray-100">
         <p class="text-4xl mb-2">🔍</p>
-        <p class="text-gray-700 font-bold">${currentLanguage === 'hi' ? 'Koi property ya room nahi mila' : 'No properties found'}</p>
-        <p class="text-xs text-gray-400 mt-1">${currentLanguage === 'hi' ? 'Kripya doosra sheher ya category chunein.' : 'Please try another city or category.'}</p>
+        <p class="text-gray-700 font-bold">${currentLanguage === 'hi' ? 'Koi listing nahi mili' : 'No properties found'}</p>
+        <p class="text-xs text-gray-400 mt-1">${currentLanguage === 'hi' ? 'Kripya doosra sheher ya category chunein.' : 'Please try another filter.'}</p>
       </div>`;
     return;
   }
@@ -137,7 +147,7 @@ function displayRooms(rooms) {
     const rawPhone = String(room.phone || "").replace(/\D/g, "");
     const cleanPhone = rawPhone.length === 10 ? `91${rawPhone}` : rawPhone;
     const roomUrl = window.location.href.split('?')[0];
-    
+
     const categoryBadge = room.category || "Room";
     const spaceDetail = room.space_size ? `• ${room.space_size}` : '';
     const cityState = `${room.city || ''}${room.state ? ', ' + room.state : ''}`;
@@ -149,7 +159,7 @@ function displayRooms(rooms) {
     const message = encodeURIComponent(`Namaste! Maine RoomDekho par aapka "${room.title}" dekha. Kya ye available hai?`);
     const whatsappContactUrl = `https://wa.me/${cleanPhone}?text=${message}`;
     const callUrl = `tel:+${cleanPhone}`;
-    
+
     const mapsQuery = encodeURIComponent(`${room.location || ''}, ${cityState}`);
     const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
     const amenitiesList = Array.isArray(room.amenities) ? room.amenities : [];
@@ -178,7 +188,7 @@ function displayRooms(rooms) {
 
             ${isMyListing ? '<span class="absolute bottom-2 left-2 bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow z-10">Aapki Listing</span>' : ''}
             
-            <button onclick="toggleFav(event, ${room.id})" class="absolute top-3 right-3 bg-white/90 hover:bg-white text-sm p-1.5 rounded-full z-20 shadow transition">
+            <button type="button" onclick="toggleFav(event, ${room.id})" class="absolute top-3 right-3 bg-white/90 hover:bg-white text-sm p-1.5 rounded-full z-20 shadow transition">
               ${isFav ? '❤️' : '🤍'}
             </button>
 
@@ -201,7 +211,7 @@ function displayRooms(rooms) {
             ${room.owner_name ? `<p class="text-[11px] text-gray-600 mt-1 font-medium">👤 Owner/Manager: <strong class="text-gray-800">${room.owner_name}</strong></p>` : ''}
 
             ${ownerTotalListings > 1 ? `
-              <button onclick="filterByOwnerPhone('${room.phone}', '${room.owner_name || 'Owner'}')" class="mt-2 text-xs bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold px-2.5 py-1 rounded-md border border-amber-200 flex items-center gap-1 w-full justify-center transition">
+              <button type="button" onclick="filterByOwnerPhone('${room.phone}', '${room.owner_name || 'Owner'}')" class="mt-2 text-xs bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold px-2.5 py-1 rounded-md border border-amber-200 flex items-center gap-1 w-full justify-center transition">
                 🏢 Is Owner ke pass ${ownerTotalListings} spaces hain (Sabhi Dekhein)
               </button>
             ` : ''}
@@ -238,10 +248,10 @@ function displayRooms(rooms) {
           `}
 
           <div class="flex gap-2 pt-1.5 border-t text-[11px]">
-            <button onclick="handleRentedToggle(${room.id}, ${room.is_rented})" class="flex-1 py-1 rounded border border-gray-200 hover:bg-gray-50 text-gray-600 font-medium">
+            <button type="button" onclick="handleRentedToggle(${room.id}, ${room.is_rented})" class="flex-1 py-1 rounded border border-gray-200 hover:bg-gray-50 text-gray-600 font-medium">
               ${room.is_rented ? t.markAvailable : t.markRented}
             </button>
-            <button onclick="handleDeleteRoom(${room.id})" class="px-2.5 py-1 rounded border border-red-200 text-red-500 hover:bg-red-50 font-medium">
+            <button type="button" onclick="handleDeleteRoom(${room.id})" class="px-2.5 py-1 rounded border border-red-200 text-red-500 hover:bg-red-50 font-medium">
               ${t.deleteBtn}
             </button>
           </div>
@@ -265,7 +275,6 @@ function handleCategoryFieldChanges() {
   }
 }
 
-// Unlimited Photos Upload
 async function addNewRoom(event) {
   event.preventDefault();
   const btn = document.getElementById("submitBtn");
@@ -290,13 +299,13 @@ async function addNewRoom(event) {
 
       btn.innerText = `Photo upload ho rahi hai (${i + 1}/${files.length})...`;
 
-      const { error: uploadError } = await db.storage
+      const { error: uploadError } = await window.db.storage
         .from('Room finder')
         .upload(fileName, file);
 
       if (uploadError) throw uploadError;
 
-      const { data: publicUrlData } = db.storage
+      const { data: publicUrlData } = window.db.storage
         .from('Room finder')
         .getPublicUrl(fileName);
 
@@ -316,7 +325,7 @@ async function addNewRoom(event) {
       location: document.getElementById("location").value,
       city: document.getElementById("city").value,
       state: document.getElementById("state").value,
-      rent: parseInt(document.getElementById("rent").value),
+      rent: parseInt(document.getElementById("rent").value) || 0,
       price_period: document.getElementById("price_period").value,
       space_size: document.getElementById("space_size").value,
       type: document.getElementById("type").value,
@@ -328,7 +337,7 @@ async function addNewRoom(event) {
       amenities: amenitiesArray
     };
 
-    const { error: insertError } = await db.from('rooms').insert([newProperty]);
+    const { error: insertError } = await window.db.from('rooms').insert([newProperty]);
     if (insertError) throw insertError;
 
     if (!myCreatedPins.includes(ownerPin)) {
@@ -348,11 +357,10 @@ async function addNewRoom(event) {
   }
 }
 
-// Category Tabs
-function setCategoryFilter(category) {
+function setCategoryFilter(category, btnElement) {
   selectedCategory = category;
   selectedOwnerPhone = null;
-  
+
   const notice = document.getElementById("ownerFilterNotice");
   if (notice) notice.classList.add("hidden");
 
@@ -361,9 +369,9 @@ function setCategoryFilter(category) {
     btn.classList.add("bg-indigo-800/80", "text-white");
   });
 
-  if (window.event && window.event.target) {
-    window.event.target.classList.remove("bg-indigo-800/80", "text-white");
-    window.event.target.classList.add("bg-white", "text-indigo-900", "font-bold");
+  if (btnElement) {
+    btnElement.classList.remove("bg-indigo-800/80", "text-white");
+    btnElement.classList.add("bg-white", "text-indigo-900", "font-bold");
   }
 
   applyFilters();
@@ -402,7 +410,6 @@ function toggleMyListings() {
   applyFilters();
 }
 
-// Wishlist
 function toggleFav(event, id) {
   if (event) event.stopPropagation();
   if (favorites.includes(id)) {
@@ -428,7 +435,6 @@ function toggleFavoritesOnly() {
   applyFilters();
 }
 
-// Main Filter
 function applyFilters() {
   const searchInput = document.getElementById("searchInput");
   const budgetFilter = document.getElementById("budgetFilter");
@@ -444,7 +450,7 @@ function applyFilters() {
     const cityMatch = room.city ? room.city.toLowerCase().includes(search) : false;
     const stateMatch = room.state ? room.state.toLowerCase().includes(search) : false;
     const matchesSearch = titleMatch || locMatch || cityMatch || stateMatch;
-    
+
     const matchesCategory = selectedCategory === "All" || (room.category || "Room") === selectedCategory;
     const matchesBudget = (room.rent || 0) <= maxBudget;
     const matchesFav = !showFavoritesOnly || favorites.includes(room.id);
@@ -471,7 +477,6 @@ function setAreaFilter(cityName) {
   applyFilters();
 }
 
-// Navigation
 function showSection(sectionName) {
   const homeSec = document.getElementById("homeSection");
   const aboutSec = document.getElementById("aboutSection");
@@ -488,12 +493,9 @@ function showSection(sectionName) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Actions
 async function handleRentedToggle(id, currentStatus) {
   const room = roomsData.find(r => r.id === id);
   const inputPin = prompt("Room/Property ka 4-digit PIN enter karein:");
   if (!inputPin) return;
 
-  if (inputPin === room.pin || inputPin === MASTER_ADMIN_PIN) {
-    const { error } = await db.from('rooms').update({ is_rented: !currentStatus }).eq('id', id);
-    if (error) alert("Err
+  if (inputPin === room.pi
