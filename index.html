@@ -150,7 +150,6 @@
 
       <form id="roomForm" onsubmit="addNewRoom(event)" class="space-y-4">
         
-        <!-- Category Selection -->
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1">Property Category</label>
           <select id="category" onchange="handleCategoryFieldChanges()" class="w-full border p-2.5 rounded-lg bg-gray-50 font-semibold focus:outline-indigo-500 text-sm">
@@ -261,37 +260,36 @@
     </div>
   </section>
 
-  <!-- Complete About Us Section -->
-  <section id="aboutSection" class="hidden max-w-4xl mx-auto px-4 py-12 flex-1">
-    <button onclick="showSection('home')" class="text-indigo-600 font-semibold mb-4 text-sm flex items-center gap-1">&larr; Wapas Home jayein</button>
-    <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 space-y-6">
-      <h2 class="text-3xl font-black text-gray-900">About RoomDekho India</h2>
-      <p class="text-gray-600 leading-relaxed text-sm sm:text-base">
-        <strong>RoomDekho India</strong> Bharat ka sabse tezi se badhta hua <strong>100% Zero Brokerage Rental aur Commercial Property Marketplace</strong> hai. Hamara vision desh ke har student, parivar, vyapari aur traveler ko bina kisi dalal ya middleman ke seedhe verified property owners aur hotel managers se connect karna hai.
-      </p>
-
-      <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 py-3">
-        <div class="bg-indigo-50 p-4 rounded-xl text-center">
-          <h4 class="font-black text-indigo-700 text-2xl">0%</h4>
-          <p class="text-xs text-gray-600 font-semibold mt-1">Zero Commission</p>
-        </div>
-        <div class="bg-emerald-50 p-4 rounded-xl text-center">
-          <h4 class="font-black text-emerald-700 text-2xl">Pan-India</h4>
-          <p class="text-xs text-gray-600 font-semibold mt-1">All States & Cities</p>
-        </div>
-        <div class="bg-amber-50 p-4 rounded-xl text-center">
-          <h4 class="font-black text-amber-700 text-2xl">Direct</h4>
-          <p class="text-xs text-gray-600 font-semibold mt-1">Owner Contact</p>
-        </div>
-        <div class="bg-purple-50 p-4 rounded-xl text-center">
-          <h4 class="font-black text-purple-700 text-2xl">Safe</h4>
-          <p class="text-xs text-gray-600 font-semibold mt-1">Family & Students</p>
-        </div>
+  <!-- Complete Professional About Us Section -->
+  <section id="aboutSection" class="hidden max-w-5xl mx-auto px-4 py-12 flex-1">
+    <button onclick="showSection('home')" class="text-indigo-600 font-bold mb-6 text-sm flex items-center gap-1 hover:underline">&larr; Wapas Home jayein</button>
+    
+    <div class="bg-white p-6 sm:p-10 rounded-2xl shadow-sm border border-gray-100 space-y-8">
+      
+      <!-- Top Banner -->
+      <div class="border-b pb-6">
+        <span class="text-xs bg-indigo-50 text-indigo-700 font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Bharat Ka Sabse Vishwasniya Platform</span>
+        <h2 class="text-3xl sm:text-4xl font-black text-gray-900 mt-3">About RoomDekho India</h2>
+        <p class="text-gray-600 text-base sm:text-lg mt-2 leading-relaxed">
+          <strong>RoomDekho India</strong> Bharat ka pehla aisa **100% Zero Brokerage Rental aur Commercial Property Marketplace** hai jo pure desh me kirayedaaro (students, parivar, vyapariyon) ko bina kisi dalal ya commission agent ke seedhe verified property owners se jodata hai.
+        </p>
       </div>
 
-      <div class="space-y-3 text-sm text-gray-600 leading-relaxed">
-        <h3 class="font-bold text-gray-800 text-base">Hamari Pramukh Suvidhayein:</h3>
-        <ul class="list-disc pl-5 space-y-1">
-          <li><strong>Student & Job Seekers:</strong> Boys & Girls Hostels, PGs, aur single shared rooms bina brokerage ke.</li>
-          <li><strong>Families:</strong> Safe residential flats, independent floors aur apartments.</li>
-          <li><s
+      <!-- 4 Core Pillars -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-indigo-50/60 p-5 rounded-xl border border-indigo-100">
+          <div class="text-2xl mb-2">🚫 0%</div>
+          <h4 class="font-bold text-gray-900 text-sm">No Dalali / 0% Commission</h4>
+          <p class="text-xs text-gray-600 mt-1">Kirayedaar aur owner dono ka mehnat se kamaya gaya poora brokerage paisa bachta hai.</p>
+        </div>
+        <div class="bg-emerald-50/60 p-5 rounded-xl border border-emerald-100">
+          <div class="text-2xl mb-2">🇮🇳 All-India</div>
+          <h4 class="font-bold text-gray-900 text-sm">Pan-India Reach</h4>
+          <p class="text-xs text-gray-600 mt-1">Patna, Kota, Prayagraj, Delhi NCR se lekar Bangalore tak har sheher ke liye live.</p>
+        </div>
+        <div class="bg-amber-50/60 p-5 rounded-xl border border-amber-100">
+          <div class="text-2xl mb-2">📞 Direct</div>
+          <h4 class="font-bold text-gray-900 text-sm">Direct Phone & WhatsApp</h4>
+          <p class="text-xs text-gray-600 mt-1">Bina kisi third-party bot ya delay ke sidhe room owner se baat karein aur Maps se location dekhein.</p>
+        </div>
+        <di
