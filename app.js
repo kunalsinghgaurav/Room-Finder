@@ -9,9 +9,9 @@ let roomsData = [];
 let favorites = JSON.parse(localStorage.getItem("roomdekho_favs") || "[]");
 let myCreatedPins = JSON.parse(localStorage.getItem("roomdekho_mypins") || "[]");
 
-let currentLanguage = localStorage.getItem("roomdekho_lang") || "hi"; // Default Hindi
+let currentLanguage = localStorage.getItem("roomdekho_lang") || "hi";
 let selectedCategory = "All";
-let selectedOwnerPhone = null; // Owner group listing filter
+let selectedOwnerPhone = null;
 let showFavoritesOnly = false;
 let showMyListingsOnly = false;
 
@@ -19,7 +19,13 @@ let showMyListingsOnly = false;
 let currentImages = [];
 let currentImageIndex = 0;
 
-// Language Translations Dictionary
+// Safe Text Update Helper (Taaki kabhi crash na ho)
+function safeSetText(id, text) {
+  const el = document.getElementById(id);
+  if (el) el.innerText = text;
+}
+
+// Translations
 const translations = {
   en: {
     langBtn: "हिन्दी",
@@ -29,16 +35,13 @@ const translations = {
     myListings: "My Listings",
     postBtn: "+ Post Property",
     modalTitle: "Post New Property or Space",
-    availableListings: "Available Listings Across India",
-    ownerFilterMsg: "Showing all properties by this Owner",
+    availableListings: "All India Available Listings",
     rentSuffixMonth: "/month",
     rentSuffixDay: "/day",
     callBtn: "📞 Call",
     waBtn: "💬 WhatsApp",
     mapBtn: "📍 View on Google Maps",
-    ownerPropertiesBtn: "👤 View Owner's Other Spaces",
     rentedBadge: "Rented / Booked",
-    verifiedBadge: "Verified",
     markRented: "Mark as Rented",
     markAvailable: "Mark Available",
     deleteBtn: "Delete"
@@ -52,15 +55,12 @@ const translations = {
     postBtn: "+ Property Post Karein",
     modalTitle: "Nayi Property / Space List Karein",
     availableListings: "Bharat Me Uplabdh Sabhi Listings",
-    ownerFilterMsg: "Is Owner Ke Dwara Dali Gayi Sabhi Listings",
     rentSuffixMonth: "/mahina",
     rentSuffixDay: "/din",
     callBtn: "📞 Call Karein",
     waBtn: "💬 WhatsApp",
     mapBtn: "📍 Google Maps Par Rasta Dekhein",
-    ownerPropertiesBtn: "👤 Is Owner Ke Baaki Rooms / Floors Dekhein",
     rentedBadge: "Rented / Full",
-    verifiedBadge: "Pramanit",
     markRented: "Mark as Rented",
     markAvailable: "Mark Available",
     deleteBtn: "Delete Karein"
@@ -70,23 +70,27 @@ const translations = {
 // Fetch All Properties
 async function fetchRooms() {
   const container = document.getElementById("roomContainer");
-  const { data, error } = await db.from('rooms').select('*').order('id', { ascending: false });
+  try {
+    const { data, error } = await db.from('rooms').select('*').order('id', { ascending: false });
 
-  if (error) {
-    container.innerHTML = `<p class="col-span-full text-center text-red-500 py-8 font-medium">Database connection error.</p>`;
-    return;
+    if (error) throw error;
+    roomsData = data || [];
+    
+    applyLanguageUI();
+    updateHeaderCounts();
+    applyFilters();
+  } catch (err) {
+    console.error(err);
+    if (container) {
+      container.innerHTML = `<p class="col-span-full text-center text-red-500 py-8 font-medium">Database connect nahi ho paya. Refresh karein.</p>`;
+    }
   }
-
-  roomsData = data || [];
-  applyLanguageUI();
-  updateHeaderCounts();
-  applyFilters();
 }
 
 function updateHeaderCounts() {
-  document.getElementById("favCount").innerText = favorites.length;
+  safeSetText("favCount", favorites.length);
   const myRooms = roomsData.filter(r => myCreatedPins.includes(r.pin));
-  document.getElementById("myCount").innerText = myRooms.length;
+  safeSetText("myCount", myRooms.length);
 }
 
 // Language Switcher
@@ -99,30 +103,32 @@ function toggleLanguage() {
 
 function applyLanguageUI() {
   const t = translations[currentLanguage];
-  document.getElementById("currentLangLabel").innerText = t.langBtn;
-  document.getElementById("langSubHeader").innerText = t.subHeader;
-  document.getElementById("t_hero_title").innerText = t.heroTitle;
-  document.getElementById("t_hero_sub").innerText = t.heroSub;
-  document.getElementById("t_my_listings").innerText = t.myListings;
-  document.getElementById("t_post_btn").innerText = t.postBtn;
-  document.getElementById("t_modal_title").innerText = t.modalTitle;
+  safeSetText("currentLangLabel", t.langBtn);
+  safeSetText("langSubHeader", t.subHeader);
+  safeSetText("t_hero_title", t.heroTitle);
+  safeSetText("t_hero_sub", t.heroSub);
+  safeSetText("t_my_listings", t.myListings);
+  safeSetText("t_post_btn", t.postBtn);
+  safeSetText("t_modal_title", t.modalTitle);
+  safeSetText("currentViewTitle", t.availableListings);
 }
 
 // Display Cards
 function displayRooms(rooms) {
   const container = document.getElementById("roomContainer");
-  const countDisplay = document.getElementById("resultsCount");
-  const t = translations[currentLanguage];
-  container.innerHTML = "";
+  if (!container) return;
 
-  countDisplay.innerText = `${rooms.length} listings`;
+  const t = translations[currentLanguage];
+  safeSetText("resultsCount", `${rooms.length} listings`);
+
+  container.innerHTML = "";
 
   if (rooms.length === 0) {
     container.innerHTML = `
       <div class="col-span-full text-center py-12 bg-white rounded-xl border border-gray-100">
         <p class="text-4xl mb-2">🔍</p>
         <p class="text-gray-700 font-bold">${currentLanguage === 'hi' ? 'Koi property ya room nahi mila' : 'No properties found'}</p>
-        <p class="text-xs text-gray-400 mt-1">${currentLanguage === 'hi' ? 'Kripya doosra sheher ya category select karein.' : 'Please try another city or category.'}</p>
+        <p class="text-xs text-gray-400 mt-1">${currentLanguage === 'hi' ? 'Kripya doosra sheher ya category chunein.' : 'Please try another city or category.'}</p>
       </div>`;
     return;
   }
@@ -137,19 +143,17 @@ function displayRooms(rooms) {
     const cityState = `${room.city || ''}${room.state ? ', ' + room.state : ''}`;
     const periodSuffix = room.price_period === 'day' ? t.rentSuffixDay : t.rentSuffixMonth;
 
-    const shareText = encodeURIComponent(`India me ye property dekho: "${room.title}" (${categoryBadge}) - ₹${room.rent}${periodSuffix}. Direct Owner Link: ${roomUrl}`);
+    const shareText = encodeURIComponent(`India me ye property dekho: "${room.title}" (${categoryBadge}) - ₹${room.rent}${periodSuffix}. Direct Link: ${roomUrl}`);
     const whatsappShareUrl = `https://api.whatsapp.com/send?text=${shareText}`;
 
-    const message = encodeURIComponent(`Namaste! Maine RoomDekho par aapka "${room.title}" (${categoryBadge}) dekha. Kya ye available hai?`);
+    const message = encodeURIComponent(`Namaste! Maine RoomDekho par aapka "${room.title}" dekha. Kya ye available hai?`);
     const whatsappContactUrl = `https://wa.me/${cleanPhone}?text=${message}`;
     const callUrl = `tel:+${cleanPhone}`;
     
-    // Dynamic Google Maps Search for Any City/State in India
-    const mapsQuery = encodeURIComponent(`${room.location}, ${cityState}`);
+    const mapsQuery = encodeURIComponent(`${room.location || ''}, ${cityState}`);
     const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
     const amenitiesList = Array.isArray(room.amenities) ? room.amenities : [];
 
-    // Images Array
     let imgs = [];
     if (room.images && room.images.length > 0) {
       imgs = room.images;
@@ -161,15 +165,13 @@ function displayRooms(rooms) {
 
     const isFav = favorites.includes(room.id);
     const isMyListing = myCreatedPins.includes(room.pin);
-
-    // Count how many rooms this owner has in total
     const ownerTotalListings = roomsData.filter(r => r.phone === room.phone).length;
+    const safeImgsString = encodeURIComponent(JSON.stringify(imgs));
 
     const card = `
       <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition flex flex-col justify-between border border-gray-100 overflow-hidden ${room.is_rented ? 'opacity-65 grayscale' : ''}">
         <div>
-          <!-- Image Box -->
-          <div class="relative cursor-pointer group" onclick="openGallery(${JSON.stringify(imgs).replace(/"/g, '&quot;')})">
+          <div class="relative cursor-pointer group" onclick="openGallery('${safeImgsString}')">
             ${room.is_rented 
               ? `<span class="absolute top-3 left-3 bg-red-600 text-white text-[10px] px-2.5 py-0.5 rounded-md font-bold uppercase z-10 shadow">${t.rentedBadge}</span>` 
               : `<span class="absolute top-3 left-3 bg-indigo-600 text-white text-[10px] px-2.5 py-0.5 rounded-md font-bold z-10 shadow">${categoryBadge}</span>`}
@@ -187,7 +189,6 @@ function displayRooms(rooms) {
             </div>
           </div>
 
-          <!-- Content Details -->
           <div class="p-4 pb-2">
             <div class="flex justify-between items-baseline mb-1">
               <span class="text-xl font-black text-indigo-700">₹${room.rent}<span class="text-xs text-gray-500 font-normal">${periodSuffix}</span></span>
@@ -195,14 +196,13 @@ function displayRooms(rooms) {
             </div>
             
             <h4 class="font-bold text-gray-900 leading-snug line-clamp-1">${room.title}</h4>
-            <p class="text-xs text-gray-500 mt-0.5 font-medium">📍 ${room.location} <span class="text-gray-400">(${cityState})</span> <span class="text-indigo-600 font-semibold">${spaceDetail}</span></p>
+            <p class="text-xs text-gray-500 mt-0.5 font-medium">📍 ${room.location || ''} <span class="text-gray-400">(${cityState})</span> <span class="text-indigo-600 font-semibold">${spaceDetail}</span></p>
 
             ${room.owner_name ? `<p class="text-[11px] text-gray-600 mt-1 font-medium">👤 Owner/Manager: <strong class="text-gray-800">${room.owner_name}</strong></p>` : ''}
 
-            <!-- Point 6: Owner's Multiple Properties Link -->
             ${ownerTotalListings > 1 ? `
               <button onclick="filterByOwnerPhone('${room.phone}', '${room.owner_name || 'Owner'}')" class="mt-2 text-xs bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold px-2.5 py-1 rounded-md border border-amber-200 flex items-center gap-1 w-full justify-center transition">
-                🏢 Is Owner ke pass ${ownerTotalListings} rooms/floors hain (Sabhi Dekhein)
+                🏢 Is Owner ke pass ${ownerTotalListings} spaces hain (Sabhi Dekhein)
               </button>
             ` : ''}
 
@@ -221,7 +221,6 @@ function displayRooms(rooms) {
           </div>
         </div>
 
-        <!-- Action Buttons -->
         <div class="p-4 pt-2 space-y-2">
           ${!room.is_rented ? `
             <div class="grid grid-cols-2 gap-2">
@@ -238,7 +237,6 @@ function displayRooms(rooms) {
             </button>
           `}
 
-          <!-- Owner / Admin Controls -->
           <div class="flex gap-2 pt-1.5 border-t text-[11px]">
             <button onclick="handleRentedToggle(${room.id}, ${room.is_rented})" class="flex-1 py-1 rounded border border-gray-200 hover:bg-gray-50 text-gray-600 font-medium">
               ${room.is_rented ? t.markAvailable : t.markRented}
@@ -255,27 +253,26 @@ function displayRooms(rooms) {
 }
 
 function toggleForm() {
-  document.getElementById("formSection").classList.toggle("hidden");
+  const formSec = document.getElementById("formSection");
+  if (formSec) formSec.classList.toggle("hidden");
 }
 
 function handleCategoryFieldChanges() {
   const cat = document.getElementById("category").value;
   const pricePeriod = document.getElementById("price_period");
-  if (cat === "Hotel") {
-    pricePeriod.value = "day";
-  } else {
-    pricePeriod.value = "month";
+  if (pricePeriod) {
+    pricePeriod.value = (cat === "Hotel") ? "day" : "month";
   }
 }
 
-// Unlimited Photos Upload & Form Submit
+// Unlimited Photos Upload
 async function addNewRoom(event) {
   event.preventDefault();
   const btn = document.getElementById("submitBtn");
   const fileInput = document.getElementById("imageFiles");
 
   if (!fileInput.files.length) {
-    alert("Kripya kam se kam 1 photo select karein!");
+    alert("Kripya kam se kam 1 photo chunein!");
     return;
   }
 
@@ -339,7 +336,7 @@ async function addNewRoom(event) {
       localStorage.setItem("roomdekho_mypins", JSON.stringify(myCreatedPins));
     }
 
-    alert("Property poore Bharat me safaltapoorvak publish ho gayi! Apna 4-digit PIN yaad rakhein.");
+    alert("Property safaltapoorvak publish ho gayi!");
     document.getElementById("roomForm").reset();
     toggleForm();
     fetchRooms();
@@ -351,58 +348,63 @@ async function addNewRoom(event) {
   }
 }
 
-// Category Navigation Tabs / Pages
+// Category Tabs
 function setCategoryFilter(category) {
   selectedCategory = category;
-  selectedOwnerPhone = null; // Clear owner filter on category switch
-  document.getElementById("ownerFilterNotice").classList.add("hidden");
+  selectedOwnerPhone = null;
+  
+  const notice = document.getElementById("ownerFilterNotice");
+  if (notice) notice.classList.add("hidden");
 
   document.querySelectorAll(".category-btn").forEach(btn => {
     btn.classList.remove("bg-white", "text-indigo-900", "font-bold");
     btn.classList.add("bg-indigo-800/80", "text-white");
   });
-  event.target.classList.remove("bg-indigo-800/80", "text-white");
-  event.target.classList.add("bg-white", "text-indigo-900", "font-bold");
+
+  if (window.event && window.event.target) {
+    window.event.target.classList.remove("bg-indigo-800/80", "text-white");
+    window.event.target.classList.add("bg-white", "text-indigo-900", "font-bold");
+  }
 
   applyFilters();
 }
 
-// Point 6: Owner Phone Filter (Building / Owner View)
 function filterByOwnerPhone(phone, ownerName) {
   selectedOwnerPhone = phone;
-  document.getElementById("ownerFilterNotice").classList.remove("hidden");
-  document.getElementById("currentViewTitle").innerText = `${ownerName} Ke Sabhi Rooms / Floors`;
+  const notice = document.getElementById("ownerFilterNotice");
+  if (notice) notice.classList.remove("hidden");
+  safeSetText("currentViewTitle", `${ownerName} Ke Sabhi Rooms / Floors`);
   window.scrollTo({ top: 350, behavior: 'smooth' });
   applyFilters();
 }
 
 function clearOwnerFilter() {
   selectedOwnerPhone = null;
-  document.getElementById("ownerFilterNotice").classList.add("hidden");
-  document.getElementById("currentViewTitle").innerText = translations[currentLanguage].availableListings;
+  const notice = document.getElementById("ownerFilterNotice");
+  if (notice) notice.classList.add("hidden");
+  safeSetText("currentViewTitle", translations[currentLanguage].availableListings);
   applyFilters();
 }
 
-// Owner "Mere Listings" Button
 function toggleMyListings() {
   showMyListingsOnly = !showMyListingsOnly;
   const btn = document.getElementById("myListingsBtn");
 
-  if (showMyListingsOnly) {
-    btn.classList.add("bg-indigo-600", "text-white");
-    btn.classList.remove("bg-indigo-50/50", "text-indigo-700");
-    document.getElementById("currentViewTitle").innerText = "Aapke Dwara Dali Gayi Listings";
-  } else {
-    btn.classList.remove("bg-indigo-600", "text-white");
-    btn.classList.add("bg-indigo-50/50", "text-indigo-700");
-    document.getElementById("currentViewTitle").innerText = translations[currentLanguage].availableListings;
+  if (btn) {
+    if (showMyListingsOnly) {
+      btn.classList.add("bg-indigo-600", "text-white");
+      btn.classList.remove("bg-indigo-50/50", "text-indigo-700");
+    } else {
+      btn.classList.remove("bg-indigo-600", "text-white");
+      btn.classList.add("bg-indigo-50/50", "text-indigo-700");
+    }
   }
   applyFilters();
 }
 
 // Wishlist
 function toggleFav(event, id) {
-  event.stopPropagation();
+  if (event) event.stopPropagation();
   if (favorites.includes(id)) {
     favorites = favorites.filter(favId => favId !== id);
   } else {
@@ -416,19 +418,25 @@ function toggleFav(event, id) {
 function toggleFavoritesOnly() {
   showFavoritesOnly = !showFavoritesOnly;
   const btn = document.getElementById("favFilterBtn");
-  if (showFavoritesOnly) {
-    btn.classList.add("bg-rose-600", "text-white");
-  } else {
-    btn.classList.remove("bg-rose-600", "text-white");
+  if (btn) {
+    if (showFavoritesOnly) {
+      btn.classList.add("bg-rose-600", "text-white");
+    } else {
+      btn.classList.remove("bg-rose-600", "text-white");
+    }
   }
   applyFilters();
 }
 
-// Main Filter Logic (Search by City, State, Area, Category, Owner)
+// Main Filter
 function applyFilters() {
-  const search = document.getElementById("searchInput").value.toLowerCase();
-  const maxBudget = parseInt(document.getElementById("budgetFilter").value);
-  const sortBy = document.getElementById("sortBy").value;
+  const searchInput = document.getElementById("searchInput");
+  const budgetFilter = document.getElementById("budgetFilter");
+  const sortBy = document.getElementById("sortBy");
+
+  const search = searchInput ? searchInput.value.toLowerCase() : "";
+  const maxBudget = budgetFilter ? parseInt(budgetFilter.value) : 10000000;
+  const sort = sortBy ? sortBy.value : "newest";
 
   let filtered = roomsData.filter(room => {
     const titleMatch = room.title ? room.title.toLowerCase().includes(search) : false;
@@ -437,9 +445,8 @@ function applyFilters() {
     const stateMatch = room.state ? room.state.toLowerCase().includes(search) : false;
     const matchesSearch = titleMatch || locMatch || cityMatch || stateMatch;
     
-    // Category match
     const matchesCategory = selectedCategory === "All" || (room.category || "Room") === selectedCategory;
-    const matchesBudget = room.rent <= maxBudget;
+    const matchesBudget = (room.rent || 0) <= maxBudget;
     const matchesFav = !showFavoritesOnly || favorites.includes(room.id);
     const matchesMyListings = !showMyListingsOnly || myCreatedPins.includes(room.pin);
     const matchesOwner = !selectedOwnerPhone || room.phone === selectedOwnerPhone;
@@ -447,9 +454,9 @@ function applyFilters() {
     return matchesSearch && matchesCategory && matchesBudget && matchesFav && matchesMyListings && matchesOwner;
   });
 
-  if (sortBy === "low_high") {
+  if (sort === "low_high") {
     filtered.sort((a, b) => a.rent - b.rent);
-  } else if (sortBy === "high_low") {
+  } else if (sort === "high_low") {
     filtered.sort((a, b) => b.rent - a.rent);
   } else {
     filtered.sort((a, b) => b.id - a.id);
@@ -459,16 +466,34 @@ function applyFilters() {
 }
 
 function setAreaFilter(cityName) {
-  document.getElementById("searchInput").value = cityName;
+  const searchInput = document.getElementById("searchInput");
+  if (searchInput) searchInput.value = cityName;
   applyFilters();
 }
 
-// Multi-Page Navigation (Home, About, Privacy)
+// Navigation
 function showSection(sectionName) {
-  document.getElementById("homeSection").classList.add("hidden");
-  document.getElementById("aboutSection").classList.add("hidden");
-  document.getElementById("privacySection").classList.add("hidden");
+  const homeSec = document.getElementById("homeSection");
+  const aboutSec = document.getElementById("aboutSection");
+  const privacySec = document.getElementById("privacySection");
 
-  if (sectionName === "home") {
-    document.getElementById("homeSection").classList.remove("hidden");
-  } else if (sectionName === "about") {
+  if (homeSec) homeSec.classList.add("hidden");
+  if (aboutSec) aboutSec.classList.add("hidden");
+  if (privacySec) privacySec.classList.add("hidden");
+
+  if (sectionName === "home" && homeSec) homeSec.classList.remove("hidden");
+  else if (sectionName === "about" && aboutSec) aboutSec.classList.remove("hidden");
+  else if (sectionName === "privacy" && privacySec) privacySec.classList.remove("hidden");
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Actions
+async function handleRentedToggle(id, currentStatus) {
+  const room = roomsData.find(r => r.id === id);
+  const inputPin = prompt("Room/Property ka 4-digit PIN enter karein:");
+  if (!inputPin) return;
+
+  if (inputPin === room.pin || inputPin === MASTER_ADMIN_PIN) {
+    const { error } = await db.from('rooms').update({ is_rented: !currentStatus }).eq('id', id);
+    if (error) alert("Err
