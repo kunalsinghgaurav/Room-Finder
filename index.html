@@ -3,16 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RoomDekho - Property & Space Finder Patna</title>
+  <title>RoomDekho India - Zero Brokerage Rental & Space Marketplace</title>
 
-  <!-- SEO Meta Tags -->
-  <meta name="description" content="Patna's zero-brokerage marketplace for Rooms, Flats, Commercial Halls, Shops, Hotels, and Coaching spaces.">
-  <meta name="keywords" content="rooms in patna, shops on rent patna, commercial space patna, coaching space patna, flat rent patna">
+  <!-- SEO Meta Tags for Pan-India -->
+  <meta name="description" content="India's zero-brokerage marketplace for Rooms, PGs, Hostels, Flats, Shops, Hotels, and Commercial Spaces across all states. Direct owner contacts.">
+  <meta name="keywords" content="rooms in india, flat on rent, pg hostel booking, shop on rent india, commercial coaching space, hotel family rooms">
+  <meta name="author" content="RoomDekho India">
+
+  <!-- WhatsApp / Social Share Preview -->
+  <meta property="og:title" content="RoomDekho India - Zero Brokerage Space Marketplace">
+  <meta property="og:description" content="Find verified rooms, flats, shops, hotels, and commercial spaces across India directly from owners.">
+  <meta property="og:image" content="https://img.icons8.com/color/512/home--v1.png">
+  <meta property="og:url" content="https://kunalsinghgaurav.github.io/Room-Finder/">
+  <meta property="og:type" content="website">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="https://img.icons8.com/color/192/home--v1.png">
 
-  <!-- Tailwind & Supabase -->
+  <!-- Tailwind & Supabase Client -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -22,59 +30,77 @@
 </head>
 <body class="bg-gray-50 font-sans text-gray-800 flex flex-col min-h-screen">
 
-  <!-- Navigation Bar -->
+  <!-- Top Global Navigation Bar -->
   <header class="bg-white shadow-sm sticky top-0 z-40 border-b">
     <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
       <div>
-        <a href="#" onclick="showSection('home')" class="text-2xl font-black text-indigo-600 tracking-tight">🏢 RoomDekho<span class="text-xs text-orange-500 font-bold ml-1">PATNA</span></a>
-        <p class="text-[10px] text-gray-400 font-medium">Rent Rooms, Shops, Flats & Commercial Spaces</p>
+        <a href="#" onclick="showSection('home')" class="text-2xl font-black text-indigo-600 tracking-tight flex items-center gap-1">
+          🏢 RoomDekho<span class="text-xs bg-orange-500 text-white font-extrabold px-1.5 py-0.5 rounded">INDIA</span>
+        </a>
+        <p id="langSubHeader" class="text-[10px] text-gray-400 font-medium">Pan-India Direct Space & Room Marketplace</p>
       </div>
 
       <div class="flex items-center gap-2">
-        <button id="myListingsBtn" onclick="toggleMyListings()" class="text-xs font-semibold px-3 py-2 rounded-lg border border-indigo-200 text-indigo-700 bg-indigo-50/50 hover:bg-indigo-100 transition">
-          📋 Mere Listings (<span id="myCount">0</span>)
+        <!-- Language Switcher Toggle -->
+        <button id="langToggleBtn" onclick="toggleLanguage()" class="text-xs font-bold px-2.5 py-1.5 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition flex items-center gap-1">
+          🌐 <span id="currentLangLabel">हिन्दी</span>
         </button>
-        <button id="favFilterBtn" onclick="toggleFavoritesOnly()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-semibold px-3 py-2 rounded-lg transition border border-rose-200">
-          ❤️ Saved (<span id="favCount">0</span>)
+
+        <!-- Saved / Wishlist -->
+        <button id="favFilterBtn" onclick="toggleFavoritesOnly()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-semibold px-2.5 py-2 rounded-lg transition border border-rose-200">
+          ❤️ (<span id="favCount">0</span>)
         </button>
+
+        <!-- Owner My Listings -->
+        <button id="myListingsBtn" onclick="toggleMyListings()" class="text-xs font-semibold px-2.5 py-2 rounded-lg border border-indigo-200 text-indigo-700 bg-indigo-50/50 hover:bg-indigo-100 transition hidden sm:inline-block">
+          📋 <span id="t_my_listings">Mere Listings</span> (<span id="myCount">0</span>)
+        </button>
+
         <button onclick="toggleForm()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-semibold px-3 sm:px-4 py-2 rounded-lg transition shadow">
-          + Property Post Karein
+          <span id="t_post_btn">+ Post Property</span>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- Main Home Content -->
+  <!-- Main Body Content -->
   <div id="homeSection">
-    <!-- Hero / Category Selector -->
-    <section class="bg-gradient-to-r from-indigo-700 to-indigo-900 text-white py-10 px-4 text-center">
-      <h2 class="text-3xl sm:text-4xl font-extrabold mb-2">Patna Me Koi Bhi Space Ya Room Dhundhein</h2>
-      <p class="text-indigo-200 text-sm max-w-xl mx-auto mb-6">Zero Brokerage • Direct Owner Contact • Verified Commercial & Residential Properties</p>
+    
+    <!-- Hero Banner with Category Pages Navigation -->
+    <section class="bg-gradient-to-r from-indigo-700 via-indigo-800 to-indigo-950 text-white py-10 px-4 text-center">
+      <h2 id="t_hero_title" class="text-2xl sm:text-4xl font-extrabold mb-2">Poore Bharat Me Kisi Bhi Sheher Me Space Ya Room Dhundhein</h2>
+      <p id="t_hero_sub" class="text-indigo-200 text-xs sm:text-sm max-w-2xl mx-auto mb-6">Zero Brokerage • Direct Owner Contact • Rooms, Flats, Hostels, Hotels, Shops & Commercial Spaces</p>
 
-      <!-- Category Tabs -->
-      <div class="flex flex-wrap justify-center gap-2 max-w-4xl mx-auto" id="categoryTabs">
-        <button onclick="setCategoryFilter('All')" class="category-btn active bg-white text-indigo-900 font-bold px-4 py-2 rounded-full text-xs shadow">Sabhi (All)</button>
-        <button onclick="setCategoryFilter('Room')" class="category-btn bg-indigo-800/80 hover:bg-indigo-800 text-white font-medium px-4 py-2 rounded-full text-xs transition">🏠 Student Rooms / PG</button>
-        <button onclick="setCategoryFilter('Apartment')" class="category-btn bg-indigo-800/80 hover:bg-indigo-800 text-white font-medium px-4 py-2 rounded-full text-xs transition">🏢 Flat / Apartment</button>
-        <button onclick="setCategoryFilter('Shop')" class="category-btn bg-indigo-800/80 hover:bg-indigo-800 text-white font-medium px-4 py-2 rounded-full text-xs transition">🛍️ Dukaan / Shop</button>
-        <button onclick="setCategoryFilter('Commercial')" class="category-btn bg-indigo-800/80 hover:bg-indigo-800 text-white font-medium px-4 py-2 rounded-full text-xs transition">🏦 Commercial / Bank / Coaching Space</button>
-        <button onclick="setCategoryFilter('Hotel')" class="category-btn bg-indigo-800/80 hover:bg-indigo-800 text-white font-medium px-4 py-2 rounded-full text-xs transition">🏨 Hotel / Guest House</button>
+      <!-- Category Filter Tabs / Separate Pages -->
+      <div class="flex flex-wrap justify-center gap-2 max-w-5xl mx-auto" id="categoryTabs">
+        <button onclick="setCategoryFilter('All')" class="category-btn bg-white text-indigo-900 font-bold px-3 py-1.5 rounded-full text-xs shadow">🌐 All Listings</button>
+        <button onclick="setCategoryFilter('Room Boys')" class="category-btn bg-indigo-800/80 hover:bg-indigo-800 text-white font-medium px-3 py-1.5 rounded-full text-xs transition">👦 Room Boys</button>
+        <button onclick="setCategoryFilter('Room Girls')" class="category-btn bg-indigo-800/80 hover:bg-indigo-800 text-white font-medium px-3 py-1.5 rounded-full text-xs transition">👧 Room Girls</button>
+        <button onclick="setCategoryFilter('Hostel')" class="category-btn bg-indigo-800/80 hover:bg-indigo-800 text-white font-medium px-3 py-1.5 rounded-full text-xs transition">🏫 Hostel</button>
+        <button onclick="setCategoryFilter('Lodge')" class="category-btn bg-indigo-800/80 hover:bg-indigo-800 text-white font-medium px-3 py-1.5 rounded-full text-xs transition">🏡 Lodge</button>
+        <button onclick="setCategoryFilter('PG')" class="category-btn bg-indigo-800/80 hover:bg-indigo-800 text-white font-medium px-3 py-1.5 rounded-full text-xs transition">🛏️ PG</button>
+        <button onclick="setCategoryFilter('Flat')" class="category-btn bg-indigo-800/80 hover:bg-indigo-800 text-white font-medium px-3 py-1.5 rounded-full text-xs transition">🏠 Flat</button>
+        <button onclick="setCategoryFilter('Apartment')" class="category-btn bg-indigo-800/80 hover:bg-indigo-800 text-white font-medium px-3 py-1.5 rounded-full text-xs transition">🏢 Apartment Floor</button>
+        <button onclick="setCategoryFilter('Family')" class="category-btn bg-indigo-800/80 hover:bg-indigo-800 text-white font-medium px-3 py-1.5 rounded-full text-xs transition">👨‍👩‍👧 Family Homes</button>
+        <button onclick="setCategoryFilter('Dukan')" class="category-btn bg-indigo-800/80 hover:bg-indigo-800 text-white font-medium px-3 py-1.5 rounded-full text-xs transition">🛍️ Dukaan / Retail</button>
+        <button onclick="setCategoryFilter('Commercial')" class="category-btn bg-indigo-800/80 hover:bg-indigo-800 text-white font-medium px-3 py-1.5 rounded-full text-xs transition">🏦 Commercial / Bank / Coaching</button>
+        <button onclick="setCategoryFilter('Hotel')" class="category-btn bg-indigo-800/80 hover:bg-indigo-800 text-white font-medium px-3 py-1.5 rounded-full text-xs transition">🏨 Hotel / Guest House</button>
       </div>
     </section>
 
-    <!-- Filter Bar -->
+    <!-- Filter & City Search Bar -->
     <section class="max-w-7xl mx-auto px-4 -mt-5">
       <div class="bg-white p-4 rounded-xl shadow-lg border border-gray-100 space-y-3">
         <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
-          <input type="text" id="searchInput" oninput="applyFilters()" placeholder="🔍 Area search karein (e.g. Boring Road, Kankarbagh)..." class="sm:col-span-2 border p-2.5 rounded-lg bg-gray-50 focus:outline-indigo-500 text-sm">
+          <input type="text" id="searchInput" oninput="applyFilters()" placeholder="🔍 Sheher, Area ya Landmark search karein (e.g. Patna, Delhi, Boring Rd)..." class="sm:col-span-2 border p-2.5 rounded-lg bg-gray-50 focus:outline-indigo-500 text-sm">
           
           <select id="budgetFilter" onchange="applyFilters()" class="border p-2.5 rounded-lg bg-gray-50 focus:outline-indigo-500 text-sm">
-            <option value="1000000">Budget: No Limit</option>
-            <option value="5000">Upto ₹5,000</option>
-            <option value="10000">Upto ₹10,000</option>
-            <option value="25000">Upto ₹25,000</option>
-            <option value="50000">Upto ₹50,000</option>
-            <option value="100000">Upto ₹1 Lakh+ (Commercial)</option>
+            <option value="10000000">Budget: No Limit</option>
+            <option value="4000">Upto ₹4,000</option>
+            <option value="8000">Upto ₹8,000</option>
+            <option value="15000">Upto ₹15,000</option>
+            <option value="30000">Upto ₹30,000</option>
+            <option value="100000">Upto ₹1 Lakh+ (Commercial/Hotels)</option>
           </select>
 
           <select id="sortBy" onchange="applyFilters()" class="border p-2.5 rounded-lg bg-gray-50 focus:outline-indigo-500 text-sm">
@@ -84,107 +110,148 @@
           </select>
         </div>
 
-        <!-- Quick Patna Area Chips -->
+        <!-- Quick Major Cities Chips -->
         <div class="flex flex-wrap gap-1.5 items-center pt-1 text-xs">
-          <span class="text-gray-400 font-semibold mr-1">Popular:</span>
-          <button onclick="setAreaFilter('Boring Road')" class="bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded-full text-gray-700">Boring Road</button>
-          <button onclick="setAreaFilter('Kankarbagh')" class="bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded-full text-gray-700">Kankarbagh</button>
-          <button onclick="setAreaFilter('Saguna More')" class="bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded-full text-gray-700">Saguna More / Bailey Rd</button>
-          <button onclick="setAreaFilter('Rajendra Nagar')" class="bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded-full text-gray-700">Rajendra Nagar</button>
-          <button onclick="setAreaFilter('Musallahpur')" class="bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded-full text-gray-700">Musallahpur Haat</button>
+          <span class="text-gray-400 font-semibold mr-1">Major Hubs:</span>
+          <button onclick="setAreaFilter('Patna')" class="bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded-full text-gray-700">Patna</button>
+          <button onclick="setAreaFilter('Delhi')" class="bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded-full text-gray-700">Delhi NCR</button>
+          <button onclick="setAreaFilter('Kota')" class="bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded-full text-gray-700">Kota</button>
+          <button onclick="setAreaFilter('Prayagraj')" class="bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded-full text-gray-700">Prayagraj</button>
+          <button onclick="setAreaFilter('Bangalore')" class="bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded-full text-gray-700">Bangalore</button>
+          <button onclick="setAreaFilter('')" class="text-indigo-600 font-semibold px-2">Reset</button>
         </div>
       </div>
     </section>
 
-    <!-- Property Listings Container -->
+    <!-- Properties Container -->
     <main class="max-w-7xl mx-auto px-4 py-8 flex-1">
       <div class="flex justify-between items-center mb-4">
-        <h3 id="currentViewTitle" class="text-lg font-bold text-gray-800">Available Listings</h3>
+        <div>
+          <h3 id="currentViewTitle" class="text-lg font-bold text-gray-800">All India Listings</h3>
+          <p id="ownerFilterNotice" class="text-xs text-indigo-600 font-medium hidden">
+            <span>Showing all spaces by this specific owner</span> • <button onclick="clearOwnerFilter()" class="underline font-bold">Clear Filter (Show All)</button>
+          </p>
+        </div>
         <p id="resultsCount" class="text-xs text-gray-500 font-medium"></p>
       </div>
+
       <div id="roomContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <p class="col-span-full text-center text-gray-500 py-8">Properties load ho rahi hain...</p>
       </div>
     </main>
   </div>
 
-  <!-- Add Property Form Modal -->
+  <!-- Multi-Category Add Property Form Modal -->
   <section id="formSection" class="hidden fixed inset-0 bg-black/70 z-50 overflow-y-auto p-4 flex items-center justify-center">
     <div class="bg-white max-w-2xl w-full p-6 rounded-2xl shadow-2xl my-8 relative">
       <button onclick="toggleForm()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl font-bold">&times;</button>
-      <h3 class="text-xl font-black text-gray-800 mb-1">Nayi Property Ya Space List Karein</h3>
-      <p class="text-xs text-gray-500 mb-4">Zero Commission • Direct Grahak / Tenant Payein</p>
+      <h3 id="t_modal_title" class="text-xl font-black text-gray-800 mb-1">Nayi Property / Space List Karein</h3>
+      <p class="text-xs text-gray-500 mb-4">Poore Bharat me kisi bhi jagah ka room, dukan ya space seedhe grahak tak pahuchayein</p>
 
       <form id="roomForm" onsubmit="addNewRoom(event)" class="space-y-4">
+        
+        <!-- Category Selection -->
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1">Property Category</label>
-          <select id="category" class="w-full border p-2.5 rounded-lg bg-gray-50 font-medium focus:outline-indigo-500">
-            <option value="Room">🏠 Room / PG / Hostel</option>
-            <option value="Apartment">🏢 Flat / Complete Apartment Floor</option>
-            <option value="Shop">🛍️ Dukaan / Retail Shop</option>
+          <select id="category" onchange="handleCategoryFieldChanges()" class="w-full border p-2.5 rounded-lg bg-gray-50 font-semibold focus:outline-indigo-500 text-sm">
+            <option value="Room Boys">👦 Room Boys (Hostel / Single / Shared)</option>
+            <option value="Room Girls">👧 Room Girls (PG / Single / Shared)</option>
+            <option value="Hostel">🏫 Hostel (Students & Working)</option>
+            <option value="Lodge">🏡 Lodge (Affordable Stay)</option>
+            <option value="PG">🛏️ PG (Paying Guest with/without Food)</option>
+            <option value="Flat">🏠 Flat (1BHK / 2BHK / 3BHK)</option>
+            <option value="Apartment">🏢 Apartment (Full Floor / Unit)</option>
+            <option value="Family">👨‍👩‍‍👧 Family House / Independent Floor</option>
+            <option value="Dukan">🛍️ Dukaan / Retail Shop</option>
             <option value="Commercial">🏦 Commercial Hall (Bank, Coaching, Mall, Office)</option>
-            <option value="Hotel">🏨 Hotel / Lodge / Guest House</option>
+            <option value="Hotel">🏨 Hotel / Lodge / Guest House (Family & Travelers)</option>
           </select>
         </div>
 
-        <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1">Title</label>
-          <input type="text" id="title" required placeholder="e.g. 1st Floor 3-Room Flat ya 1500 sq ft Commercial Hall" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
-        </div>
-        
-        <div class="grid grid-cols-2 gap-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-bold text-gray-700 mb-1">Location / Area</label>
-            <input type="text" id="location" required placeholder="e.g. Boring Road, Near Pillar 45" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
+            <label class="block text-xs font-bold text-gray-700 mb-1">Property Title</label>
+            <input type="text" id="title" required placeholder="e.g. 2nd Floor 2BHK ya Deluxe AC Family Room" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
           </div>
           <div>
-            <label class="block text-xs font-bold text-gray-700 mb-1">Monthly Rent / Price (₹)</label>
-            <input type="number" id="rent" required placeholder="e.g. 15000" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
+            <label class="block text-xs font-bold text-gray-700 mb-1">Owner / Manager Name</label>
+            <input type="text" id="owner_name" required placeholder="Aapka ya Building ka naam" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <div class="col-span-2 sm:col-span-1">
+            <label class="block text-xs font-bold text-gray-700 mb-1">Area / Landmark</label>
+            <input type="text" id="location" required placeholder="e.g. Boring Road ya Karol Bagh" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">City (Sheher)</label>
+            <input type="text" id="city" required placeholder="e.g. Patna, Delhi" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">State (Rajya)</label>
+            <input type="text" id="state" required placeholder="e.g. Bihar, UP" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
           </div>
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-bold text-gray-700 mb-1">Floor / Size / Type</label>
-            <input type="text" id="space_size" placeholder="e.g. 2nd Floor, 1200 Sq Ft, 2BHK" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
+            <label class="block text-xs font-bold text-gray-700 mb-1">Rent / Price (₹)</label>
+            <input type="number" id="rent" required placeholder="e.g. 5000" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
           </div>
           <div>
-            <label class="block text-xs font-bold text-gray-700 mb-1">Suitable For / Tenant</label>
-            <select id="type" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
-              <option value="Any">Anyone / Commercial</option>
-              <option value="Boys">Boys / Students</option>
-              <option value="Girls">Girls / Working Women</option>
-              <option value="Family">Family Only</option>
+            <label class="block text-xs font-bold text-gray-700 mb-1">Pricing Model</label>
+            <select id="price_period" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500 font-medium">
+              <option value="month">Per Month (Mahine ka)</option>
+              <option value="day">Per Day (Hotels / Daily Stays)</option>
             </select>
           </div>
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-bold text-gray-700 mb-1">WhatsApp / Calling Number</label>
+            <label class="block text-xs font-bold text-gray-700 mb-1">Floor No. / Space Size</label>
+            <input type="text" id="space_size" placeholder="e.g. 3rd Floor, 1500 Sq Ft, 2BHK" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">Suitable For (Guests/Tenants)</label>
+            <select id="type" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
+              <option value="Anyone / Open to All">Anyone / Open to All</option>
+              <option value="Family Allowed (Hotels/Flats)">Family Allowed (Hotels & Flats)</option>
+              <option value="Boys Only">Boys Only (Students/Job)</option>
+              <option value="Girls Only">Girls Only (Students/Working)</option>
+              <option value="Family Only">Family Only</option>
+              <option value="Commercial Business / Shop">Commercial Business / Shop</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">WhatsApp / Call Number</label>
             <input type="tel" id="phone" required placeholder="e.g. 9876543210" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
           </div>
           <div>
-            <label class="block text-xs font-bold text-indigo-700 mb-1">🔒 4-Digit Secret Owner PIN</label>
-            <input type="password" id="ownerPin" maxlength="4" required placeholder="e.g. 7890" class="w-full border-2 border-indigo-200 p-2 rounded-lg bg-indigo-50/50 text-sm font-bold text-indigo-800">
+            <label class="block text-xs font-bold text-indigo-700 mb-1">🔒 4-Digit Owner Secret PIN</label>
+            <input type="password" id="ownerPin" maxlength="4" required placeholder="e.g. 9898" class="w-full border-2 border-indigo-200 p-2 rounded-lg bg-indigo-50/50 text-sm font-bold text-indigo-800">
           </div>
         </div>
 
         <!-- Unlimited Photo Upload -->
         <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1">Photos (Kitni bhi photos select kar sakte hain)</label>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Photos (Unlimited Select Karein)</label>
           <input type="file" id="imageFiles" accept="image/*" multiple required class="w-full border p-2 rounded-lg bg-gray-50 text-xs file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-bold file:bg-indigo-100 file:text-indigo-800">
-          <p class="text-[11px] text-gray-400 mt-1">Sabhi photos (Rooms, Washroom, Front View, Hall) ek sath select karein.</p>
+          <p class="text-[11px] text-gray-400 mt-1">Sabhi photos (Front View, Rooms, Washroom, Kitchen/Hall) ek sath chunein.</p>
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1">Suvidhayein / Amenities (Comma separated)</label>
-          <input type="text" id="amenities" placeholder="e.g. Parking, Lift, 3 Phase Light, Generator, Security" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
+          <label class="block text-xs font-bold text-gray-700 mb-1">Suvidhayein / Amenities (Comma Separated)</label>
+          <input type="text" id="amenities" placeholder="e.g. AC, Lift, 24x7 Reception, Family Safe, Parking, Wi-Fi" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
         </div>
 
         <div class="flex gap-2 pt-2">
           <button id="submitBtn" type="submit" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition shadow">
-            Publish Property
+            Publish Listing
           </button>
           <button type="button" onclick="toggleForm()" class="bg-gray-200 text-gray-700 font-bold px-4 py-3 rounded-lg hover:bg-gray-300">
             Cancel
@@ -194,77 +261,37 @@
     </div>
   </section>
 
-  <!-- About Us Page Section -->
+  <!-- Complete About Us Section -->
   <section id="aboutSection" class="hidden max-w-4xl mx-auto px-4 py-12 flex-1">
     <button onclick="showSection('home')" class="text-indigo-600 font-semibold mb-4 text-sm flex items-center gap-1">&larr; Wapas Home jayein</button>
     <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 space-y-6">
-      <h2 class="text-3xl font-black text-gray-900">About RoomDekho Patna</h2>
-      <p class="text-gray-600 leading-relaxed">
-        RoomDekho Patna ka ek dedicated <strong>0% Brokerage Property & Space Marketplace</strong> hai. Hamara maksad students, vyapariyon, aur aam logo ko bina kisi dalal (broker) ke sidhe asli property owner se jodna hai.
+      <h2 class="text-3xl font-black text-gray-900">About RoomDekho India</h2>
+      <p class="text-gray-600 leading-relaxed text-sm sm:text-base">
+        <strong>RoomDekho India</strong> Bharat ka sabse tezi se badhta hua <strong>100% Zero Brokerage Rental aur Commercial Property Marketplace</strong> hai. Hamara vision desh ke har student, parivar, vyapari aur traveler ko bina kisi dalal ya middleman ke seedhe verified property owners aur hotel managers se connect karna hai.
       </p>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 py-4">
+
+      <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 py-3">
         <div class="bg-indigo-50 p-4 rounded-xl text-center">
           <h4 class="font-black text-indigo-700 text-2xl">0%</h4>
-          <p class="text-xs text-gray-600">Zero Commission / Dalali</p>
+          <p class="text-xs text-gray-600 font-semibold mt-1">Zero Commission</p>
         </div>
         <div class="bg-emerald-50 p-4 rounded-xl text-center">
-          <h4 class="font-black text-emerald-700 text-2xl">100%</h4>
-          <p class="text-xs text-gray-600">Direct Owner Contact</p>
+          <h4 class="font-black text-emerald-700 text-2xl">Pan-India</h4>
+          <p class="text-xs text-gray-600 font-semibold mt-1">All States & Cities</p>
         </div>
         <div class="bg-amber-50 p-4 rounded-xl text-center">
-          <h4 class="font-black text-amber-700 text-2xl">Patna</h4>
-          <p class="text-xs text-gray-600">Pure City Coverage</p>
+          <h4 class="font-black text-amber-700 text-2xl">Direct</h4>
+          <p class="text-xs text-gray-600 font-semibold mt-1">Owner Contact</p>
+        </div>
+        <div class="bg-purple-50 p-4 rounded-xl text-center">
+          <h4 class="font-black text-purple-700 text-2xl">Safe</h4>
+          <p class="text-xs text-gray-600 font-semibold mt-1">Family & Students</p>
         </div>
       </div>
-      <p class="text-gray-600 text-sm">
-        Chahe aap coaching chalane ke liye bada hall dhoondh rahe hon, dukaan ke liye front space, ya student ke liye pocket-friendly room, RoomDekho sabhi suvidhayein ek click me pradan karta hai.
-      </p>
-    </div>
-  </section>
 
-  <!-- Privacy Policy Section -->
-  <section id="privacySection" class="hidden max-w-4xl mx-auto px-4 py-12 flex-1">
-    <button onclick="showSection('home')" class="text-indigo-600 font-semibold mb-4 text-sm flex items-center gap-1">&larr; Wapas Home jayein</button>
-    <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 space-y-4">
-      <h2 class="text-2xl font-black text-gray-900">Privacy Policy</h2>
-      <p class="text-gray-600 text-xs">Last updated: October 2026</p>
-      <div class="text-gray-600 text-sm space-y-3 leading-relaxed">
-        <p><strong>1. Data Collection:</strong> Hum user aur owners se sirf wahi jaankari lete hain jo room aur space rent par dene ke liye zaroori hai (jaise phone number, property location, aur photos).</p>
-        <p><strong>2. Direct Communication:</strong> Aapka contact number sidhe prospective tenants aur grahakon ko contact karne ke liye dikhaya jata hai.</p>
-        <p><strong>3. Content Removal:</strong> Property rented hone par owner apne secret PIN se listing ko kabhi bhi hata ya hide kar sakta hai.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Fullscreen Modal / Gallery Viewer -->
-  <div id="imageModal" class="hidden fixed inset-0 bg-black/90 z-50 flex flex-col items-center justify-center p-4">
-    <button onclick="closeImageModal()" class="absolute top-4 right-4 text-white text-3xl font-bold">&times;</button>
-    <div class="relative max-w-4xl w-full flex items-center justify-center">
-      <button onclick="prevImage(event)" class="absolute left-2 text-white bg-black/60 p-3 rounded-full hover:bg-black/80 font-bold">&#10094;</button>
-      <img id="modalImg" src="" alt="Property Preview" class="max-w-full max-h-[75vh] rounded-lg shadow-2xl object-contain">
-      <button onclick="nextImage(event)" class="absolute right-2 text-white bg-black/60 p-3 rounded-full hover:bg-black/80 font-bold">&#10095;</button>
-    </div>
-    <p id="imageCounter" class="text-white text-xs mt-3 bg-black/40 px-3 py-1 rounded-full"></p>
-  </div>
-
-  <!-- Footer with Links -->
-  <footer class="bg-gray-900 text-gray-400 py-8 border-t border-gray-800 mt-auto">
-    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs">
-      <div>
-        <p class="font-bold text-white text-sm">RoomDekho Patna</p>
-        <p>Zero Brokerage Direct Rental Marketplace</p>
-      </div>
-      <div class="flex gap-4 font-medium">
-        <a href="#" onclick="showSection('home')" class="hover:text-white">Home</a>
-        <a href="#" onclick="showSection('about')" class="hover:text-white">About Us</a>
-        <a href="#" onclick="showSection('privacy')" class="hover:text-white">Privacy Policy</a>
-      </div>
-      <div>
-        <p>© 2026 RoomDekho. Made for Patna.</p>
-      </div>
-    </div>
-  </footer>
-
-  <script src="app.js"></script>
-</body>
-</html>
+      <div class="space-y-3 text-sm text-gray-600 leading-relaxed">
+        <h3 class="font-bold text-gray-800 text-base">Hamari Pramukh Suvidhayein:</h3>
+        <ul class="list-disc pl-5 space-y-1">
+          <li><strong>Student & Job Seekers:</strong> Boys & Girls Hostels, PGs, aur single shared rooms bina brokerage ke.</li>
+          <li><strong>Families:</strong> Safe residential flats, independent floors aur apartments.</li>
+          <li><s
