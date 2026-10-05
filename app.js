@@ -1,10 +1,16 @@
 // Supabase Configuration
 const SUPABASE_URL = "https://ndegekylfrhroyyhumyo.supabase.co";
 const SUPABASE_KEY = "sb_publishable_hwBUpVWGEoWrQgiiG8ZgBw_ZM_aJyH2";
-const MASTER_ADMIN_PIN = "1234"; // Aapka apna master password (hamesha chalega)
+const MASTER_ADMIN_PIN = "1234";
 
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 let roomsData = [];
+let favorites = JSON.parse(localStorage.getItem("roomdekho_favs") || "[]");
+let showFavoritesOnly = false;
+
+// Modal Gallery State
+let currentImages = [];
+let currentImageIndex = 0;
 
 // Fetch Rooms
 async function fetchRooms() {
@@ -17,7 +23,12 @@ async function fetchRooms() {
   }
 
   roomsData = data || [];
+  updateFavCount();
   applyFilters();
+}
+
+function updateFavCount() {
+  document.getElementById("favCount").innerText = favorites.length;
 }
 
 // Display Cards
@@ -33,22 +44,49 @@ function displayRooms(rooms) {
   rooms.forEach(room => {
     const rawPhone = String(room.phone || "").replace(/\D/g, "");
     const cleanPhone = rawPhone.length === 10 ? `91${rawPhone}` : rawPhone;
+    const roomUrl = window.location.href.split('?')[0];
+    
+    // Feature 3: WhatsApp Share Message
+    const shareText = encodeURIComponent(`Patna me ye room dekho: "${room.title}" - ₹${room.rent}/month (${room.location}). Zero brokerage! Link: ${roomUrl}`);
+    const whatsappShareUrl = `https://api.whatsapp.com/send?text=${shareText}`;
+
+    // Tenant Contact Links
     const message = encodeURIComponent(`Namaste! Maine RoomDekho par aapka room "${room.title}" dekha. Kya ye available hai?`);
-    const whatsappUrl = `https://wa.me/${cleanPhone}?text=${message}`;
+    const whatsappContactUrl = `https://wa.me/${cleanPhone}?text=${message}`;
     const callUrl = `tel:+${cleanPhone}`;
     const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(room.location + ', Patna')}`;
     const amenitiesList = Array.isArray(room.amenities) ? room.amenities : [];
 
+    // Feature 1: Multiple Images Array Setup
+    let imgs = [];
+    if (room.images && room.images.length > 0) {
+      imgs = room.images;
+    } else if (room.image) {
+      imgs = [room.image];
+    } else {
+      imgs = ['https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=600'];
+    }
+
+    const isFav = favorites.includes(room.id);
+
     const card = `
       <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition flex flex-col justify-between border border-gray-100 ${room.is_rented ? 'opacity-60 grayscale' : ''}">
         <div>
-          <div class="relative cursor-pointer group" onclick="openImageModal('${room.image}')">
+          <div class="relative cursor-pointer group" onclick="openGallery(${JSON.stringify(imgs).replace(/"/g, '&quot;')})">
             ${room.is_rented 
               ? '<span class="absolute top-3 left-3 bg-red-600 text-white text-xs px-2.5 py-1 rounded-md font-bold uppercase z-10 shadow">Rented Out</span>' 
               : '<span class="absolute top-3 left-3 bg-emerald-600 text-white text-xs px-2 py-0.5 rounded font-semibold z-10 flex items-center gap-1 shadow">✓ Verified</span>'}
             
-            <img src="${room.image}" alt="${room.title}" class="h-48 w-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=600'">
-            <span class="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] px-1.5 py-0.5 rounded">🔍 Tap to zoom</span>
+            <!-- Feature 2: Wishlist Heart -->
+            <button onclick="toggleFav(event, ${room.id})" class="absolute top-3 right-3 bg-white/90 hover:bg-white text-sm p-1.5 rounded-full z-20 shadow transition">
+              ${isFav ? '❤️' : '🤍'}
+            </button>
+
+            <img src="${imgs[0]}" alt="${room.title}" class="h-48 w-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=600'">
+            
+            <div class="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] px-2 py-0.5 rounded flex items-center gap-1">
+              📷 ${imgs.length} Photo${imgs.length > 1 ? 's' : ''} (Tap to view)
+            </div>
           </div>
 
           <div class="p-5 pb-3">
@@ -78,7 +116,7 @@ function displayRooms(rooms) {
               <a href="${callUrl}" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold py-2 rounded-lg text-center flex items-center justify-center gap-1 transition">
                 📞 Call
               </a>
-              <a href="${whatsappUrl}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold py-2 rounded-lg text-center flex items-center justify-center gap-1 transition">
+              <a href="${whatsappContactUrl}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold py-2 rounded-lg text-center flex items-center justify-center gap-1 transition">
                 💬 WhatsApp
               </a>
             </div>
@@ -87,6 +125,16 @@ function displayRooms(rooms) {
               Room Full Ho Chuka Hai
             </button>
           `}
+
+          <!-- Feature 3 & 4: Share & Report Buttons -->
+          <div class="flex justify-between items-center text-[11px] text-gray-500 pt-1">
+            <a href="${whatsappShareUrl}" target="_blank" class="text-emerald-600 font-semibold hover:underline flex items-center gap-1">
+              📤 Share with friend
+            </a>
+            <button onclick="reportRoom(${room.id})" class="text-gray-400 hover:text-red-500">
+              🚩 Report Fake / Rented
+            </button>
+          </div>
 
           <!-- Owner PIN Verification Actions -->
           <div class="flex gap-2 pt-2 border-t text-[11px]">
@@ -108,34 +156,41 @@ function toggleForm() {
   document.getElementById("formSection").classList.toggle("hidden");
 }
 
-// Add Room with Owner's Secret PIN
+// Feature 1: Multi-file Upload Handler
 async function addNewRoom(event) {
   event.preventDefault();
   const btn = document.getElementById("submitBtn");
-  const fileInput = document.getElementById("imageFile");
+  const fileInput = document.getElementById("imageFiles");
 
   if (!fileInput.files.length) {
-    alert("Kripya gallery se photo select karein!");
+    alert("Kripya kam se kam 1 photo chunein!");
     return;
   }
 
-  btn.innerText = "Photo upload ho rahi hai...";
+  btn.innerText = "Photos upload ho rahi hain...";
   btn.disabled = true;
 
   try {
-    const file = fileInput.files[0];
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
+    const uploadedUrls = [];
+    const files = Array.from(fileInput.files).slice(0, 4); // Max 4 photos
 
-    const { error: uploadError } = await db.storage
-      .from('Room finder')
-      .upload(fileName, file);
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}_${i}_${Math.random().toString(36).substring(2)}.${fileExt}`;
 
-    if (uploadError) throw uploadError;
+      const { error: uploadError } = await db.storage
+        .from('Room finder')
+        .upload(fileName, file);
 
-    const { data: publicUrlData } = db.storage
-      .from('Room finder')
-      .getPublicUrl(fileName);
+      if (uploadError) throw uploadError;
+
+      const { data: publicUrlData } = db.storage
+        .from('Room finder')
+        .getPublicUrl(fileName);
+
+      uploadedUrls.push(publicUrlData.publicUrl);
+    }
 
     btn.innerText = "Database me save ho raha hai...";
 
@@ -148,8 +203,9 @@ async function addNewRoom(event) {
       rent: parseInt(document.getElementById("rent").value),
       type: document.getElementById("type").value,
       phone: document.getElementById("phone").value,
-      pin: document.getElementById("ownerPin").value, // Owner ka apna PIN save hoga
-      image: publicUrlData.publicUrl,
+      pin: document.getElementById("ownerPin").value,
+      image: uploadedUrls[0], // primary image
+      images: uploadedUrls,   // all uploaded images array
       is_rented: false,
       amenities: amenitiesArray
     };
@@ -169,6 +225,44 @@ async function addNewRoom(event) {
   }
 }
 
+// Feature 2: Wishlist Toggle
+function toggleFav(event, id) {
+  event.stopPropagation();
+  if (favorites.includes(id)) {
+    favorites = favorites.filter(favId => favId !== id);
+  } else {
+    favorites.push(id);
+  }
+  localStorage.setItem("roomdekho_favs", JSON.stringify(favorites));
+  updateFavCount();
+  applyFilters();
+}
+
+function toggleFavoritesOnly() {
+  showFavoritesOnly = !showFavoritesOnly;
+  const btn = document.getElementById("favFilterBtn");
+  if (showFavoritesOnly) {
+    btn.classList.add("bg-rose-600", "text-white");
+    btn.classList.remove("bg-rose-50", "text-rose-600");
+  } else {
+    btn.classList.remove("bg-rose-600", "text-white");
+    btn.classList.add("bg-rose-50", "text-rose-600");
+  }
+  applyFilters();
+}
+
+// Feature 4: Report Room
+async function reportRoom(id) {
+  if (confirm("Kya ye room rented ho chuka hai ya number galat hai? Report karein?")) {
+    const { error } = await db.rpc('increment_report', { row_id: id }).catch(async () => {
+      // Fallback simple update
+      const room = roomsData.find(r => r.id === id);
+      return await db.from('rooms').update({ report_count: (room.report_count || 0) + 1 }).eq('id', id);
+    });
+    alert("Shukriya! Aapki report darj kar li gayi hai, admin ise review karega.");
+  }
+}
+
 // Owner PIN Verification for Rented
 async function handleRentedToggle(id, currentStatus) {
   const room = roomsData.find(r => r.id === id);
@@ -176,7 +270,6 @@ async function handleRentedToggle(id, currentStatus) {
   
   if (!inputPin) return;
 
-  // Owner ka apna PIN match hoga YA Master PIN (1234)
   if (inputPin === room.pin || inputPin === MASTER_ADMIN_PIN) {
     const { error } = await db.from('rooms').update({ is_rented: !currentStatus }).eq('id', id);
     if (error) alert("Error: " + error.message);
@@ -194,7 +287,7 @@ async function handleDeleteRoom(id) {
   if (!inputPin) return;
 
   if (inputPin === room.pin || inputPin === MASTER_ADMIN_PIN) {
-    if (confirm("Kya aap sach me is room ko hamesha ke liye delete karna chahte hain?")) {
+    if (confirm("Kya aap sach me is room ko delete karna chahte hain?")) {
       const { error } = await db.from('rooms').delete().eq('id', id);
       if (error) alert("Error: " + error.message);
       else fetchRooms();
@@ -204,20 +297,31 @@ async function handleDeleteRoom(id) {
   }
 }
 
-// Filters
+// Feature 5: Filters & Sorting Logic
 function applyFilters() {
   const search = document.getElementById("searchInput").value.toLowerCase();
   const selectedType = document.getElementById("typeFilter").value;
   const maxBudget = parseInt(document.getElementById("budgetFilter").value);
+  const sortBy = document.getElementById("sortBy").value;
 
-  const filtered = roomsData.filter(room => {
+  let filtered = roomsData.filter(room => {
     const titleMatch = room.title ? room.title.toLowerCase().includes(search) : false;
     const locMatch = room.location ? room.location.toLowerCase().includes(search) : false;
     const matchesSearch = titleMatch || locMatch;
     const matchesType = selectedType === "All" || room.type === selectedType;
     const matchesBudget = room.rent <= maxBudget;
-    return matchesSearch && matchesType && matchesBudget;
+    const matchesFav = !showFavoritesOnly || favorites.includes(room.id);
+    return matchesSearch && matchesType && matchesBudget && matchesFav;
   });
+
+  // Sorting
+  if (sortBy === "low_high") {
+    filtered.sort((a, b) => a.rent - b.rent);
+  } else if (sortBy === "high_low") {
+    filtered.sort((a, b) => b.rent - a.rent);
+  } else {
+    filtered.sort((a, b) => b.id - a.id);
+  }
 
   displayRooms(filtered);
 }
@@ -227,10 +331,29 @@ function setAreaFilter(areaName) {
   applyFilters();
 }
 
-function openImageModal(imgSrc) {
-  const modal = document.getElementById("imageModal");
-  document.getElementById("modalImg").src = imgSrc;
-  modal.classList.remove("hidden");
+// Gallery / Slider Modal Logic
+function openGallery(images) {
+  currentImages = images;
+  currentImageIndex = 0;
+  updateModalImage();
+  document.getElementById("imageModal").classList.remove("hidden");
+}
+
+function updateModalImage() {
+  document.getElementById("modalImg").src = currentImages[currentImageIndex];
+  document.getElementById("imageCounter").innerText = `Photo ${currentImageIndex + 1} of ${currentImages.length}`;
+}
+
+function prevImage(event) {
+  event.stopPropagation();
+  currentImageIndex = (currentImageIndex - 1 + currentImages.length) % currentImages.length;
+  updateModalImage();
+}
+
+function nextImage(event) {
+  event.stopPropagation();
+  currentImageIndex = (currentImageIndex + 1) % currentImages.length;
+  updateModalImage();
 }
 
 function closeImageModal() {
