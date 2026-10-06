@@ -10,6 +10,7 @@
 
   <link rel="icon" type="image/png" href="https://img.icons8.com/color/192/home--v1.png">
 
+  <!-- Tailwind CSS & Supabase CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -178,7 +179,7 @@
             <option value="PG Owner">🛏️ PG Owner</option>
             <option value="Flat Owner">🏠 Flat Owner</option>
             <option value="Apartment Owner">🏢 Apartment Floor Owner</option>
-            <option value="Family House Owner">👨‍👩‍👧 Family Homes Owner</option>
+            <option value="Family House Owner">👨‍👩‍‍👧 Family Homes Owner</option>
             <option value="Dukan Owner">🛍️ Dukaan / Retail Shop Owner</option>
             <option value="Commercial Space Owner">🏦 Commercial Hall / Coaching / Bank Owner</option>
             <option value="Hotel Owner">🏨 Hotel / Guest House Owner</option>
@@ -277,4 +278,1065 @@
           
           <div class="grid grid-cols-2 gap-3">
             <div>
-              <label class="block t
+              <label class="block text-[11px] font-bold text-gray-700 mb-1">Area / Measurement Unit</label>
+              <input type="text" id="plot_area_unit" placeholder="e.g. 2 Katha, 1500 Sq Ft, 1 Bigha" class="w-full border p-2 rounded-lg bg-white text-xs focus:outline-emerald-500">
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-gray-700 mb-1">Front Road Width</label>
+              <input type="text" id="road_width" placeholder="e.g. 20 Feet, 30 Feet Road" class="w-full border p-2 rounded-lg bg-white text-xs focus:outline-emerald-500">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2">
+            <div>
+              <label class="block text-[11px] font-bold text-gray-700 mb-1">Facing (Disha)</label>
+              <select id="facing" class="w-full border p-2 rounded-lg bg-white text-xs">
+                <option value="East">East (Purab)</option>
+                <option value="North">North (Uttar)</option>
+                <option value="West">West (Paschim)</option>
+                <option value="South">South (Dakshin)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-gray-700 mb-1">Boundary Wall?</label>
+              <select id="boundary_wall" class="w-full border p-2 rounded-lg bg-white text-xs">
+                <option value="Yes">Yes (Hai)</option>
+                <option value="No">No (Nahi Hai)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-gray-700 mb-1">Registry Papers</label>
+              <select id="doc_status" class="w-full border p-2 rounded-lg bg-white text-xs font-semibold text-emerald-700">
+                <option value="Registry & Mutation Done">Registry & Dakhil-Kharij Ready</option>
+                <option value="Clean Khatiyan">Khatiyan Paper Clear</option>
+                <option value="Under Process">In Process</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="border-t border-emerald-200 pt-3 mt-3">
+            <label class="block text-[11px] font-bold text-emerald-900 mb-1">📄 Zameen Legal Documents (Registry Paper, Rasid, Khatiyan, Naksha Photo)</label>
+            <input type="file" id="docFiles" accept="image/*" multiple class="w-full border p-2 rounded-lg bg-white text-xs file:mr-2 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-[10px] file:font-bold file:bg-emerald-100 file:text-emerald-800">
+            <p class="text-[10px] text-emerald-700 mt-1">Gallery se zameen ke paper ki photos select karein (Buyer ko verified dikhega).</p>
+          </div>
+        </div>
+
+        <!-- Normal Space / Room Fields -->
+        <div id="roomFieldsSection" class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">Floor No. / Space Size</label>
+            <input type="text" id="space_size" placeholder="e.g. 3rd Floor, 1500 Sq Ft, 2BHK" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">Suitable For (Guests/Tenants)</label>
+            <select id="type" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
+              <option value="Anyone / Open to All">Anyone / Open to All</option>
+              <option value="Family Allowed">Family Allowed</option>
+              <option value="Boys Only">Boys Only</option>
+              <option value="Girls Only">Girls Only</option>
+              <option value="Family Only">Family Only</option>
+              <option value="Commercial Business">Commercial Business / Shop</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">WhatsApp / Call Number</label>
+            <input type="tel" id="phone" required placeholder="e.g. 9876543210" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-indigo-700 mb-1">🔒 4-Digit Owner Secret PIN</label>
+            <input type="password" id="ownerPin" maxlength="4" required placeholder="e.g. 9898" class="w-full border-2 border-indigo-200 p-2 rounded-lg bg-indigo-50/50 text-sm font-bold text-indigo-800">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Site / Land Photos (View, Road, Frontage)</label>
+          <input type="file" id="imageFiles" accept="image/*" multiple required class="w-full border p-2 rounded-lg bg-gray-50 text-xs file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-bold file:bg-indigo-100 file:text-indigo-800">
+          <p class="text-[11px] text-gray-400 mt-1">Zameen ya room ke front view aur surroundings ki photos chunein.</p>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Suvidhayein / Key Features (Comma Separated)</label>
+          <input type="text" id="amenities" placeholder="e.g. Highway Touch, Electricity Pole, Corner Plot, 24x7 Water" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
+        </div>
+
+        <div class="flex gap-2 pt-2">
+          <button id="submitBtn" type="submit" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition shadow">
+            Publish Listing
+          </button>
+          <button type="button" onclick="toggleForm()" class="bg-gray-200 text-gray-700 font-bold px-4 py-3 rounded-lg hover:bg-gray-300">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- Dedicated Document Viewer Modal for Land Papers -->
+  <div id="docModal" class="hidden fixed inset-0 bg-black/90 z-50 flex flex-col items-center justify-center p-4">
+    <button type="button" onclick="closeDocModal()" class="absolute top-4 right-4 text-white text-3xl font-bold">&times;</button>
+    <div class="bg-white/10 text-white text-xs px-4 py-1.5 rounded-full mb-3 flex items-center gap-1 font-bold">
+      <span>📜 Land Verified Legal Document Preview</span>
+    </div>
+    <div class="relative max-w-4xl w-full flex items-center justify-center">
+      <button type="button" onclick="prevDoc(event)" class="absolute left-2 text-white bg-black/60 p-3 rounded-full hover:bg-black/80 font-bold">&#10094;</button>
+      <img id="docModalImg" src="" alt="Document Paper" class="max-w-full max-h-[75vh] rounded-lg shadow-2xl object-contain bg-white">
+      <button type="button" onclick="nextDoc(event)" class="absolute right-2 text-white bg-black/60 p-3 rounded-full hover:bg-black/80 font-bold">&#10095;</button>
+    </div>
+    <p id="docCounter" class="text-white text-xs mt-3 bg-black/40 px-3 py-1 rounded-full"></p>
+  </div>
+
+  <!-- Fullscreen Modal / Gallery Viewer -->
+  <div id="imageModal" class="hidden fixed inset-0 bg-black/90 z-50 flex flex-col items-center justify-center p-4">
+    <button type="button" onclick="closeImageModal()" class="absolute top-4 right-4 text-white text-3xl font-bold">&times;</button>
+    <div class="relative max-w-4xl w-full flex items-center justify-center">
+      <button type="button" onclick="prevImage(event)" class="absolute left-2 text-white bg-black/60 p-3 rounded-full hover:bg-black/80 font-bold">&#10094;</button>
+      <img id="modalImg" src="" alt="Property Preview" class="max-w-full max-h-[75vh] rounded-lg shadow-2xl object-contain">
+      <button type="button" onclick="nextImage(event)" class="absolute right-2 text-white bg-black/60 p-3 rounded-full hover:bg-black/80 font-bold">&#10095;</button>
+    </div>
+    <p id="imageCounter" class="text-white text-xs mt-3 bg-black/40 px-3 py-1 rounded-full"></p>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-gray-400 py-8 border-t border-gray-800 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs">
+      <div>
+        <p class="font-bold text-white text-sm">RoomDekho India</p>
+        <p>100% Zero Brokerage Rental, Commercial, Hotel & Land Marketplace</p>
+      </div>
+      <div class="flex gap-4 font-medium">
+        <button type="button" onclick="showSection('home')" class="hover:text-white">Home</button>
+        <button type="button" onclick="showSection('about')" class="hover:text-white">About Us</button>
+        <button type="button" onclick="showSection('privacy')" class="hover:text-white">Privacy Policy</button>
+      </div>
+      <div>
+        <p>© 2026 RoomDekho India. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPT BLOCK: COMPLETELY PROTECTED & NON-BLOCKING -->
+  <script>
+    const SUPABASE_URL = "https://ndegekylfrhroyyhumyo.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_hwBUpVWGEoWrQgiiG8ZgBw_ZM_aJyH2";
+    const MASTER_ADMIN_PIN = "1234";
+
+    let dbClient = null;
+    let currentUser = null;
+    let userProfile = null;
+
+    let roomsData = [];
+    let favorites = [];
+    let myCreatedPins = [];
+
+    try {
+      favorites = JSON.parse(localStorage.getItem("roomdekho_favs") || "[]");
+      myCreatedPins = JSON.parse(localStorage.getItem("roomdekho_mypins") || "[]");
+    } catch (e) {
+      favorites = [];
+      myCreatedPins = [];
+    }
+
+    let currentLanguage = localStorage.getItem("roomdekho_lang") || "hi";
+    let selectedCategory = "All";
+    let selectedOwnerPhone = null;
+    let showFavoritesOnly = false;
+    let showMyListingsOnly = false;
+
+    let currentImages = [];
+    let currentImageIndex = 0;
+
+    let currentDocs = [];
+    let currentDocIndex = 0;
+
+    function safeSetText(id, text) {
+      const el = document.getElementById(id);
+      if (el) el.innerText = text;
+    }
+
+    const translations = {
+      en: {
+        langBtn: "हिन्दी",
+        subHeader: "Pan-India Direct Space & Land Marketplace",
+        heroTitle: "Find Any Room, Flat, Hotel, Commercial Space or Land Across India",
+        heroSub: "Zero Brokerage • Direct Owner Contact • Verified Residential, Commercial & Land Listings",
+        myListings: "My Listings",
+        postBtn: "+ Post Property",
+        modalTitle: "Post New Property, Space or Land",
+        availableListings: "All India Available Listings",
+        rentSuffixMonth: "/month",
+        rentSuffixDay: "/day",
+        rentSuffixTotal: " (Total)",
+        callBtn: "📞 Call",
+        waBtn: "💬 WhatsApp",
+        mapBtn: "📍 View on Google Maps",
+        rentedBadge: "Sold / Rented",
+        markRented: "Mark as Sold/Rented",
+        markAvailable: "Mark Available",
+        deleteBtn: "Delete"
+      },
+      hi: {
+        langBtn: "English",
+        subHeader: "Poore Bharat Ka Direct Space & Land Marketplace",
+        heroTitle: "Poore Bharat Me Space, Room Ya Land Dhundhein",
+        heroSub: "Zero Brokerage • Direct Owner Contact • Rooms, Flats, Hostels, Hotels, Shops, Commercial Spaces & Land/Plots",
+        myListings: "Mere Listings",
+        postBtn: "+ Property Post Karein",
+        modalTitle: "Nayi Property, Space Ya Land List Karein",
+        availableListings: "Bharat Me Uplabdh Sabhi Listings",
+        rentSuffixMonth: "/mahina",
+        rentSuffixDay: "/din",
+        rentSuffixTotal: " (Kul Mulya)",
+        callBtn: "📞 Call Karein",
+        waBtn: "💬 WhatsApp",
+        mapBtn: "📍 Google Maps Par Rasta Dekhein",
+        rentedBadge: "Sold / Booked",
+        markRented: "Mark as Sold/Rented",
+        markAvailable: "Mark Available",
+        deleteBtn: "Delete Karein"
+      }
+    };
+
+    // Client initialize helper
+    function getDb() {
+      if (!dbClient && window.supabase) {
+        dbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      }
+      return dbClient;
+    }
+
+    // MAIN STARTUP FUNCTION
+    async function initApp() {
+      const db = getDb();
+      if (!db) {
+        setTimeout(initApp, 150);
+        return;
+      }
+
+      // Step 1: Pehle data fetch karein taaki screen atke nahi
+      fetchRooms();
+
+      // Step 2: Auth check background me chalayein
+      try {
+        const { data } = await db.auth.getSession();
+        if (data && data.session && data.session.user) {
+          currentUser = data.session.user;
+          fetchUserProfile(currentUser.id);
+        }
+      } catch (err) {
+        console.warn("Auth check error:", err);
+      }
+
+      renderAuthUI();
+
+      // Auth state listener
+      try {
+        db.auth.onAuthStateChange(async (event, session) => {
+          if (session && session.user) {
+            currentUser = session.user;
+            await fetchUserProfile(currentUser.id);
+          } else {
+            currentUser = null;
+            userProfile = null;
+          }
+          renderAuthUI();
+          updateHeaderCounts();
+          applyFilters();
+        });
+      } catch (e) {
+        console.warn("Auth listener error:", e);
+      }
+    }
+
+    async function fetchUserProfile(userId) {
+      const db = getDb();
+      if (!db) return;
+      try {
+        const { data } = await db.from('profiles').select('*').eq('id', userId).maybeSingle();
+        if (data) {
+          userProfile = data;
+          renderAuthUI();
+        }
+      } catch (err) {
+        console.warn("Profile fetch error:", err);
+      }
+    }
+
+    function renderAuthUI() {
+      const authContainer = document.getElementById("authContainer");
+      if (!authContainer) return;
+
+      if (currentUser) {
+        const displayName = (userProfile && userProfile.full_name) ? userProfile.full_name : (currentUser.email ? currentUser.email.split('@')[0] : 'User');
+        const roleBadge = (userProfile && userProfile.role) ? userProfile.role : 'Owner';
+        authContainer.innerHTML = `
+          <div class="flex items-center gap-1.5 bg-indigo-50 border border-indigo-200 px-2 py-1 rounded-lg text-xs">
+            <span class="font-bold text-indigo-700 max-w-[100px] truncate">👤 ${displayName}</span>
+            <span class="bg-indigo-600 text-white text-[9px] px-1.5 py-0.2 rounded font-semibold hidden sm:inline-block">${roleBadge}</span>
+            <button onclick="handleLogout()" class="text-red-500 font-bold hover:underline ml-1">Exit</button>
+          </div>
+        `;
+      } else {
+        authContainer.innerHTML = `
+          <button id="loginOpenBtn" onclick="toggleAuthModal(true)" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-800 transition">
+            Sign In / Register
+          </button>
+        `;
+      }
+    }
+
+    function toggleAuthModal(show) {
+      const modal = document.getElementById("authModal");
+      if (modal) {
+        if (show) modal.classList.remove("hidden");
+        else modal.classList.add("hidden");
+      }
+    }
+
+    function switchAuthTab(tab) {
+      const loginForm = document.getElementById("loginForm");
+      const regForm = document.getElementById("registerForm");
+      const tabLogin = document.getElementById("tabLoginBtn");
+      const tabReg = document.getElementById("tabRegisterBtn");
+
+      if (tab === 'login') {
+        if (loginForm) loginForm.classList.remove("hidden");
+        if (regForm) regForm.classList.add("hidden");
+        if (tabLogin) tabLogin.className = "flex-1 py-2 font-bold text-sm border-b-2 border-indigo-600 text-indigo-600";
+        if (tabReg) tabReg.className = "flex-1 py-2 font-bold text-sm border-b-2 border-transparent text-gray-400 hover:text-gray-700";
+      } else {
+        if (loginForm) loginForm.classList.add("hidden");
+        if (regForm) regForm.classList.remove("hidden");
+        if (tabReg) tabReg.className = "flex-1 py-2 font-bold text-sm border-b-2 border-emerald-600 text-emerald-600";
+        if (tabLogin) tabLogin.className = "flex-1 py-2 font-bold text-sm border-b-2 border-transparent text-gray-400 hover:text-gray-700";
+      }
+    }
+
+    async function handleLogin(event) {
+      event.preventDefault();
+      const db = getDb();
+      const email = document.getElementById("loginEmail").value;
+      const password = document.getElementById("loginPassword").value;
+      const btn = document.getElementById("loginSubmitBtn");
+
+      btn.innerText = "Signing in...";
+      btn.disabled = true;
+
+      try {
+        const { error } = await db.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        alert("Swagat hai! Login safal hua.");
+        toggleAuthModal(false);
+      } catch (err) {
+        alert("Login fail: " + err.message);
+      } finally {
+        btn.innerText = "Sign In";
+        btn.disabled = false;
+      }
+    }
+
+    async function handleRegister(event) {
+      event.preventDefault();
+      const db = getDb();
+      const fullName = document.getElementById("regName").value;
+      const phone = document.getElementById("regPhone").value;
+      const role = document.getElementById("regRole").value;
+      const city = document.getElementById("regCity").value;
+      const email = document.getElementById("regEmail").value;
+      const password = document.getElementById("regPassword").value;
+      const btn = document.getElementById("regSubmitBtn");
+
+      btn.innerText = "Khata ban raha hai...";
+      btn.disabled = true;
+
+      try {
+        const { data, error } = await db.auth.signUp({
+          email,
+          password,
+          options: {
+            data: { full_name: fullName, phone: phone, role: role, city: city }
+          }
+        });
+
+        if (error) throw error;
+
+        if (data && data.user) {
+          try {
+            await db.from('profiles').upsert([{
+              id: data.user.id,
+              full_name: fullName,
+              phone: phone,
+              role: role,
+              city: city
+            }]);
+          } catch(e) { console.warn("Direct profile upsert:", e); }
+        }
+
+        alert("Khata ban gaya! Ab aap login kar sakte hain.");
+        toggleAuthModal(false);
+      } catch (err) {
+        alert("Registration fail: " + err.message);
+      } finally {
+        btn.innerText = "Khata Banayein (Register)";
+        btn.disabled = false;
+      }
+    }
+
+    async function handleLogout() {
+      const db = getDb();
+      if (confirm("Sign out karna chahte hain?")) {
+        await db.auth.signOut();
+        currentUser = null;
+        userProfile = null;
+        renderAuthUI();
+        updateHeaderCounts();
+        applyFilters();
+      }
+    }
+
+    function handlePostPropertyClick() {
+      if (currentUser && userProfile) {
+        const nameInput = document.getElementById("owner_name");
+        const phoneInput = document.getElementById("phone");
+        const cityInput = document.getElementById("city");
+        if (nameInput && !nameInput.value) nameInput.value = userProfile.full_name || '';
+        if (phoneInput && !phoneInput.value) phoneInput.value = userProfile.phone || '';
+        if (cityInput && !cityInput.value) cityInput.value = userProfile.city || '';
+        
+        const categorySelect = document.getElementById("category");
+        if (categorySelect && userProfile.role && userProfile.role.includes("Owner")) {
+          const matchedOption = Array.from(categorySelect.options).find(opt => userProfile.role.includes(opt.value));
+          if (matchedOption) {
+            categorySelect.value = matchedOption.value;
+            handleCategoryFieldChanges();
+          }
+        }
+      }
+      toggleForm();
+    }
+
+    // MAIN DATA FETCH
+    async function fetchRooms() {
+      const container = document.getElementById("roomContainer");
+      const db = getDb();
+      if (!db) return;
+
+      try {
+        const { data, error } = await db.from('rooms').select('*').order('id', { ascending: false });
+        if (error) throw error;
+
+        roomsData = data || [];
+        applyLanguageUI();
+        updateHeaderCounts();
+        applyFilters();
+      } catch (err) {
+        console.error("fetchRooms error:", err);
+        if (container) {
+          container.innerHTML = `<p class="col-span-full text-center text-red-500 py-8 font-medium">Data load nahi ho saka: ${err.message}. Kripya refresh karein.</p>`;
+        }
+      }
+    }
+
+    function updateHeaderCounts() {
+      safeSetText("favCount", favorites.length);
+      const myRooms = roomsData.filter(r => (currentUser && r.user_id === currentUser.id) || myCreatedPins.includes(r.pin));
+      safeSetText("myCount", myRooms.length);
+    }
+
+    function toggleMyListings() {
+      showMyListingsOnly = !showMyListingsOnly;
+      const btn = document.getElementById("myListingsBtn");
+
+      if (btn) {
+        if (showMyListingsOnly) {
+          btn.classList.add("bg-indigo-600", "text-white");
+          btn.classList.remove("bg-indigo-50", "text-indigo-700");
+          safeSetText("currentViewTitle", "Aapke Dwara Dali Gayi Kul Listings");
+        } else {
+          btn.classList.remove("bg-indigo-600", "text-white");
+          btn.classList.add("bg-indigo-50", "text-indigo-700");
+          safeSetText("currentViewTitle", translations[currentLanguage].availableListings);
+        }
+      }
+      applyFilters();
+    }
+
+    function toggleLanguage() {
+      currentLanguage = currentLanguage === "hi" ? "en" : "hi";
+      localStorage.setItem("roomdekho_lang", currentLanguage);
+      applyLanguageUI();
+      applyFilters();
+    }
+
+    function applyLanguageUI() {
+      const t = translations[currentLanguage];
+      safeSetText("currentLangLabel", t.langBtn);
+      safeSetText("langSubHeader", t.subHeader);
+      safeSetText("t_hero_title", t.heroTitle);
+      safeSetText("t_hero_sub", t.heroSub);
+      safeSetText("t_post_btn", t.postBtn);
+      safeSetText("t_modal_title", t.modalTitle);
+      safeSetText("t_my_listings", t.myListings);
+      if (!showMyListingsOnly) {
+        safeSetText("currentViewTitle", t.availableListings);
+      }
+    }
+
+    function displayRooms(rooms) {
+      const container = document.getElementById("roomContainer");
+      if (!container) return;
+
+      const t = translations[currentLanguage];
+      safeSetText("resultsCount", `${rooms.length} listings`);
+      container.innerHTML = "";
+
+      if (rooms.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full text-center py-12 bg-white rounded-xl border border-gray-100">
+            <p class="text-4xl mb-2">🔍</p>
+            <p class="text-gray-700 font-bold">${showMyListingsOnly ? 'Aapne abhi tak koi listing nahi daali hai' : (currentLanguage === 'hi' ? 'Koi listing nahi mili' : 'No properties found')}</p>
+            <p class="text-xs text-gray-400 mt-1">${showMyListingsOnly ? 'Upar "+ Post Property" button dabakar apni pehli listing daalein!' : (currentLanguage === 'hi' ? 'Kripya doosra sheher ya category chunein.' : 'Please try another filter.')}</p>
+          </div>`;
+        return;
+      }
+
+      rooms.forEach(room => {
+        const rawPhone = String(room.phone || "").replace(/\D/g, "");
+        const cleanPhone = rawPhone.length === 10 ? `91${rawPhone}` : rawPhone;
+        const roomUrl = window.location.href.split('?')[0];
+
+        const isLand = room.category === "Land";
+        const categoryBadge = isLand ? "🌾 Land / Plot" : (room.category || "Room");
+        
+        let periodSuffix = t.rentSuffixMonth;
+        if (room.price_period === 'day') periodSuffix = t.rentSuffixDay;
+        else if (room.price_period === 'total' || isLand) periodSuffix = t.rentSuffixTotal;
+
+        const cityState = `${room.city || ''}${room.state ? ', ' + room.state : ''}`;
+        
+        let detailLine = room.space_size ? `• ${room.space_size}` : '';
+        if (isLand && room.plot_area_unit) {
+          detailLine = `• 📐 ${room.plot_area_unit} | Road: ${room.road_width || 'N/A'}`;
+        }
+
+        const shareText = encodeURIComponent(`India me ye property/plot dekho: "${room.title}" (${categoryBadge}) - ₹${room.rent}${periodSuffix}. Direct Link: ${roomUrl}`);
+        const whatsappShareUrl = `https://api.whatsapp.com/send?text=${shareText}`;
+
+        const message = encodeURIComponent(`Namaste! Maine RoomDekho par aapka "${room.title}" (${categoryBadge}) dekha. Kya ye available hai?`);
+        const whatsappContactUrl = `https://wa.me/${cleanPhone}?text=${message}`;
+        const callUrl = `tel:+${cleanPhone}`;
+
+        const mapsQuery = encodeURIComponent(`${room.location || ''}, ${cityState}`);
+        const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
+        const amenitiesList = Array.isArray(room.amenities) ? room.amenities : [];
+
+        let imgs = [];
+        if (room.images && room.images.length > 0) {
+          imgs = room.images;
+        } else if (room.image) {
+          imgs = [room.image];
+        } else {
+          imgs = ['https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600'];
+        }
+
+        const docsList = Array.isArray(room.documents) ? room.documents : [];
+        const safeDocsString = encodeURIComponent(JSON.stringify(docsList));
+
+        const isFav = favorites.includes(room.id);
+        const isMyListing = (currentUser && room.user_id === currentUser.id) || myCreatedPins.includes(room.pin);
+        const ownerTotalListings = roomsData.filter(r => r.phone === room.phone).length;
+        const safeImgsString = encodeURIComponent(JSON.stringify(imgs));
+
+        const card = `
+          <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition flex flex-col justify-between border border-gray-100 overflow-hidden ${room.is_rented ? 'opacity-65 grayscale' : ''}">
+            <div>
+              <div class="relative cursor-pointer group" onclick="openGallery('${safeImgsString}')">
+                ${room.is_rented 
+                  ? `<span class="absolute top-3 left-3 bg-red-600 text-white text-[10px] px-2.5 py-0.5 rounded-md font-bold uppercase z-10 shadow">${t.rentedBadge}</span>` 
+                  : `<span class="absolute top-3 left-3 ${isLand ? 'bg-emerald-600' : 'bg-indigo-600'} text-white text-[10px] px-2.5 py-0.5 rounded-md font-bold z-10 shadow">${categoryBadge}</span>`}
+
+                ${isMyListing ? '<span class="absolute bottom-2 left-2 bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow z-10">Aapki Listing</span>' : ''}
+                
+                <button type="button" onclick="toggleFav(event, ${room.id})" class="absolute top-3 right-3 bg-white/90 hover:bg-white text-sm p-1.5 rounded-full z-20 shadow transition">
+                  ${isFav ? '❤️' : '🤍'}
+                </button>
+
+                <img src="${imgs[0]}" alt="${room.title}" class="h-48 w-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600'">
+                
+                <div class="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] px-2 py-0.5 rounded flex items-center gap-1 font-semibold">
+                  📷 ${imgs.length} Photo${imgs.length > 1 ? 's' : ''}
+                </div>
+              </div>
+
+              <div class="p-4 pb-2">
+                <div class="flex justify-between items-baseline mb-1">
+                  <span class="text-xl font-black ${isLand ? 'text-emerald-700' : 'text-indigo-700'}">₹${room.rent}<span class="text-xs text-gray-500 font-normal">${periodSuffix}</span></span>
+                  <span class="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded font-semibold">${isLand ? 'Plot / Zameen' : (room.type || 'Open to All')}</span>
+                </div>
+                
+                <h4 class="font-bold text-gray-900 leading-snug line-clamp-1">${room.title}</h4>
+                <p class="text-xs text-gray-500 mt-0.5 font-medium">📍 ${room.location || ''} <span class="text-gray-400">(${cityState})</span> <span class="text-emerald-700 font-bold">${detailLine}</span></p>
+
+                ${isLand ? `
+                  <div class="flex flex-wrap gap-1 mt-2 text-[10px] font-bold">
+                    <span class="bg-emerald-50 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded">📜 ${room.doc_status || 'Papers Clear'}</span>
+                    <span class="bg-blue-50 text-blue-800 border border-blue-200 px-2 py-0.5 rounded">🧭 Facing: ${room.facing || 'East'}</span>
+                    <span class="bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded">🧱 Boundary: ${room.boundary_wall || 'Yes'}</span>
+                  </div>
+
+                  ${docsList.length > 0 ? `
+                    <button type="button" onclick="openDocModal('${safeDocsString}')" class="mt-2.5 w-full bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold py-1.5 px-2 rounded-lg text-xs flex items-center justify-center gap-1.5 transition">
+                      📄 Verified Land Papers (${docsList.length} Photos Dekhein)
+                    </button>
+                  ` : `
+                    <p class="text-[10px] text-gray-400 mt-1 italic">Papers physical visit par uplabdh hain</p>
+                  `}
+                ` : ''}
+
+                ${room.owner_name ? `<p class="text-[11px] text-gray-600 mt-1.5 font-medium">👤 Owner/Seller: <strong class="text-gray-800">${room.owner_name}</strong></p>` : ''}
+
+                ${ownerTotalListings > 1 ? `
+                  <button type="button" onclick="filterByOwnerPhone('${room.phone}', '${room.owner_name || 'Owner'}')" class="mt-2 text-xs bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold px-2.5 py-1 rounded-md border border-amber-200 flex items-center gap-1 w-full justify-center transition">
+                    🏢 Is Owner ke pass ${ownerTotalListings} properties hain (Sabhi Dekhein)
+                  </button>
+                ` : ''}
+
+                <div class="flex items-center justify-between mt-2 pt-2 border-t text-xs">
+                  <a href="${mapsUrl}" target="_blank" class="text-blue-600 font-semibold hover:underline flex items-center gap-1">
+                    ${t.mapBtn}
+                  </a>
+                  <a href="${whatsappShareUrl}" target="_blank" class="text-emerald-600 font-semibold hover:underline">
+                    📤 Share
+                  </a>
+                </div>
+
+                <div class="flex flex-wrap gap-1 mt-2.5">
+                  ${amenitiesList.map(tag => `<span class="text-[10px] bg-gray-50 border border-gray-100 text-gray-600 px-2 py-0.5 rounded-full">${tag}</span>`).join('')}
+                </div>
+              </div>
+            </div>
+
+            <div class="p-4 pt-2 space-y-2">
+              ${!room.is_rented ? `
+                <div class="grid grid-cols-2 gap-2">
+                  <a href="${callUrl}" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2 rounded-lg text-center flex items-center justify-center gap-1 transition">
+                    ${t.callBtn}
+                  </a>
+                  <a href="${whatsappContactUrl}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2 rounded-lg text-center flex items-center justify-center gap-1 transition">
+                    ${t.waBtn}
+                  </a>
+                </div>
+              ` : `
+                <button disabled class="w-full bg-gray-300 text-gray-600 text-xs font-bold py-2 rounded-lg cursor-not-allowed">
+                  ${t.rentedBadge}
+                </button>
+              `}
+
+              <div class="flex gap-2 pt-1.5 border-t text-[11px]">
+                <button type="button" onclick="handleRentedToggle(${room.id}, ${room.is_rented})" class="flex-1 py-1 rounded border border-gray-200 hover:bg-gray-50 text-gray-600 font-medium">
+                  ${room.is_rented ? t.markAvailable : t.markRented}
+                </button>
+                <button type="button" onclick="handleDeleteRoom(${room.id})" class="px-2.5 py-1 rounded border border-red-200 text-red-500 hover:bg-red-50 font-medium">
+                  ${t.deleteBtn}
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+        container.innerHTML += card;
+      });
+    }
+
+    function toggleForm() {
+      const formSec = document.getElementById("formSection");
+      if (formSec) formSec.classList.toggle("hidden");
+    }
+
+    function handleCategoryFieldChanges() {
+      const cat = document.getElementById("category").value;
+      const pricePeriod = document.getElementById("price_period");
+      const landSec = document.getElementById("landFieldsSection");
+      const roomSec = document.getElementById("roomFieldsSection");
+      const lblRent = document.getElementById("lblRent");
+
+      if (cat === "Land") {
+        if (landSec) landSec.classList.remove("hidden");
+        if (roomSec) roomSec.classList.add("hidden");
+        if (pricePeriod) pricePeriod.value = "total";
+        if (lblRent) lblRent.innerText = "Total Sale Price (Kul Keemat ₹)";
+      } else {
+        if (landSec) landSec.classList.add("hidden");
+        if (roomSec) roomSec.classList.remove("hidden");
+        if (lblRent) lblRent.innerText = "Monthly Rent / Price (₹)";
+        if (pricePeriod) pricePeriod.value = (cat === "Hotel") ? "day" : "month";
+      }
+    }
+
+    async function addNewRoom(event) {
+      event.preventDefault();
+      const db = getDb();
+      const btn = document.getElementById("submitBtn");
+      const fileInput = document.getElementById("imageFiles");
+      const docInput = document.getElementById("docFiles");
+      const cat = document.getElementById("category").value;
+
+      if (!fileInput.files.length) {
+        alert("Kripya kam se kam 1 photo chunein!");
+        return;
+      }
+
+      btn.innerText = "Files upload ho rahi hain...";
+      btn.disabled = true;
+
+      try {
+        const uploadedUrls = [];
+        const files = Array.from(fileInput.files);
+
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
+          const fileExt = file.name.split('.').pop();
+          const fileName = `prop_${Date.now()}_${i}.${fileExt}`;
+
+          btn.innerText = `Photos upload ho rahi hain (${i + 1}/${files.length})...`;
+
+          const { error: uploadError } = await db.storage
+            .from('Room finder')
+            .upload(fileName, file);
+
+          if (uploadError) throw uploadError;
+
+          const { data: publicUrlData } = db.storage
+            .from('Room finder')
+            .getPublicUrl(fileName);
+
+          uploadedUrls.push(publicUrlData.publicUrl);
+        }
+
+        const uploadedDocUrls = [];
+        if (cat === "Land" && docInput && docInput.files.length > 0) {
+          const docFiles = Array.from(docInput.files);
+          for (let d = 0; d < docFiles.length; d++) {
+            const docFile = docFiles[d];
+            const docExt = docFile.name.split('.').pop();
+            const docName = `doc_${Date.now()}_${d}.${docExt}`;
+
+            btn.innerText = `Papers upload ho rahe hain (${d + 1}/${docFiles.length})...`;
+
+            const { error: docUploadError } = await db.storage
+              .from('Room finder')
+              .upload(docName, docFile);
+
+            if (docUploadError) throw docUploadError;
+
+            const { data: docUrlData } = db.storage
+              .from('Room finder')
+              .getPublicUrl(docName);
+
+            uploadedDocUrls.push(docUrlData.publicUrl);
+          }
+        }
+
+        btn.innerText = "Database me save ho raha hai...";
+
+        const rawAmenities = document.getElementById("amenities").value;
+        const amenitiesArray = rawAmenities ? rawAmenities.split(",").map(i => i.trim()).filter(Boolean) : [];
+        const ownerPin = document.getElementById("ownerPin").value;
+
+        const newProperty = {
+          category: cat,
+          title: document.getElementById("title").value,
+          owner_name: document.getElementById("owner_name").value,
+          location: document.getElementById("location").value,
+          city: document.getElementById("city").value,
+          state: document.getElementById("state").value,
+          rent: parseInt(document.getElementById("rent").value) || 0,
+          price_period: document.getElementById("price_period").value,
+          space_size: document.getElementById("space_size").value,
+          type: document.getElementById("type").value,
+          phone: document.getElementById("phone").value,
+          pin: ownerPin,
+          image: uploadedUrls[0],
+          images: uploadedUrls,
+          documents: uploadedDocUrls,
+          is_rented: false,
+          amenities: amenitiesArray,
+          user_id: currentUser ? currentUser.id : null,
+          plot_area_unit: cat === "Land" ? document.getElementById("plot_area_unit").value : null,
+          road_width: cat === "Land" ? document.getElementById("road_width").value : null,
+          facing: cat === "Land" ? document.getElementById("facing").value : null,
+          boundary_wall: cat === "Land" ? document.getElementById("boundary_wall").value : null,
+          doc_status: cat === "Land" ? document.getElementById("doc_status").value : null
+        };
+
+        const { error: insertError } = await db.from('rooms').insert([newProperty]);
+        if (insertError) throw insertError;
+
+        if (!myCreatedPins.includes(ownerPin)) {
+          myCreatedPins.push(ownerPin);
+          localStorage.setItem("roomdekho_mypins", JSON.stringify(myCreatedPins));
+        }
+
+        alert("Listing safaltapoorvak publish ho gayi!");
+        document.getElementById("roomForm").reset();
+        toggleForm();
+        fetchRooms();
+      } catch (err) {
+        alert("Upload fail hua: " + err.message);
+      } finally {
+        btn.innerText = "Publish Listing";
+        btn.disabled = false;
+      }
+    }
+
+    function setCategoryFilter(category, btnElement) {
+      selectedCategory = category;
+      selectedOwnerPhone = null;
+
+      const notice = document.getElementById("ownerFilterNotice");
+      if (notice) notice.classList.add("hidden");
+
+      document.querySelectorAll(".category-btn").forEach(btn => {
+        btn.classList.remove("bg-white", "text-indigo-900", "font-bold");
+        btn.classList.add("bg-indigo-800/80", "text-white");
+      });
+
+      if (btnElement) {
+        btnElement.classList.remove("bg-indigo-800/80", "text-white");
+        btnElement.classList.add("bg-white", "text-indigo-900", "font-bold");
+      }
+
+      applyFilters();
+    }
+
+    function filterByOwnerPhone(phone, ownerName) {
+      selectedOwnerPhone = phone;
+      const notice = document.getElementById("ownerFilterNotice");
+      if (notice) notice.classList.remove("hidden");
+      safeSetText("currentViewTitle", `${ownerName} Ke Sabhi Spaces / Lands`);
+      window.scrollTo({ top: 350, behavior: 'smooth' });
+      applyFilters();
+    }
+
+    function clearOwnerFilter() {
+      selectedOwnerPhone = null;
+      const notice = document.getElementById("ownerFilterNotice");
+      if (notice) notice.classList.add("hidden");
+      safeSetText("currentViewTitle", translations[currentLanguage].availableListings);
+      applyFilters();
+    }
+
+    function toggleFav(event, id) {
+      if (event) event.stopPropagation();
+      if (favorites.includes(id)) {
+        favorites = favorites.filter(favId => favId !== id);
+      } else {
+        favorites.push(id);
+      }
+      localStorage.setItem("roomdekho_favs", JSON.stringify(favorites));
+      updateHeaderCounts();
+      applyFilters();
+    }
+
+    function toggleFavoritesOnly() {
+      showFavoritesOnly = !showFavoritesOnly;
+      const btn = document.getElementById("favFilterBtn");
+      if (btn) {
+        if (showFavoritesOnly) {
+          btn.classList.add("bg-rose-600", "text-white");
+        } else {
+          btn.classList.remove("bg-rose-600", "text-white");
+        }
+      }
+      applyFilters();
+    }
+
+    function applyFilters() {
+      const searchInput = document.getElementById("searchInput");
+      const budgetFilter = document.getElementById("budgetFilter");
+      const sortBy = document.getElementById("sortBy");
+
+      const search = searchInput ? searchInput.value.toLowerCase() : "";
+      const maxBudget = budgetFilter ? parseInt(budgetFilter.value) : 100000000;
+      const sort = sortBy ? sortBy.value : "newest";
+
+      let filtered = roomsData.filter(room => {
+        const titleMatch = room.title ? room.title.toLowerCase().includes(search) : false;
+        const locMatch = room.location ? room.location.toLowerCase().includes(search) : false;
+        const cityMatch = room.city ? room.city.toLowerCase().includes(search) : false;
+        const stateMatch = room.state ? room.state.toLowerCase().includes(search) : false;
+        const matchesSearch = titleMatch || locMatch || cityMatch || stateMatch;
+
+        const matchesCategory = selectedCategory === "All" || (room.category || "Room") === selectedCategory;
+        const matchesBudget = (room.rent || 0) <= maxBudget;
+        const matchesFav = !showFavoritesOnly || favorites.includes(room.id);
+        const matchesOwner = !selectedOwnerPhone || room.phone === selectedOwnerPhone;
+        const matchesMyListings = !showMyListingsOnly || ((currentUser && room.user_id === currentUser.id) || myCreatedPins.includes(room.pin));
+
+        return matchesSearch && matchesCategory && matchesBudget && matchesFav && matchesOwner && matchesMyListings;
+      });
+
+      if (sort === "low_high") {
+        filtered.sort((a, b) => a.rent - b.rent);
+      } else if (sort === "high_low") {
+        filtered.sort((a, b) => b.rent - a.rent);
+      } else {
+        filtered.sort((a, b) => b.id - a.id);
+      }
+
+      displayRooms(filtered);
+    }
+
+    function setAreaFilter(cityName) {
+      const searchInput = document.getElementById("searchInput");
+      if (searchInput) searchInput.value = cityName;
+      applyFilters();
+    }
+
+    function showSection(sectionName) {
+      const homeSec = document.getElementById("homeSection");
+      const aboutSec = document.getElementById("aboutSection");
+      const privacySec = document.getElementById("privacySection");
+
+      if (homeSec) homeSec.classList.add("hidden");
+      if (aboutSec) aboutSec.classList.add("hidden");
+      if (privacySec) privacySec.classList.add("hidden");
+
+      if (sectionName === "home" && homeSec) homeSec.classList.remove("hidden");
+      else if (sectionName === "about" && aboutSec) aboutSec.classList.remove("hidden");
+      else if (sectionName === "privacy" && privacySec) privacySec.classList.remove("hidden");
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    async function handleRentedToggle(id, currentStatus) {
+      const db = getDb();
+      const room = roomsData.find(r => r.id === id);
+      const isOwnerLoggedIn = currentUser && room.user_id === currentUser.id;
+
+      if (!isOwnerLoggedIn) {
+        const inputPin = prompt("Room/Property ka 4-digit PIN enter karein:");
+        if (!inputPin) return;
+        if (inputPin !== room.pin && inputPin !== MASTER_ADMIN_PIN) {
+          alert("❌ Galat PIN! Sirf owner hi mark kar sakta hai.");
+          return;
+        }
+      }
+
+      const { error } = await db.from('rooms').update({ is_rented: !currentStatus }).eq('id', id);
+      if (error) alert("Error: " + error.message);
+      else fetchRooms();
+    }
+
+    async function handleDeleteRoom(id) {
+      const db = getDb();
+      const room = roomsData.find(r => r.id === id);
+      const isOwnerLoggedIn = currentUser && room.user_id === currentUser.id;
+
+      if (!isOwnerLoggedIn) {
+        const inputPin = prompt("Property delete karne ke liye 4-digit PIN enter karein:");
+        if (!inputPin) return;
+        if (inputPin !== room.pin && inputPin !== MASTER_ADMIN_PIN) {
+          alert("❌ Galat PIN! Access denied.");
+          return;
+        }
+      }
+
+      if (confirm("Kya aap sach me is listing ko delete karna chahte hain?")) {
+        const { error } = await db.from('rooms').delete().eq('id', id);
+        if (error) alert("Error: " + error.message);
+        else fetchRooms();
+      }
+    }
+
+    function openGallery(safeImgsString) {
+      try {
+        currentImages = JSON.parse(decodeURIComponent(safeImgsString));
+        currentImageIndex = 0;
+        updateModalImage();
+        const modal = document.getElementById("imageModal");
+        if (modal) modal.classList.remove("hidden");
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function updateModalImage() {
+      const modalImg = document.getElementById("modalImg");
+      const counter = document.getElementById("imageCounter");
+      if (modalImg && currentImages[currentImageIndex]) {
+        modalImg.src = currentImages[currentImageIndex];
+      }
+      if (counter) {
+        counter.innerText = `Photo ${currentImageIndex + 1} of ${currentImages.length}`;
+      }
+    }
+
+    function prevImage(event) {
+      if (event) event.stopPropagation();
+      currentImageIndex = (currentImageIndex - 1 + currentImages.length) % currentImages.length;
+      updateModalImage();
+    }
+
+    function nextImage(event) {
+      if (event) event.stopPropagation();
+      currentImageIndex = (currentImageIndex + 1) % currentImages.length;
+      updateModalImage();
+    }
+
+    function closeImageModal() {
+      const modal = document.getElementById("imageModal");
+      if (modal) modal.classList.add("hidden");
+    }
+
+    function openDocModal(safeDocsString) {
+      try {
+        currentDocs = JSON.parse(decodeURIComponent(safeDocsString));
+        if (!currentDocs || currentDocs.length === 0) return;
+        currentDocIndex = 0;
+        updateDocModalImage();
+        const modal = document.getElementById("docModal");
+        if (modal) modal.classList.remove("hidden");
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function updateDocModalImage() {
+      const docImg = document.getElementById("docModalImg");
+      const counter = document.getElementById("docCounter");
+      if (docImg && currentDocs[currentDocIndex]) {
+        docImg.src = currentDocs[currentDocIndex];
+      }
+      if (counter) {
+        counter.innerText = `Legal Paper ${currentDocIndex + 1} of ${currentDocs.length}`;
+      }
+    }
+
+    function prevDoc(event) {
+      if (event) event.stopPropagation();
+      currentDocIndex = (currentDocIndex - 1 + currentDocs.length) % currentDocs.length;
+      updateDocModalImage();
+    }
+
+    function nextDoc(event) {
+      if (event) event.stopPropagation();
+      currentDocIndex = (currentDocIndex + 1) % currentDocs.length;
+      updateDocModalImage();
+    }
+
+    function closeDocModal() {
+      const modal = document.getElementById("docModal");
+      if (modal) modal.classList.add("hidden");
+    }
+
+    // Startup call
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initApp);
+    } else {
+      initApp();
+    }
+  </script>
+</body>
+</html>
