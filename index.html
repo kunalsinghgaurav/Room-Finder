@@ -41,11 +41,14 @@
           ❤️ (<span id="favCount">0</span>)
         </button>
 
-        <button id="myListingsBtn" onclick="toggleMyListings()" class="text-xs font-semibold px-2.5 py-2 rounded-lg border border-indigo-200 text-indigo-700 bg-indigo-50/50 hover:bg-indigo-100 transition hidden sm:inline-block">
-          📋 <span id="t_my_listings">Mere Listings</span> (<span id="myCount">0</span>)
-        </button>
+        <!-- Auth Section Button -->
+        <div id="authContainer">
+          <button id="loginOpenBtn" onclick="toggleAuthModal(true)" class="text-xs font-bold px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-800 transition">
+            Sign In / Register
+          </button>
+        </div>
 
-        <button onclick="toggleForm()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-semibold px-3 sm:px-4 py-2 rounded-lg transition shadow">
+        <button onclick="handlePostPropertyClick()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-semibold px-3 sm:px-4 py-2 rounded-lg transition shadow">
           <span id="t_post_btn">+ Post Property</span>
         </button>
       </div>
@@ -69,7 +72,7 @@
         <button type="button" onclick="setCategoryFilter('PG', this)" class="category-btn bg-indigo-800/80 hover:bg-indigo-800 text-white font-medium px-3 py-1.5 rounded-full text-xs transition">🛏️ PG</button>
         <button type="button" onclick="setCategoryFilter('Flat', this)" class="category-btn bg-indigo-800/80 hover:bg-indigo-800 text-white font-medium px-3 py-1.5 rounded-full text-xs transition">🏠 Flat</button>
         <button type="button" onclick="setCategoryFilter('Apartment', this)" class="category-btn bg-indigo-800/80 hover:bg-indigo-800 text-white font-medium px-3 py-1.5 rounded-full text-xs transition">🏢 Apartment Floor</button>
-        <button type="button" onclick="setCategoryFilter('Family', this)" class="category-btn bg-indigo-800/80 hover:bg-indigo-800 text-white font-medium px-3 py-1.5 rounded-full text-xs transition">👨‍👩‍‍👧 Family Homes</button>
+        <button type="button" onclick="setCategoryFilter('Family', this)" class="category-btn bg-indigo-800/80 hover:bg-indigo-800 text-white font-medium px-3 py-1.5 rounded-full text-xs transition">👨‍👩‍👧 Family Homes</button>
         <button type="button" onclick="setCategoryFilter('Dukan', this)" class="category-btn bg-indigo-800/80 hover:bg-indigo-800 text-white font-medium px-3 py-1.5 rounded-full text-xs transition">🛍️ Dukaan / Retail</button>
         <button type="button" onclick="setCategoryFilter('Commercial', this)" class="category-btn bg-indigo-800/80 hover:bg-indigo-800 text-white font-medium px-3 py-1.5 rounded-full text-xs transition">🏦 Commercial / Bank / Coaching</button>
         <button type="button" onclick="setCategoryFilter('Hotel', this)" class="category-btn bg-indigo-800/80 hover:bg-indigo-800 text-white font-medium px-3 py-1.5 rounded-full text-xs transition">🏨 Hotel / Guest House</button>
@@ -127,6 +130,76 @@
       </div>
     </main>
   </div>
+
+  <!-- Sign In / Register Modal -->
+  <section id="authModal" class="hidden fixed inset-0 bg-black/70 z-50 overflow-y-auto p-4 flex items-center justify-center">
+    <div class="bg-white max-w-md w-full p-6 rounded-2xl shadow-2xl relative">
+      <button type="button" onclick="toggleAuthModal(false)" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl font-bold">&times;</button>
+      
+      <!-- Tab Headers -->
+      <div class="flex border-b mb-4">
+        <button id="tabLoginBtn" onclick="switchAuthTab('login')" class="flex-1 py-2 font-bold text-sm border-b-2 border-indigo-600 text-indigo-600">Sign In</button>
+        <button id="tabRegisterBtn" onclick="switchAuthTab('register')" class="flex-1 py-2 font-bold text-sm border-b-2 border-transparent text-gray-400 hover:text-gray-700">Naya Khata (Register)</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Email ID</label>
+          <input type="email" id="loginEmail" required placeholder="name@example.com" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Password</label>
+          <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
+        </div>
+        <button type="submit" id="loginSubmitBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-lg transition shadow">
+          Sign In
+        </button>
+      </form>
+
+      <!-- Register Form -->
+      <form id="registerForm" onsubmit="handleRegister(event)" class="hidden space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Pura Naam (Full Name)</label>
+          <input type="text" id="regName" required placeholder="e.g. Rahul Kumar" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Mobile / WhatsApp Number</label>
+          <input type="tel" id="regPhone" required placeholder="e.g. 9876543210" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Aapka Role (Kaun hain aap?)</label>
+          <select id="regRole" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500 font-semibold">
+            <option value="Owner">🏠 Property / Room Owner (Kiraye par dene wale)</option>
+            <option value="Tenant">🔍 Student / Kirayedaar (Room dhoondhne wale)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Sheher (City)</label>
+          <input type="text" id="regCity" required placeholder="e.g. Patna, Delhi, Kota" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Email ID</label>
+          <input type="email" id="regEmail" required placeholder="name@example.com" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Password</label>
+          <input type="password" id="regPassword" minlength="6" required placeholder="Min 6 characters" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
+        </div>
+        <button type="submit" id="regSubmitBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-lg transition shadow">
+          Khata Banayein (Register)
+        </button>
+      </form>
+
+      <!-- Google Sign-in Divider -->
+      <div class="mt-4 pt-4 border-t text-center">
+        <button type="button" onclick="handleGoogleSignIn()" class="w-full border border-gray-300 hover:bg-gray-50 text-gray-700 font-bold py-2 rounded-lg flex items-center justify-center gap-2 text-xs transition">
+          <svg class="w-4 h-4" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/></svg>
+          Continue with Google
+        </button>
+      </div>
+    </div>
+  </section>
 
   <!-- Multi-Category Add Property Form Modal -->
   <section id="formSection" class="hidden fixed inset-0 bg-black/70 z-50 overflow-y-auto p-4 flex items-center justify-center">
@@ -328,13 +401,16 @@
     </div>
   </footer>
 
-  <!-- Direct Embedded JavaScript (404 Error Fix) -->
+  <!-- Direct Embedded Logic with Full Auth & Database -->
   <script>
     const SUPABASE_URL = "https://ndegekylfrhroyyhumyo.supabase.co";
     const SUPABASE_KEY = "sb_publishable_hwBUpVWGEoWrQgiiG8ZgBw_ZM_aJyH2";
     const MASTER_ADMIN_PIN = "1234";
 
     let dbClient = null;
+    let currentUser = null;
+    let userProfile = null;
+
     let roomsData = [];
     let favorites = [];
     let myCreatedPins = [];
@@ -402,16 +478,205 @@
       }
     };
 
-    async function fetchRooms() {
-      const container = document.getElementById("roomContainer");
+    // Initialize Supabase & Check Auth Session
+    async function initApp() {
       if (!window.supabase) {
-        if (container) container.innerHTML = `<p class="col-span-full text-center text-red-500 py-8">Supabase CDN connection pending...</p>`;
+        setTimeout(initApp, 200);
         return;
       }
 
       if (!dbClient) {
         dbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
       }
+
+      // Check current user session
+      const { data: { session } } = await dbClient.auth.getSession();
+      if (session && session.user) {
+        currentUser = session.user;
+        await fetchUserProfile(currentUser.id);
+      }
+      renderAuthUI();
+
+      // Listen for auth changes
+      dbClient.auth.onAuthStateChange(async (event, session) => {
+        if (session && session.user) {
+          currentUser = session.user;
+          await fetchUserProfile(currentUser.id);
+        } else {
+          currentUser = null;
+          userProfile = null;
+        }
+        renderAuthUI();
+        updateHeaderCounts();
+        applyFilters();
+      });
+
+      fetchRooms();
+    }
+
+    async function fetchUserProfile(userId) {
+      try {
+        const { data, error } = await dbClient.from('profiles').select('*').eq('id', userId).single();
+        if (data) userProfile = data;
+      } catch (err) {
+        console.error("Profile load error:", err);
+      }
+    }
+
+    function renderAuthUI() {
+      const authContainer = document.getElementById("authContainer");
+      if (!authContainer) return;
+
+      if (currentUser) {
+        const displayName = userProfile ? userProfile.full_name : currentUser.email.split('@')[0];
+        const roleBadge = userProfile ? userProfile.role : 'User';
+        authContainer.innerHTML = `
+          <div class="flex items-center gap-1.5 bg-indigo-50 border border-indigo-200 px-2.5 py-1 rounded-lg text-xs">
+            <span class="font-bold text-indigo-700">👤 ${displayName}</span>
+            <span class="bg-indigo-600 text-white text-[10px] px-1.5 py-0.2 rounded font-semibold">${roleBadge}</span>
+            <button onclick="handleLogout()" class="text-red-500 font-bold hover:underline ml-1">Exit</button>
+          </div>
+        `;
+      } else {
+        authContainer.innerHTML = `
+          <button id="loginOpenBtn" onclick="toggleAuthModal(true)" class="text-xs font-bold px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-800 transition">
+            Sign In / Register
+          </button>
+        `;
+      }
+    }
+
+    // Auth Modals
+    function toggleAuthModal(show) {
+      const modal = document.getElementById("authModal");
+      if (modal) {
+        if (show) modal.classList.remove("hidden");
+        else modal.classList.add("hidden");
+      }
+    }
+
+    function switchAuthTab(tab) {
+      const loginForm = document.getElementById("loginForm");
+      const regForm = document.getElementById("registerForm");
+      const tabLogin = document.getElementById("tabLoginBtn");
+      const tabReg = document.getElementById("tabRegisterBtn");
+
+      if (tab === 'login') {
+        loginForm.classList.remove("hidden");
+        regForm.classList.add("hidden");
+        tabLogin.className = "flex-1 py-2 font-bold text-sm border-b-2 border-indigo-600 text-indigo-600";
+        tabReg.className = "flex-1 py-2 font-bold text-sm border-b-2 border-transparent text-gray-400 hover:text-gray-700";
+      } else {
+        loginForm.classList.add("hidden");
+        regForm.classList.remove("hidden");
+        tabReg.className = "flex-1 py-2 font-bold text-sm border-b-2 border-emerald-600 text-emerald-600";
+        tabLogin.className = "flex-1 py-2 font-bold text-sm border-b-2 border-transparent text-gray-400 hover:text-gray-700";
+      }
+    }
+
+    async function handleLogin(event) {
+      event.preventDefault();
+      const email = document.getElementById("loginEmail").value;
+      const password = document.getElementById("loginPassword").value;
+      const btn = document.getElementById("loginSubmitBtn");
+
+      btn.innerText = "Signing in...";
+      btn.disabled = true;
+
+      try {
+        const { data, error } = await dbClient.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        alert("Swagat hai! Login safal hua.");
+        toggleAuthModal(false);
+      } catch (err) {
+        alert("Login fail: " + err.message);
+      } finally {
+        btn.innerText = "Sign In";
+        btn.disabled = false;
+      }
+    }
+
+    async function handleRegister(event) {
+      event.preventDefault();
+      const fullName = document.getElementById("regName").value;
+      const phone = document.getElementById("regPhone").value;
+      const role = document.getElementById("regRole").value;
+      const city = document.getElementById("regCity").value;
+      const email = document.getElementById("regEmail").value;
+      const password = document.getElementById("regPassword").value;
+      const btn = document.getElementById("regSubmitBtn");
+
+      btn.innerText = "Khata ban raha hai...";
+      btn.disabled = true;
+
+      try {
+        const { data, error } = await dbClient.auth.signUp({
+          email,
+          password,
+          options: {
+            data: { full_name: fullName, phone: phone, role: role, city: city }
+          }
+        });
+
+        if (error) throw error;
+
+        // Insert into public.profiles
+        if (data && data.user) {
+          await dbClient.from('profiles').insert([{
+            id: data.user.id,
+            full_name: fullName,
+            phone: phone,
+            role: role,
+            city: city
+          }]);
+        }
+
+        alert("Khata ban gaya! Ab aap login kar sakte hain.");
+        toggleAuthModal(false);
+      } catch (err) {
+        alert("Registration fail: " + err.message);
+      } finally {
+        btn.innerText = "Khata Banayein (Register)";
+        btn.disabled = false;
+      }
+    }
+
+    async function handleGoogleSignIn() {
+      try {
+        const { error } = await dbClient.auth.signInWithOAuth({
+          provider: 'google',
+          options: { redirectTo: window.location.href }
+        });
+        if (error) throw error;
+      } catch (err) {
+        alert("Google sign in error: " + err.message);
+      }
+    }
+
+    async function handleLogout() {
+      if (confirm("Kya aap account se sign out karna chahte hain?")) {
+        await dbClient.auth.signOut();
+        alert("Aap sign out ho chuke hain.");
+      }
+    }
+
+    function handlePostPropertyClick() {
+      // Form auto-fill agar user logged in hai
+      if (currentUser && userProfile) {
+        const nameInput = document.getElementById("owner_name");
+        const phoneInput = document.getElementById("phone");
+        const cityInput = document.getElementById("city");
+        if (nameInput && !nameInput.value) nameInput.value = userProfile.full_name || '';
+        if (phoneInput && !phoneInput.value) phoneInput.value = userProfile.phone || '';
+        if (cityInput && !cityInput.value) cityInput.value = userProfile.city || '';
+      }
+      toggleForm();
+    }
+
+    // Fetch Properties
+    async function fetchRooms() {
+      const container = document.getElementById("roomContainer");
+      if (!dbClient) return;
 
       try {
         const { data, error } = await dbClient.from('rooms').select('*').order('id', { ascending: false });
@@ -431,7 +696,7 @@
 
     function updateHeaderCounts() {
       safeSetText("favCount", favorites.length);
-      const myRooms = roomsData.filter(r => myCreatedPins.includes(r.pin));
+      const myRooms = roomsData.filter(r => (currentUser && r.user_id === currentUser.id) || myCreatedPins.includes(r.pin));
       safeSetText("myCount", myRooms.length);
     }
 
@@ -448,7 +713,6 @@
       safeSetText("langSubHeader", t.subHeader);
       safeSetText("t_hero_title", t.heroTitle);
       safeSetText("t_hero_sub", t.heroSub);
-      safeSetText("t_my_listings", t.myListings);
       safeSetText("t_post_btn", t.postBtn);
       safeSetText("t_modal_title", t.modalTitle);
       safeSetText("currentViewTitle", t.availableListings);
@@ -503,7 +767,7 @@
         }
 
         const isFav = favorites.includes(room.id);
-        const isMyListing = myCreatedPins.includes(room.pin);
+        const isMyListing = (currentUser && room.user_id === currentUser.id) || myCreatedPins.includes(room.pin);
         const ownerTotalListings = roomsData.filter(r => r.phone === room.phone).length;
         const safeImgsString = encodeURIComponent(JSON.stringify(imgs));
 
@@ -663,7 +927,8 @@
           image: uploadedUrls[0],
           images: uploadedUrls,
           is_rented: false,
-          amenities: amenitiesArray
+          amenities: amenitiesArray,
+          user_id: currentUser ? currentUser.id : null // Authenticated user ID link
         };
 
         const { error: insertError } = await dbClient.from('rooms').insert([newProperty]);
@@ -783,7 +1048,7 @@
         const matchesCategory = selectedCategory === "All" || (room.category || "Room") === selectedCategory;
         const matchesBudget = (room.rent || 0) <= maxBudget;
         const matchesFav = !showFavoritesOnly || favorites.includes(room.id);
-        const matchesMyListings = !showMyListingsOnly || myCreatedPins.includes(room.pin);
+        const matchesMyListings = !showMyListingsOnly || ((currentUser && room.user_id === currentUser.id) || myCreatedPins.includes(room.pin));
         const matchesOwner = !selectedOwnerPhone || room.phone === selectedOwnerPhone;
 
         return matchesSearch && matchesCategory && matchesBudget && matchesFav && matchesMyListings && matchesOwner;
@@ -824,31 +1089,39 @@
 
     async function handleRentedToggle(id, currentStatus) {
       const room = roomsData.find(r => r.id === id);
-      const inputPin = prompt("Room/Property ka 4-digit PIN enter karein:");
-      if (!inputPin) return;
+      const isOwnerLoggedIn = currentUser && room.user_id === currentUser.id;
 
-      if (inputPin === room.pin || inputPin === MASTER_ADMIN_PIN) {
-        const { error } = await dbClient.from('rooms').update({ is_rented: !currentStatus }).eq('id', id);
-        if (error) alert("Error: " + error.message);
-        else fetchRooms();
-      } else {
-        alert("❌ Galat PIN! Sirf owner hi mark kar sakta hai.");
+      if (!isOwnerLoggedIn) {
+        const inputPin = prompt("Room/Property ka 4-digit PIN enter karein:");
+        if (!inputPin) return;
+        if (inputPin !== room.pin && inputPin !== MASTER_ADMIN_PIN) {
+          alert("❌ Galat PIN! Sirf owner hi mark kar sakta hai.");
+          return;
+        }
       }
+
+      const { error } = await dbClient.from('rooms').update({ is_rented: !currentStatus }).eq('id', id);
+      if (error) alert("Error: " + error.message);
+      else fetchRooms();
     }
 
     async function handleDeleteRoom(id) {
       const room = roomsData.find(r => r.id === id);
-      const inputPin = prompt("Property delete karne ke liye 4-digit PIN enter karein:");
-      if (!inputPin) return;
+      const isOwnerLoggedIn = currentUser && room.user_id === currentUser.id;
 
-      if (inputPin === room.pin || inputPin === MASTER_ADMIN_PIN) {
-        if (confirm("Kya aap sach me is listing ko delete karna chahte hain?")) {
-          const { error } = await dbClient.from('rooms').delete().eq('id', id);
-          if (error) alert("Error: " + error.message);
-          else fetchRooms();
+      if (!isOwnerLoggedIn) {
+        const inputPin = prompt("Property delete karne ke liye 4-digit PIN enter karein:");
+        if (!inputPin) return;
+        if (inputPin !== room.pin && inputPin !== MASTER_ADMIN_PIN) {
+          alert("❌ Galat PIN! Access denied.");
+          return;
         }
-      } else {
-        alert("❌ Galat PIN! Access denied.");
+      }
+
+      if (confirm("Kya aap sach me is listing ko delete karna chahte hain?")) {
+        const { error } = await dbClient.from('rooms').delete().eq('id', id);
+        if (error) alert("Error: " + error.message);
+        else fetchRooms();
       }
     }
 
@@ -892,10 +1165,11 @@
       if (modal) modal.classList.add("hidden");
     }
 
+    // Startup
     if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", fetchRooms);
+      document.addEventListener("DOMContentLoaded", initApp);
     } else {
-      fetchRooms();
+      initApp();
     }
   </script>
 </body>
