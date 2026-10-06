@@ -152,7 +152,7 @@
         </button>
       </form>
 
-      <!-- Register Form with All Detailed Roles -->
+      <!-- Register Form -->
       <form id="registerForm" onsubmit="handleRegister(event)" class="hidden space-y-3">
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1">Pura Naam (Full Name)</label>
@@ -162,8 +162,6 @@
           <label class="block text-xs font-bold text-gray-700 mb-1">Mobile / WhatsApp Number</label>
           <input type="tel" id="regPhone" required placeholder="e.g. 9876543210" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
         </div>
-        
-        <!-- Aapka Role Section -->
         <div>
           <label class="block text-xs font-bold text-indigo-700 mb-1">Aapka Role (Kaun Hain Aap?)</label>
           <select id="regRole" class="w-full border-2 border-indigo-100 p-2.5 rounded-lg bg-indigo-50/40 text-xs sm:text-sm focus:outline-indigo-600 font-semibold text-gray-800">
@@ -175,14 +173,13 @@
             <option value="PG Owner">🛏️ PG Owner</option>
             <option value="Flat Owner">🏠 Flat Owner</option>
             <option value="Apartment Owner">🏢 Apartment Floor Owner</option>
-            <option value="Family House Owner">👨‍👩‍👧 Family Homes Owner</option>
+            <option value="Family House Owner">👨‍👩‍‍👧 Family Homes Owner</option>
             <option value="Dukan Owner">🛍️ Dukaan / Retail Shop Owner</option>
             <option value="Commercial Space Owner">🏦 Commercial Hall / Coaching / Bank Owner</option>
             <option value="Hotel Owner">🏨 Hotel / Guest House Owner</option>
             <option value="Land/Plot Owner">🌾 Land / Plot Owner (Zameen Bechne Wale)</option>
           </select>
         </div>
-
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1">Sheher (City)</label>
           <input type="text" id="regCity" required placeholder="e.g. Patna, Delhi, Kota" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
@@ -200,7 +197,7 @@
         </button>
       </form>
 
-      <!-- Google Sign-in Notification Alert -->
+      <!-- Google Sign-in Handler -->
       <div class="mt-4 pt-4 border-t text-center">
         <button type="button" onclick="handleGoogleSignIn()" class="w-full border border-gray-300 hover:bg-gray-50 text-gray-700 font-bold py-2 rounded-lg flex items-center justify-center gap-2 text-xs transition">
           <svg class="w-4 h-4" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/></svg>
@@ -218,7 +215,6 @@
       <p class="text-xs text-gray-500 mb-4">Poore Bharat me kisi bhi jagah ka room, dukan, space ya zameen direct khareeddaar tak pahuchayein</p>
 
       <form id="roomForm" onsubmit="addNewRoom(event)" class="space-y-4">
-        
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1">Property Category</label>
           <select id="category" onchange="handleCategoryFieldChanges()" class="w-full border-2 border-indigo-100 p-2.5 rounded-lg bg-indigo-50/30 font-bold focus:outline-indigo-500 text-sm text-indigo-900">
@@ -278,8 +274,8 @@
           </div>
         </div>
 
-        <!-- Land / Plot Specific Fields (Hidden by default, shows when Land is selected) -->
-        <div id="landFieldsSection" class="hidden bg-emerald-50/60 p-3 rounded-xl border border-emerald-200 space-y-3">
+        <!-- Land / Plot Specific Fields -->
+        <div id="landFieldsSection" class="hidden bg-emerald-50/60 p-4 rounded-xl border border-emerald-200 space-y-3">
           <p class="text-xs font-black text-emerald-800 uppercase tracking-wide">🌾 Zameen / Plot Ki Zaroori Jankari</p>
           
           <div class="grid grid-cols-2 gap-3">
@@ -319,6 +315,13 @@
               </select>
             </div>
           </div>
+
+          <!-- DEDICATED LAND DOCUMENT GALLERY UPLOAD (POINT 1) -->
+          <div class="border-t border-emerald-200 pt-3 mt-3">
+            <label class="block text-[11px] font-bold text-emerald-900 mb-1">📄 Zameen Legal Documents (Registry Paper, Rasid, Khatiyan, Naksha Photo)</label>
+            <input type="file" id="docFiles" accept="image/*" multiple class="w-full border p-2 rounded-lg bg-white text-xs file:mr-2 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-[10px] file:font-bold file:bg-emerald-100 file:text-emerald-800">
+            <p class="text-[10px] text-emerald-700 mt-1">Gallery se zameen ke paper ki photos select karein (Buyer ko verified dikhega).</p>
+          </div>
         </div>
 
         <!-- Normal Space / Room Fields -->
@@ -352,9 +355,9 @@
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1">Photos / Paper Photos (Unlimited Select Karein)</label>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Site / Land Photos (View, Road, Frontage)</label>
           <input type="file" id="imageFiles" accept="image/*" multiple required class="w-full border p-2 rounded-lg bg-gray-50 text-xs file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-bold file:bg-indigo-100 file:text-indigo-800">
-          <p class="text-[11px] text-gray-400 mt-1">Zameen ya room ke front road, boundary wall ya papers ki photos chunein.</p>
+          <p class="text-[11px] text-gray-400 mt-1">Zameen ya room ke front view aur surroundings ki photos chunein.</p>
         </div>
 
         <div>
@@ -373,6 +376,31 @@
       </form>
     </div>
   </section>
+
+  <!-- Dedicated Document Viewer Modal for Land Papers -->
+  <div id="docModal" class="hidden fixed inset-0 bg-black/90 z-50 flex flex-col items-center justify-center p-4">
+    <button type="button" onclick="closeDocModal()" class="absolute top-4 right-4 text-white text-3xl font-bold">&times;</button>
+    <div class="bg-white/10 text-white text-xs px-4 py-1.5 rounded-full mb-3 flex items-center gap-1 font-bold">
+      <span>📜 Land Verified Legal Document Preview</span>
+    </div>
+    <div class="relative max-w-4xl w-full flex items-center justify-center">
+      <button type="button" onclick="prevDoc(event)" class="absolute left-2 text-white bg-black/60 p-3 rounded-full hover:bg-black/80 font-bold">&#10094;</button>
+      <img id="docModalImg" src="" alt="Document Paper" class="max-w-full max-h-[75vh] rounded-lg shadow-2xl object-contain bg-white">
+      <button type="button" onclick="nextDoc(event)" class="absolute right-2 text-white bg-black/60 p-3 rounded-full hover:bg-black/80 font-bold">&#10095;</button>
+    </div>
+    <p id="docCounter" class="text-white text-xs mt-3 bg-black/40 px-3 py-1 rounded-full"></p>
+  </div>
+
+  <!-- Fullscreen Modal / Gallery Viewer -->
+  <div id="imageModal" class="hidden fixed inset-0 bg-black/90 z-50 flex flex-col items-center justify-center p-4">
+    <button type="button" onclick="closeImageModal()" class="absolute top-4 right-4 text-white text-3xl font-bold">&times;</button>
+    <div class="relative max-w-4xl w-full flex items-center justify-center">
+      <button type="button" onclick="prevImage(event)" class="absolute left-2 text-white bg-black/60 p-3 rounded-full hover:bg-black/80 font-bold">&#10094;</button>
+      <img id="modalImg" src="" alt="Property Preview" class="max-w-full max-h-[75vh] rounded-lg shadow-2xl object-contain">
+      <button type="button" onclick="nextImage(event)" class="absolute right-2 text-white bg-black/60 p-3 rounded-full hover:bg-black/80 font-bold">&#10095;</button>
+    </div>
+    <p id="imageCounter" class="text-white text-xs mt-3 bg-black/40 px-3 py-1 rounded-full"></p>
+  </div>
 
   <!-- About Us Section -->
   <section id="aboutSection" class="hidden max-w-5xl mx-auto px-4 py-12 flex-1">
@@ -428,17 +456,6 @@
     </div>
   </section>
 
-  <!-- Fullscreen Modal / Gallery Viewer -->
-  <div id="imageModal" class="hidden fixed inset-0 bg-black/90 z-50 flex flex-col items-center justify-center p-4">
-    <button type="button" onclick="closeImageModal()" class="absolute top-4 right-4 text-white text-3xl font-bold">&times;</button>
-    <div class="relative max-w-4xl w-full flex items-center justify-center">
-      <button type="button" onclick="prevImage(event)" class="absolute left-2 text-white bg-black/60 p-3 rounded-full hover:bg-black/80 font-bold">&#10094;</button>
-      <img id="modalImg" src="" alt="Property Preview" class="max-w-full max-h-[75vh] rounded-lg shadow-2xl object-contain">
-      <button type="button" onclick="nextImage(event)" class="absolute right-2 text-white bg-black/60 p-3 rounded-full hover:bg-black/80 font-bold">&#10095;</button>
-    </div>
-    <p id="imageCounter" class="text-white text-xs mt-3 bg-black/40 px-3 py-1 rounded-full"></p>
-  </div>
-
   <!-- Footer -->
   <footer class="bg-gray-900 text-gray-400 py-8 border-t border-gray-800 mt-auto">
     <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs">
@@ -457,7 +474,6 @@
     </div>
   </footer>
 
-  <!-- Complete Embedded JS with Google Fallback, Land Features & Role Mapping -->
   <script>
     const SUPABASE_URL = "https://ndegekylfrhroyyhumyo.supabase.co";
     const SUPABASE_KEY = "sb_publishable_hwBUpVWGEoWrQgiiG8ZgBw_ZM_aJyH2";
@@ -483,10 +499,12 @@
     let selectedCategory = "All";
     let selectedOwnerPhone = null;
     let showFavoritesOnly = false;
-    let showMyListingsOnly = false;
 
     let currentImages = [];
     let currentImageIndex = 0;
+
+    let currentDocs = [];
+    let currentDocIndex = 0;
 
     function safeSetText(id, text) {
       const el = document.getElementById(id);
@@ -574,7 +592,7 @@
         const { data } = await dbClient.from('profiles').select('*').eq('id', userId).single();
         if (data) userProfile = data;
       } catch (err) {
-        console.error("Profile load error:", err);
+        console.error("Profile error:", err);
       }
     }
 
@@ -694,7 +712,6 @@
       }
     }
 
-    // Google Sign-in Friendly Warning & Graceful Handler
     async function handleGoogleSignIn() {
       try {
         const { error } = await dbClient.auth.signInWithOAuth({
@@ -702,17 +719,16 @@
           options: { redirectTo: window.location.href }
         });
         if (error) {
-          alert("Google Provider abhi Supabase me active nahi hai. Kripya upar diye gaye Email aur Password form se login/register karein!");
+          alert("Google Provider notice: Kripya Supabase Authentication > Providers me Google ON karein. Abhi Email & Password se sign in karein.");
         }
       } catch (err) {
-        alert("Google Provider abhi Supabase me enable nahi kiya gaya hai. Kripya Email/Password use karein.");
+        alert("Google auth connect nahi hua: Kripya Email/Password use karein.");
       }
     }
 
     async function handleLogout() {
-      if (confirm("Kya aap account se sign out karna chahte hain?")) {
+      if (confirm("Sign out karna chahte hain?")) {
         await dbClient.auth.signOut();
-        alert("Aap sign out ho chuke hain.");
       }
     }
 
@@ -725,7 +741,6 @@
         if (phoneInput && !phoneInput.value) phoneInput.value = userProfile.phone || '';
         if (cityInput && !cityInput.value) cityInput.value = userProfile.city || '';
         
-        // Auto select role category if owner
         const categorySelect = document.getElementById("category");
         if (userProfile.role && userProfile.role.includes("Owner")) {
           const matchedOption = Array.from(categorySelect.options).find(opt => userProfile.role.includes(opt.value));
@@ -753,7 +768,7 @@
       } catch (err) {
         console.error(err);
         if (container) {
-          container.innerHTML = `<p class="col-span-full text-center text-red-500 py-8">Failed to load: ${err.message}. Please refresh.</p>`;
+          container.innerHTML = `<p class="col-span-full text-center text-red-500 py-8">Load error: ${err.message}. Please refresh.</p>`;
         }
       }
     }
@@ -812,7 +827,6 @@
 
         const cityState = `${room.city || ''}${room.state ? ', ' + room.state : ''}`;
         
-        // Detail tag
         let detailLine = room.space_size ? `• ${room.space_size}` : '';
         if (isLand && room.plot_area_unit) {
           detailLine = `• 📐 ${room.plot_area_unit} | Road: ${room.road_width || 'N/A'}`;
@@ -837,6 +851,9 @@
         } else {
           imgs = ['https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600'];
         }
+
+        const docsList = Array.isArray(room.documents) ? room.documents : [];
+        const safeDocsString = encodeURIComponent(JSON.stringify(docsList));
 
         const isFav = favorites.includes(room.id);
         const isMyListing = (currentUser && room.user_id === currentUser.id) || myCreatedPins.includes(room.pin);
@@ -873,13 +890,21 @@
                 <h4 class="font-bold text-gray-900 leading-snug line-clamp-1">${room.title}</h4>
                 <p class="text-xs text-gray-500 mt-0.5 font-medium">📍 ${room.location || ''} <span class="text-gray-400">(${cityState})</span> <span class="text-emerald-700 font-bold">${detailLine}</span></p>
 
-                <!-- Land Special Verification Badge -->
+                <!-- Land Special Verification & Document Viewer (POINT 1) -->
                 ${isLand ? `
                   <div class="flex flex-wrap gap-1 mt-2 text-[10px] font-bold">
                     <span class="bg-emerald-50 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded">📜 ${room.doc_status || 'Papers Clear'}</span>
                     <span class="bg-blue-50 text-blue-800 border border-blue-200 px-2 py-0.5 rounded">🧭 Facing: ${room.facing || 'East'}</span>
                     <span class="bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded">🧱 Boundary: ${room.boundary_wall || 'Yes'}</span>
                   </div>
+
+                  ${docsList.length > 0 ? `
+                    <button type="button" onclick="openDocModal('${safeDocsString}')" class="mt-2.5 w-full bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold py-1.5 px-2 rounded-lg text-xs flex items-center justify-center gap-1.5 transition">
+                      📄 Verified Land Papers (${docsList.length} Photos Dekhein)
+                    </button>
+                  ` : `
+                    <p class="text-[10px] text-gray-400 mt-1 italic">Papers physical visit par uplabdh hain</p>
+                  `}
                 ` : ''}
 
                 ${room.owner_name ? `<p class="text-[11px] text-gray-600 mt-1.5 font-medium">👤 Owner/Seller: <strong class="text-gray-800">${room.owner_name}</strong></p>` : ''}
@@ -941,7 +966,6 @@
       if (formSec) formSec.classList.toggle("hidden");
     }
 
-    // Category changes dynamically between Room & Land Plot
     function handleCategoryFieldChanges() {
       const cat = document.getElementById("category").value;
       const pricePeriod = document.getElementById("price_period");
@@ -962,29 +986,33 @@
       }
     }
 
+    // Unlimited Photos Upload + DEDICATED LAND LEGAL DOCS UPLOAD
     async function addNewRoom(event) {
       event.preventDefault();
       const btn = document.getElementById("submitBtn");
       const fileInput = document.getElementById("imageFiles");
+      const docInput = document.getElementById("docFiles");
+      const cat = document.getElementById("category").value;
 
       if (!fileInput.files.length) {
         alert("Kripya kam se kam 1 photo chunein!");
         return;
       }
 
-      const files = Array.from(fileInput.files);
-      btn.innerText = `Photos upload ho rahi hain (0/${files.length})...`;
+      btn.innerText = "Files upload ho rahi hain...";
       btn.disabled = true;
 
       try {
         const uploadedUrls = [];
+        const files = Array.from(fileInput.files);
 
+        // Upload normal photos
         for (let i = 0; i < files.length; i++) {
           const file = files[i];
           const fileExt = file.name.split('.').pop();
-          const fileName = `${Date.now()}_${i}_${Math.random().toString(36).substring(2)}.${fileExt}`;
+          const fileName = `prop_${Date.now()}_${i}.${fileExt}`;
 
-          btn.innerText = `Photo upload ho rahi hai (${i + 1}/${files.length})...`;
+          btn.innerText = `Photos upload ho rahi hain (${i + 1}/${files.length})...`;
 
           const { error: uploadError } = await dbClient.storage
             .from('Room finder')
@@ -999,12 +1027,36 @@
           uploadedUrls.push(publicUrlData.publicUrl);
         }
 
+        // Upload dedicated legal documents if any
+        const uploadedDocUrls = [];
+        if (cat === "Land" && docInput && docInput.files.length > 0) {
+          const docFiles = Array.from(docInput.files);
+          for (let d = 0; d < docFiles.length; d++) {
+            const docFile = docFiles[d];
+            const docExt = docFile.name.split('.').pop();
+            const docName = `doc_${Date.now()}_${d}.${docExt}`;
+
+            btn.innerText = `Papers upload ho rahe hain (${d + 1}/${docFiles.length})...`;
+
+            const { error: docUploadError } = await dbClient.storage
+              .from('Room finder')
+              .upload(docName, docFile);
+
+            if (docUploadError) throw docUploadError;
+
+            const { data: docUrlData } = dbClient.storage
+              .from('Room finder')
+              .getPublicUrl(docName);
+
+            uploadedDocUrls.push(docUrlData.publicUrl);
+          }
+        }
+
         btn.innerText = "Database me save ho raha hai...";
 
         const rawAmenities = document.getElementById("amenities").value;
         const amenitiesArray = rawAmenities ? rawAmenities.split(",").map(i => i.trim()).filter(Boolean) : [];
         const ownerPin = document.getElementById("ownerPin").value;
-        const cat = document.getElementById("category").value;
 
         const newProperty = {
           category: cat,
@@ -1021,10 +1073,10 @@
           pin: ownerPin,
           image: uploadedUrls[0],
           images: uploadedUrls,
+          documents: uploadedDocUrls,
           is_rented: false,
           amenities: amenitiesArray,
           user_id: currentUser ? currentUser.id : null,
-          // Land specific
           plot_area_unit: cat === "Land" ? document.getElementById("plot_area_unit").value : null,
           road_width: cat === "Land" ? document.getElementById("road_width").value : null,
           facing: cat === "Land" ? document.getElementById("facing").value : null,
@@ -1209,6 +1261,7 @@
       }
     }
 
+    // Modal Image Gallery
     function openGallery(safeImgsString) {
       try {
         currentImages = JSON.parse(decodeURIComponent(safeImgsString));
@@ -1246,6 +1299,48 @@
 
     function closeImageModal() {
       const modal = document.getElementById("imageModal");
+      if (modal) modal.classList.add("hidden");
+    }
+
+    // Modal Document Gallery (Land Papers Viewer)
+    function openDocModal(safeDocsString) {
+      try {
+        currentDocs = JSON.parse(decodeURIComponent(safeDocsString));
+        if (!currentDocs || currentDocs.length === 0) return;
+        currentDocIndex = 0;
+        updateDocModalImage();
+        const modal = document.getElementById("docModal");
+        if (modal) modal.classList.remove("hidden");
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function updateDocModalImage() {
+      const docImg = document.getElementById("docModalImg");
+      const counter = document.getElementById("docCounter");
+      if (docImg && currentDocs[currentDocIndex]) {
+        docImg.src = currentDocs[currentDocIndex];
+      }
+      if (counter) {
+        counter.innerText = `Legal Paper ${currentDocIndex + 1} of ${currentDocs.length}`;
+      }
+    }
+
+    function prevDoc(event) {
+      if (event) event.stopPropagation();
+      currentDocIndex = (currentDocIndex - 1 + currentDocs.length) % currentDocs.length;
+      updateDocModalImage();
+    }
+
+    function nextDoc(event) {
+      if (event) event.stopPropagation();
+      currentDocIndex = (currentDocIndex + 1) % currentDocs.length;
+      updateDocModalImage();
+    }
+
+    function closeDocModal() {
+      const modal = document.getElementById("docModal");
       if (modal) modal.classList.add("hidden");
     }
 
