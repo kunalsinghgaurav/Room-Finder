@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RoomDekho India - Zero Brokerage Space & Land Marketplace</title>
 
+  <!-- Google Search Console Ownership Verification Tag -->
+  <meta name="google-site-verification" content="LUL5r3gSPu3xCEtTkEiBqt_LXi5cj-juUOWlMUnZrJM" />
+
   <meta name="description" content="India's verified zero-brokerage marketplace for Rooms, PGs, Hostels, Flats, Shops, Hotels, Commercial Spaces, and Land/Plots. Direct owner contacts.">
   <meta name="keywords" content="rooms in india, flat on rent, pg hostel booking, plot for sale, land sell, commercial space, zero brokerage">
 
@@ -85,13 +88,13 @@
       </div>
     </section>
 
-    <!-- Feature 4: Advanced Search & Price Slider Filter Bar -->
+    <!-- Filter Bar -->
     <section class="max-w-7xl mx-auto px-4 -mt-5">
       <div class="bg-white p-4 rounded-xl shadow-lg border border-gray-100 space-y-3">
         <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
           <input type="text" id="searchInput" oninput="applyFilters()" placeholder="🔍 Sheher, Area ya Landmark search karein (e.g. Patna, Delhi, Boring Rd)..." class="sm:col-span-2 border p-2.5 rounded-lg bg-gray-50 focus:outline-indigo-500 text-sm">
           
-          <!-- Price Slider Filter (Feature 4) -->
+          <!-- Price Slider Filter -->
           <div class="bg-gray-50 p-2 border rounded-lg flex flex-col justify-center">
             <div class="flex justify-between items-center text-xs font-bold text-gray-700 mb-1">
               <span>Max Budget:</span>
@@ -118,7 +121,7 @@
             <button type="button" onclick="setAreaFilter('')" class="text-indigo-600 font-bold px-2">Reset</button>
           </div>
 
-          <!-- Feature 4: Highway / Main Road Toggle Filter -->
+          <!-- Near Main Road / Highway Toggle Filter -->
           <div class="flex items-center gap-2">
             <label class="cursor-pointer flex items-center gap-1 font-semibold text-gray-700 bg-indigo-50/60 px-2.5 py-1 rounded-full border border-indigo-100 hover:bg-indigo-100">
               <input type="checkbox" id="mainRoadFilter" onchange="applyFilters()" class="accent-indigo-600">
@@ -147,7 +150,7 @@
     </main>
   </div>
 
-  <!-- Feature 1: Land / Plot Regional Area Unit Converter Modal -->
+  <!-- Land / Plot Unit Converter Modal -->
   <section id="calcModal" class="hidden fixed inset-0 bg-black/70 z-50 overflow-y-auto p-4 flex items-center justify-center">
     <div class="bg-white max-w-md w-full p-6 rounded-2xl shadow-2xl relative">
       <button type="button" onclick="toggleCalculatorModal(false)" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl font-bold">&times;</button>
@@ -155,7 +158,7 @@
         <span class="text-2xl">📐</span>
         <h3 class="text-lg font-black text-emerald-800">Zameen / Plot Unit Converter</h3>
       </div>
-      <p class="text-xs text-gray-500 mb-4">Katha, Dhur, Gaj aur Sq.Ft ko ek second me aapas me convert karein (Standard Bihar/UP & National rates):</p>
+      <p class="text-xs text-gray-500 mb-4">Katha, Dhur, Gaj aur Sq.Ft ko ek second me convert karein:</p>
 
       <div class="space-y-3 bg-emerald-50/50 p-4 rounded-xl border border-emerald-100">
         <div>
@@ -201,7 +204,7 @@
     </div>
   </section>
 
-  <!-- Feature 5: Report / Anti-Scam Modal -->
+  <!-- Report / Anti-Scam Modal -->
   <section id="reportModal" class="hidden fixed inset-0 bg-black/70 z-50 overflow-y-auto p-4 flex items-center justify-center">
     <div class="bg-white max-w-sm w-full p-5 rounded-2xl shadow-2xl relative">
       <button type="button" onclick="toggleReportModal(false)" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl font-bold">&times;</button>
@@ -281,7 +284,7 @@
             <option value="PG Owner">🛏️ PG Owner</option>
             <option value="Flat Owner">🏠 Flat Owner</option>
             <option value="Apartment Owner">🏢 Apartment Floor Owner</option>
-            <option value="Family House Owner">👨‍👩‍‍‍‍👧 Family Homes Owner</option>
+            <option value="Family House Owner">👨‍👩‍👧 Family Homes Owner</option>
             <option value="Dukan Owner">🛍️ Dukaan / Retail Shop Owner</option>
             <option value="Commercial Space Owner">🏦 Commercial Hall / Coaching / Bank Owner</option>
             <option value="Hotel Owner">🏨 Hotel / Guest House Owner</option>
@@ -307,7 +310,7 @@
     </div>
   </section>
 
-  <!-- Multi-Category & Land Selling Add Property Form Modal -->
+  <!-- Add Property Form Modal -->
   <section id="formSection" class="hidden fixed inset-0 bg-black/70 z-50 overflow-y-auto p-4 flex items-center justify-center">
     <div class="bg-white max-w-2xl w-full p-6 rounded-2xl shadow-2xl my-8 relative">
       <button type="button" onclick="toggleForm()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl font-bold">&times;</button>
@@ -374,7 +377,7 @@
           </div>
         </div>
 
-        <!-- Land / Plot Specific Fields -->
+        <!-- Land Specific Fields -->
         <div id="landFieldsSection" class="hidden bg-emerald-50/60 p-4 rounded-xl border border-emerald-200 space-y-3">
           <p class="text-xs font-black text-emerald-800 uppercase tracking-wide">🌾 Zameen / Plot Ki Zaroori Jankari</p>
           
@@ -417,13 +420,13 @@
           </div>
 
           <div class="border-t border-emerald-200 pt-3 mt-3">
-            <label class="block text-[11px] font-bold text-emerald-900 mb-1">📄 Zameen Legal Documents (Registry Paper, Rasid, Khatiyan, Naksha Photo)</label>
+            <label class="block text-[11px] font-bold text-emerald-900 mb-1">📄 Zameen Legal Documents (Registry Paper, Rasid, Khatiyan Photo)</label>
             <input type="file" id="docFiles" accept="image/*" multiple class="w-full border p-2 rounded-lg bg-white text-xs file:mr-2 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-[10px] file:font-bold file:bg-emerald-100 file:text-emerald-800">
             <p class="text-[10px] text-emerald-700 mt-1">Gallery se zameen ke paper ki photos select karein (Buyer ko verified dikhega).</p>
           </div>
         </div>
 
-        <!-- Normal Space / Room Fields -->
+        <!-- Normal Space Fields -->
         <div id="roomFieldsSection" class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-xs font-bold text-gray-700 mb-1">Floor No. / Space Size</label>
@@ -476,7 +479,7 @@
     </div>
   </section>
 
-  <!-- Dedicated Document Viewer Modal for Land Papers -->
+  <!-- Land Papers Viewer Modal -->
   <div id="docModal" class="hidden fixed inset-0 bg-black/90 z-50 flex flex-col items-center justify-center p-4">
     <button type="button" onclick="closeDocModal()" class="absolute top-4 right-4 text-white text-3xl font-bold">&times;</button>
     <div class="bg-white/10 text-white text-xs px-4 py-1.5 rounded-full mb-3 flex items-center gap-1 font-bold">
@@ -573,7 +576,7 @@
     </div>
   </footer>
 
-  <!-- SCRIPT BLOCK: ALL 5 FEATURES FULLY INTEGRATED -->
+  <!-- SCRIPT BLOCK -->
   <script>
     const SUPABASE_URL = "https://ndegekylfrhroyyhumyo.supabase.co";
     const SUPABASE_KEY = "sb_publishable_hwBUpVWGEoWrQgiiG8ZgBw_ZM_aJyH2";
@@ -941,7 +944,6 @@
       }
     }
 
-    // Feature 4: Budget Range Slider Update Logic
     function updateBudgetSlider(val) {
       maxBudgetFilter = parseInt(val);
       const lbl = document.getElementById("budgetValueLabel");
@@ -957,7 +959,6 @@
       applyFilters();
     }
 
-    // Feature 1: Land / Plot Calculator Converter Function
     function toggleCalculatorModal(show) {
       const modal = document.getElementById("calcModal");
       if (modal) {
@@ -974,7 +975,6 @@
       const val = parseFloat(valInput.value) || 0;
       const unit = unitInput.value;
 
-      // Base conversion to Sq.Ft
       let sqft = 0;
       if (unit === 'katha') sqft = val * 1361.25;
       else if (unit === 'sqft') sqft = val;
@@ -994,7 +994,6 @@
       safeSetText("resDhur", `${resDhur.toFixed(1)} Dhur`);
     }
 
-    // Feature 5: Report / Anti-Scam Functions
     function openReportModal(roomId, roomTitle) {
       const modal = document.getElementById("reportModal");
       const idInput = document.getElementById("reportListingId");
@@ -1015,7 +1014,6 @@
     function submitReportListing(event) {
       event.preventDefault();
       const idInput = document.getElementById("reportListingId");
-      const reasonInput = document.getElementById("reportReason");
       const roomId = parseInt(idInput.value);
 
       if (!reportedListingIds.includes(roomId)) {
@@ -1028,7 +1026,6 @@
       applyFilters();
     }
 
-    // DISPLAY CARDS WITH ALL 5 FEATURES
     function displayRooms(rooms) {
       const container = document.getElementById("roomContainer");
       if (!container) return;
@@ -1069,7 +1066,6 @@
         const shareText = encodeURIComponent(`India me ye property/plot dekho: "${room.title}" (${categoryBadge}) - ₹${room.rent}${periodSuffix}. Direct Link: ${roomUrl}`);
         const whatsappShareUrl = `https://api.whatsapp.com/send?text=${shareText}`;
 
-        // Feature 3: Smart WhatsApp Auto-Lead Message Generator
         const dynamicInquiryText = isLand
           ? `Namaste ${room.owner_name || 'Sir'}! Maine RoomDekho India par aapka Plot/Zameen dekha:\n📌 Title: "${room.title}"\n📍 Location: ${room.location || ''}, ${cityState}\n💰 Price: ₹${room.rent}${periodSuffix}\n📐 Size: ${room.plot_area_unit || 'N/A'}\n\nKya ye plot abhi available hai? Kripya registry papers aur site visit ki detail share karein.`
           : `Namaste ${room.owner_name || 'Sir'}! Maine RoomDekho India par aapka space dekha:\n📌 Title: "${room.title}" (${categoryBadge})\n📍 Location: ${room.location || ''}, ${cityState}\n💰 Rent: ₹${room.rent}${periodSuffix}\n\nKya ye abhi available hai? Mujhe ye room/space visit karna hai.`;
@@ -1126,7 +1122,6 @@
                   <span class="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded font-semibold">${isLand ? 'Plot / Zameen' : (room.type || 'Open to All')}</span>
                 </div>
                 
-                <!-- Feature 2: 100% Zero Brokerage & Direct Owner Verified Green Badge -->
                 <div class="flex items-center gap-1.5 my-1">
                   <span class="bg-emerald-100 text-emerald-800 text-[10px] font-black px-2 py-0.5 rounded-md flex items-center gap-1 border border-emerald-200">
                     <svg class="w-3 h-3 text-emerald-600 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
@@ -1182,7 +1177,6 @@
                   <a href="${callUrl}" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2 rounded-lg text-center flex items-center justify-center gap-1 transition">
                     ${t.callBtn}
                   </a>
-                  <!-- Feature 3: Smart Lead WhatsApp Button -->
                   <a href="${whatsappContactUrl}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2 rounded-lg text-center flex items-center justify-center gap-1 transition">
                     ${t.waBtn}
                   </a>
@@ -1200,7 +1194,6 @@
                 <button type="button" onclick="handleDeleteRoom(${room.id})" class="px-2 py-1 rounded border border-red-200 text-red-500 hover:bg-red-50 font-medium">
                   ${t.deleteBtn}
                 </button>
-                <!-- Feature 5: Report Button -->
                 <button type="button" onclick="openReportModal(${room.id}, '${room.title.replace(/'/g, "\\'")}')" title="Report this listing" class="px-2 py-1 text-gray-400 hover:text-red-600 text-xs">
                   ${isReported ? '🚩 Flagged' : '🚩 Report'}
                 </button>
@@ -1415,7 +1408,6 @@
       applyFilters();
     }
 
-    // Comprehensive Filter Engine (Search + Category + Price Slider + Highway Toggle)
     function applyFilters() {
       const searchInput = document.getElementById("searchInput");
       const sortBy = document.getElementById("sortBy");
@@ -1438,7 +1430,6 @@
         const matchesOwner = !selectedOwnerPhone || room.phone === selectedOwnerPhone;
         const matchesMyListings = !showMyListingsOnly || ((currentUser && room.user_id === currentUser.id) || myCreatedPins.includes(room.pin));
 
-        // Highway / Main Road keyword matcher in amenities or title
         let matchesMainRoad = true;
         if (filterNearMainRoadOnly) {
           const amenitiesText = Array.isArray(room.amenities) ? room.amenities.join(" ").toLowerCase() : "";
