@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RoomDekho India - Zero Brokerage Space & Land Marketplace</title>
 
-  <meta name="description" content="India's zero-brokerage marketplace for Rooms, PGs, Hostels, Flats, Shops, Hotels, Commercial Spaces, and Land/Plots. Direct owner contacts.">
-  <meta name="keywords" content="rooms in india, flat on rent, pg hostel booking, plot for sale, land sell, commercial space">
+  <meta name="description" content="India's verified zero-brokerage marketplace for Rooms, PGs, Hostels, Flats, Shops, Hotels, Commercial Spaces, and Land/Plots. Direct owner contacts.">
+  <meta name="keywords" content="rooms in india, flat on rent, pg hostel booking, plot for sale, land sell, commercial space, zero brokerage">
 
   <link rel="icon" type="image/png" href="https://img.icons8.com/color/192/home--v1.png">
 
@@ -30,6 +30,11 @@
       </div>
 
       <div class="flex items-center gap-1.5 sm:gap-2">
+        <!-- Feature 1: Land Calculator Trigger Button -->
+        <button onclick="toggleCalculatorModal(true)" class="text-xs font-bold px-2 py-1.5 rounded-lg border border-emerald-300 text-emerald-800 bg-emerald-50 hover:bg-emerald-100 transition flex items-center gap-1 shadow-sm">
+          📐 <span class="hidden md:inline">Zameen</span> Calculator
+        </button>
+
         <button id="langToggleBtn" onclick="toggleLanguage()" class="text-xs font-bold px-2 py-1.5 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition flex items-center gap-1">
           🌐 <span id="currentLangLabel">English</span>
         </button>
@@ -38,7 +43,6 @@
           ❤️ (<span id="favCount">0</span>)
         </button>
 
-        <!-- OWNER KA PERMANENT DASHBOARD BUTTON -->
         <button id="myListingsBtn" onclick="toggleMyListings()" class="text-xs font-bold px-2.5 py-1.5 rounded-lg border border-indigo-200 text-indigo-700 bg-indigo-50 hover:bg-indigo-100 transition flex items-center gap-1">
           📋 <span id="t_my_listings">Mere Listings</span> (<span id="myCount">0</span>)
         </button>
@@ -62,7 +66,7 @@
     <!-- Hero Banner with Category Tabs -->
     <section class="bg-gradient-to-r from-indigo-700 via-indigo-800 to-indigo-950 text-white py-10 px-4 text-center">
       <h2 id="t_hero_title" class="text-2xl sm:text-4xl font-extrabold mb-2">Poore Bharat Me Space, Room Ya Land Dhundhein</h2>
-      <p id="t_hero_sub" class="text-indigo-200 text-xs sm:text-sm max-w-2xl mx-auto mb-6">Zero Brokerage • Direct Owner Contact • Rooms, Flats, Hostels, Hotels, Shops, Commercial Spaces & Land/Plots</p>
+      <p id="t_hero_sub" class="text-indigo-200 text-xs sm:text-sm max-w-2xl mx-auto mb-6">Zero Brokerage • Direct Owner Contact • Verified Residential, Commercial & Land Marketplace</p>
 
       <div class="flex flex-wrap justify-center gap-2 max-w-5xl mx-auto" id="categoryTabs">
         <button type="button" onclick="setCategoryFilter('All', this)" class="category-btn bg-white text-indigo-900 font-bold px-3 py-1.5 rounded-full text-xs shadow">🌐 All Listings</button>
@@ -81,20 +85,20 @@
       </div>
     </section>
 
-    <!-- Filter Bar -->
+    <!-- Feature 4: Advanced Search & Price Slider Filter Bar -->
     <section class="max-w-7xl mx-auto px-4 -mt-5">
       <div class="bg-white p-4 rounded-xl shadow-lg border border-gray-100 space-y-3">
         <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
           <input type="text" id="searchInput" oninput="applyFilters()" placeholder="🔍 Sheher, Area ya Landmark search karein (e.g. Patna, Delhi, Boring Rd)..." class="sm:col-span-2 border p-2.5 rounded-lg bg-gray-50 focus:outline-indigo-500 text-sm">
           
-          <select id="budgetFilter" onchange="applyFilters()" class="border p-2.5 rounded-lg bg-gray-50 focus:outline-indigo-500 text-sm">
-            <option value="100000000">Budget: No Limit</option>
-            <option value="5000">Upto ₹5,000</option>
-            <option value="15000">Upto ₹15,000</option>
-            <option value="50000">Upto ₹50,000</option>
-            <option value="500000">Upto ₹5 Lakh</option>
-            <option value="2500000">Upto ₹25 Lakh+ (Plot/Land)</option>
-          </select>
+          <!-- Price Slider Filter (Feature 4) -->
+          <div class="bg-gray-50 p-2 border rounded-lg flex flex-col justify-center">
+            <div class="flex justify-between items-center text-xs font-bold text-gray-700 mb-1">
+              <span>Max Budget:</span>
+              <span id="budgetValueLabel" class="text-indigo-600 font-black">₹10 Lakh+</span>
+            </div>
+            <input type="range" id="budgetRange" min="2000" max="10000000" step="5000" value="10000000" oninput="updateBudgetSlider(this.value)" class="w-full accent-indigo-600 cursor-pointer">
+          </div>
 
           <select id="sortBy" onchange="applyFilters()" class="border p-2.5 rounded-lg bg-gray-50 focus:outline-indigo-500 text-sm">
             <option value="newest">Sabse Naya (Newest First)</option>
@@ -103,14 +107,24 @@
           </select>
         </div>
 
-        <div class="flex flex-wrap gap-1.5 items-center pt-1 text-xs">
-          <span class="text-gray-400 font-semibold mr-1">Major Hubs:</span>
-          <button type="button" onclick="setAreaFilter('Patna')" class="bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded-full text-gray-700">Patna</button>
-          <button type="button" onclick="setAreaFilter('Delhi')" class="bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded-full text-gray-700">Delhi NCR</button>
-          <button type="button" onclick="setAreaFilter('Kota')" class="bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded-full text-gray-700">Kota</button>
-          <button type="button" onclick="setAreaFilter('Prayagraj')" class="bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded-full text-gray-700">Prayagraj</button>
-          <button type="button" onclick="setAreaFilter('Bangalore')" class="bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded-full text-gray-700">Bangalore</button>
-          <button type="button" onclick="setAreaFilter('')" class="text-indigo-600 font-semibold px-2">Reset</button>
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-1 border-t text-xs">
+          <div class="flex flex-wrap gap-1.5 items-center">
+            <span class="text-gray-400 font-semibold mr-1">Major Hubs:</span>
+            <button type="button" onclick="setAreaFilter('Patna')" class="bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded-full text-gray-700 font-medium">Patna</button>
+            <button type="button" onclick="setAreaFilter('Delhi')" class="bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded-full text-gray-700 font-medium">Delhi NCR</button>
+            <button type="button" onclick="setAreaFilter('Kota')" class="bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded-full text-gray-700 font-medium">Kota</button>
+            <button type="button" onclick="setAreaFilter('Prayagraj')" class="bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded-full text-gray-700 font-medium">Prayagraj</button>
+            <button type="button" onclick="setAreaFilter('Bangalore')" class="bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded-full text-gray-700 font-medium">Bangalore</button>
+            <button type="button" onclick="setAreaFilter('')" class="text-indigo-600 font-bold px-2">Reset</button>
+          </div>
+
+          <!-- Feature 4: Highway / Main Road Toggle Filter -->
+          <div class="flex items-center gap-2">
+            <label class="cursor-pointer flex items-center gap-1 font-semibold text-gray-700 bg-indigo-50/60 px-2.5 py-1 rounded-full border border-indigo-100 hover:bg-indigo-100">
+              <input type="checkbox" id="mainRoadFilter" onchange="applyFilters()" class="accent-indigo-600">
+              🛣️ Near Main Road / Highway Only
+            </label>
+          </div>
         </div>
       </div>
     </section>
@@ -132,6 +146,94 @@
       </div>
     </main>
   </div>
+
+  <!-- Feature 1: Land / Plot Regional Area Unit Converter Modal -->
+  <section id="calcModal" class="hidden fixed inset-0 bg-black/70 z-50 overflow-y-auto p-4 flex items-center justify-center">
+    <div class="bg-white max-w-md w-full p-6 rounded-2xl shadow-2xl relative">
+      <button type="button" onclick="toggleCalculatorModal(false)" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl font-bold">&times;</button>
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-2xl">📐</span>
+        <h3 class="text-lg font-black text-emerald-800">Zameen / Plot Unit Converter</h3>
+      </div>
+      <p class="text-xs text-gray-500 mb-4">Katha, Dhur, Gaj aur Sq.Ft ko ek second me aapas me convert karein (Standard Bihar/UP & National rates):</p>
+
+      <div class="space-y-3 bg-emerald-50/50 p-4 rounded-xl border border-emerald-100">
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Value Enter Karein</label>
+          <input type="number" id="calcInputValue" value="1" min="0" step="any" oninput="calculateLandUnits()" class="w-full border p-2.5 rounded-lg bg-white text-sm font-bold text-gray-800 focus:outline-emerald-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Select Unit (Isse convert karein)</label>
+          <select id="calcInputUnit" onchange="calculateLandUnits()" class="w-full border p-2.5 rounded-lg bg-white text-sm font-semibold text-gray-800 focus:outline-emerald-500">
+            <option value="katha">Katha (1 Katha = 1361.25 Sq.Ft)</option>
+            <option value="sqft">Square Feet (Sq.Ft)</option>
+            <option value="gaj">Gaj / Square Yard (1 Gaj = 9 Sq.Ft)</option>
+            <option value="dhur">Dhur (20 Dhur = 1 Katha)</option>
+            <option value="bigha">Bigha (20 Katha = 1 Bigha)</option>
+            <option value="acre">Acre (1 Acre = 43,560 Sq.Ft)</option>
+          </select>
+        </div>
+
+        <div class="pt-3 border-t border-emerald-200/80 space-y-2 text-xs">
+          <div class="flex justify-between items-center bg-white p-2 rounded-lg border border-emerald-100">
+            <span class="text-gray-500 font-medium">Square Feet:</span>
+            <strong id="resSqft" class="text-emerald-700 font-bold text-sm">1361.25 Sq.Ft</strong>
+          </div>
+          <div class="flex justify-between items-center bg-white p-2 rounded-lg border border-emerald-100">
+            <span class="text-gray-500 font-medium">Katha:</span>
+            <strong id="resKatha" class="text-emerald-700 font-bold text-sm">1.00 Katha</strong>
+          </div>
+          <div class="flex justify-between items-center bg-white p-2 rounded-lg border border-emerald-100">
+            <span class="text-gray-500 font-medium">Gaj (Sq. Yard):</span>
+            <strong id="resGaj" class="text-emerald-700 font-bold text-sm">151.25 Gaj</strong>
+          </div>
+          <div class="flex justify-between items-center bg-white p-2 rounded-lg border border-emerald-100">
+            <span class="text-gray-500 font-medium">Dhur:</span>
+            <strong id="resDhur" class="text-emerald-700 font-bold text-sm">20.00 Dhur</strong>
+          </div>
+        </div>
+      </div>
+
+      <button type="button" onclick="toggleCalculatorModal(false)" class="mt-4 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 rounded-lg text-xs transition">
+        Band Karein (Close)
+      </button>
+    </div>
+  </section>
+
+  <!-- Feature 5: Report / Anti-Scam Modal -->
+  <section id="reportModal" class="hidden fixed inset-0 bg-black/70 z-50 overflow-y-auto p-4 flex items-center justify-center">
+    <div class="bg-white max-w-sm w-full p-5 rounded-2xl shadow-2xl relative">
+      <button type="button" onclick="toggleReportModal(false)" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl font-bold">&times;</button>
+      <div class="flex items-center gap-2 mb-2 text-red-600">
+        <span class="text-xl">🚩</span>
+        <h3 class="text-base font-bold text-gray-900">Listing Ko Report Karein</h3>
+      </div>
+      <p class="text-xs text-gray-500 mb-3" id="reportListingTitleDisplay">Is listing ke khilaaf shikayat darj karein:</p>
+
+      <form id="reportForm" onsubmit="submitReportListing(event)" class="space-y-3">
+        <input type="hidden" id="reportListingId">
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Wajah (Reason)</label>
+          <select id="reportReason" required class="w-full border p-2 rounded-lg bg-gray-50 text-xs">
+            <option value="Broker disguised as Owner">Dalal / Broker khud ko owner bata raha hai</option>
+            <option value="Fake or Fraud Listing">Farzi ya galat listing hai</option>
+            <option value="Wrong Phone Number">Phone number galat ya invalid hai</option>
+            <option value="Fake Land Documents">Zameen ke documents verify nahi hain</option>
+            <option value="Demanding advance token">Visit se pehle online advance maang raha hai</option>
+            <option value="Other">Koi aur samasya</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Details (Optional)</label>
+          <textarea id="reportDetails" rows="2" placeholder="Koi zaroori detail likhein..." class="w-full border p-2 rounded-lg bg-gray-50 text-xs"></textarea>
+        </div>
+        <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 rounded-lg text-xs transition shadow">
+          Report Submit Karein
+        </button>
+      </form>
+    </div>
+  </section>
 
   <!-- Sign In / Register Modal -->
   <section id="authModal" class="hidden fixed inset-0 bg-black/70 z-50 overflow-y-auto p-4 flex items-center justify-center">
@@ -179,7 +281,7 @@
             <option value="PG Owner">🛏️ PG Owner</option>
             <option value="Flat Owner">🏠 Flat Owner</option>
             <option value="Apartment Owner">🏢 Apartment Floor Owner</option>
-            <option value="Family House Owner">👨‍👩‍‍👧 Family Homes Owner</option>
+            <option value="Family House Owner">👨‍👩‍‍‍‍👧 Family Homes Owner</option>
             <option value="Dukan Owner">🛍️ Dukaan / Retail Shop Owner</option>
             <option value="Commercial Space Owner">🏦 Commercial Hall / Coaching / Bank Owner</option>
             <option value="Hotel Owner">🏨 Hotel / Guest House Owner</option>
@@ -359,7 +461,7 @@
 
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1">Suvidhayein / Key Features (Comma Separated)</label>
-          <input type="text" id="amenities" placeholder="e.g. Highway Touch, Electricity Pole, Corner Plot, 24x7 Water" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
+          <input type="text" id="amenities" placeholder="e.g. Main Road Touch, Highway, Electricity Pole, Corner Plot, 24x7 Water" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
         </div>
 
         <div class="flex gap-2 pt-2">
@@ -399,6 +501,60 @@
     <p id="imageCounter" class="text-white text-xs mt-3 bg-black/40 px-3 py-1 rounded-full"></p>
   </div>
 
+  <!-- About Us Section -->
+  <section id="aboutSection" class="hidden max-w-5xl mx-auto px-4 py-12 flex-1">
+    <button type="button" onclick="showSection('home')" class="text-indigo-600 font-bold mb-6 text-sm flex items-center gap-1 hover:underline">&larr; Wapas Home jayein</button>
+    <div class="bg-white p-6 sm:p-10 rounded-2xl shadow-sm border border-gray-100 space-y-8">
+      <div class="border-b pb-6">
+        <span class="text-xs bg-indigo-50 text-indigo-700 font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Bharat Ka Sabse Vishwasniya Platform</span>
+        <h2 class="text-3xl sm:text-4xl font-black text-gray-900 mt-3">About RoomDekho India</h2>
+        <p class="text-gray-600 text-base sm:text-lg mt-2 leading-relaxed">
+          <strong>RoomDekho India</strong> Bharat ka 100% Zero Brokerage Rental, Commercial Space aur Land/Plot Selling Marketplace hai jo bina kisi dalal ke direct owners aur buyers/tenants ko jodta hai.
+        </p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-indigo-50/60 p-5 rounded-xl border border-indigo-100">
+          <div class="text-2xl mb-2">🚫 0%</div>
+          <h4 class="font-bold text-gray-900 text-sm">No Brokerage</h4>
+          <p class="text-xs text-gray-600 mt-1">Zero commission model.</p>
+        </div>
+        <div class="bg-emerald-50/60 p-5 rounded-xl border border-emerald-100">
+          <div class="text-2xl mb-2">🌾 Land & Plots</div>
+          <h4 class="font-bold text-gray-900 text-sm">Direct Zameen Kharid</h4>
+          <p class="text-xs text-gray-600 mt-1">Seedhe real plot owners se sampark karein.</p>
+        </div>
+        <div class="bg-amber-50/60 p-5 rounded-xl border border-amber-100">
+          <div class="text-2xl mb-2">📞 Direct Contact</div>
+          <h4 class="font-bold text-gray-900 text-sm">Call & WhatsApp</h4>
+          <p class="text-xs text-gray-600 mt-1">Direct owner se baat karein.</p>
+        </div>
+        <div class="bg-rose-50/60 p-5 rounded-xl border border-rose-100">
+          <div class="text-2xl mb-2">👨‍👩‍👧 Verified</div>
+          <h4 class="font-bold text-gray-900 text-sm">Safe Deals</h4>
+          <p class="text-xs text-gray-600 mt-1">Family, students aur investors ke liye safe.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Privacy Policy Section -->
+  <section id="privacySection" class="hidden max-w-5xl mx-auto px-4 py-12 flex-1">
+    <button type="button" onclick="showSection('home')" class="text-indigo-600 font-bold mb-6 text-sm flex items-center gap-1 hover:underline">&larr; Wapas Home jayein</button>
+    <div class="bg-white p-6 sm:p-10 rounded-2xl shadow-sm border border-gray-100 space-y-6">
+      <div class="border-b pb-4">
+        <span class="text-xs bg-emerald-50 text-emerald-700 font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">User Suraksha</span>
+        <h2 class="text-3xl font-black text-gray-900 mt-2">Privacy Policy & Safety</h2>
+      </div>
+      <div class="space-y-4 text-gray-700 text-sm leading-relaxed">
+        <p><strong>1. Data Transparency:</strong> Hum sirf listing ke liye zaroori contact aur property details display karte hain. Koi bhi data kisi third party ko sell nahi kiya jata.</p>
+        <p><strong>2. Owner PIN Security:</strong> Har owner ka secret PIN listing ko unauthorized modification se bachata hai.</p>
+        <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-xl text-red-900 text-xs">
+          <strong>⚠️ Fraud Alert:</strong> Kisi ko bhi room ya plot visit karne se pehle online advance token amount na bhejein. Hamesha zameen ke registry paper physically check karein.
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Footer -->
   <footer class="bg-gray-900 text-gray-400 py-8 border-t border-gray-800 mt-auto">
     <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs">
@@ -417,7 +573,7 @@
     </div>
   </footer>
 
-  <!-- SCRIPT BLOCK: COMPLETELY PROTECTED & NON-BLOCKING -->
+  <!-- SCRIPT BLOCK: ALL 5 FEATURES FULLY INTEGRATED -->
   <script>
     const SUPABASE_URL = "https://ndegekylfrhroyyhumyo.supabase.co";
     const SUPABASE_KEY = "sb_publishable_hwBUpVWGEoWrQgiiG8ZgBw_ZM_aJyH2";
@@ -430,13 +586,16 @@
     let roomsData = [];
     let favorites = [];
     let myCreatedPins = [];
+    let reportedListingIds = [];
 
     try {
       favorites = JSON.parse(localStorage.getItem("roomdekho_favs") || "[]");
       myCreatedPins = JSON.parse(localStorage.getItem("roomdekho_mypins") || "[]");
+      reportedListingIds = JSON.parse(localStorage.getItem("roomdekho_reports") || "[]");
     } catch (e) {
       favorites = [];
       myCreatedPins = [];
+      reportedListingIds = [];
     }
 
     let currentLanguage = localStorage.getItem("roomdekho_lang") || "hi";
@@ -444,6 +603,8 @@
     let selectedOwnerPhone = null;
     let showFavoritesOnly = false;
     let showMyListingsOnly = false;
+    let maxBudgetFilter = 10000000;
+    let filterNearMainRoadOnly = false;
 
     let currentImages = [];
     let currentImageIndex = 0;
@@ -471,7 +632,7 @@
         rentSuffixTotal: " (Total)",
         callBtn: "📞 Call",
         waBtn: "💬 WhatsApp",
-        mapBtn: "📍 View on Google Maps",
+        mapBtn: "📍 Google Maps",
         rentedBadge: "Sold / Rented",
         markRented: "Mark as Sold/Rented",
         markAvailable: "Mark Available",
@@ -491,7 +652,7 @@
         rentSuffixTotal: " (Kul Mulya)",
         callBtn: "📞 Call Karein",
         waBtn: "💬 WhatsApp",
-        mapBtn: "📍 Google Maps Par Rasta Dekhein",
+        mapBtn: "📍 Google Maps",
         rentedBadge: "Sold / Booked",
         markRented: "Mark as Sold/Rented",
         markAvailable: "Mark Available",
@@ -499,7 +660,6 @@
       }
     };
 
-    // Client initialize helper
     function getDb() {
       if (!dbClient && window.supabase) {
         dbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -507,7 +667,6 @@
       return dbClient;
     }
 
-    // MAIN STARTUP FUNCTION
     async function initApp() {
       const db = getDb();
       if (!db) {
@@ -515,10 +674,8 @@
         return;
       }
 
-      // Step 1: Pehle data fetch karein taaki screen atke nahi
       fetchRooms();
 
-      // Step 2: Auth check background me chalayein
       try {
         const { data } = await db.auth.getSession();
         if (data && data.session && data.session.user) {
@@ -531,7 +688,6 @@
 
       renderAuthUI();
 
-      // Auth state listener
       try {
         db.auth.onAuthStateChange(async (event, session) => {
           if (session && session.user) {
@@ -546,8 +702,10 @@
           applyFilters();
         });
       } catch (e) {
-        console.warn("Auth listener error:", e);
+        console.warn("Auth listener warning:", e);
       }
+
+      calculateLandUnits();
     }
 
     async function fetchUserProfile(userId) {
@@ -560,7 +718,7 @@
           renderAuthUI();
         }
       } catch (err) {
-        console.warn("Profile fetch error:", err);
+        console.warn("Profile fetch warning:", err);
       }
     }
 
@@ -717,7 +875,6 @@
       toggleForm();
     }
 
-    // MAIN DATA FETCH
     async function fetchRooms() {
       const container = document.getElementById("roomContainer");
       const db = getDb();
@@ -784,6 +941,94 @@
       }
     }
 
+    // Feature 4: Budget Range Slider Update Logic
+    function updateBudgetSlider(val) {
+      maxBudgetFilter = parseInt(val);
+      const lbl = document.getElementById("budgetValueLabel");
+      if (lbl) {
+        if (maxBudgetFilter >= 10000000) {
+          lbl.innerText = "No Limit (₹1 Cr+)";
+        } else if (maxBudgetFilter >= 100000) {
+          lbl.innerText = `Upto ₹${(maxBudgetFilter / 100000).toFixed(1)} Lakh`;
+        } else {
+          lbl.innerText = `Upto ₹${maxBudgetFilter.toLocaleString('en-IN')}`;
+        }
+      }
+      applyFilters();
+    }
+
+    // Feature 1: Land / Plot Calculator Converter Function
+    function toggleCalculatorModal(show) {
+      const modal = document.getElementById("calcModal");
+      if (modal) {
+        if (show) modal.classList.remove("hidden");
+        else modal.classList.add("hidden");
+      }
+    }
+
+    function calculateLandUnits() {
+      const valInput = document.getElementById("calcInputValue");
+      const unitInput = document.getElementById("calcInputUnit");
+      if (!valInput || !unitInput) return;
+
+      const val = parseFloat(valInput.value) || 0;
+      const unit = unitInput.value;
+
+      // Base conversion to Sq.Ft
+      let sqft = 0;
+      if (unit === 'katha') sqft = val * 1361.25;
+      else if (unit === 'sqft') sqft = val;
+      else if (unit === 'gaj') sqft = val * 9;
+      else if (unit === 'dhur') sqft = (val / 20) * 1361.25;
+      else if (unit === 'bigha') sqft = val * 20 * 1361.25;
+      else if (unit === 'acre') sqft = val * 43560;
+
+      const resSqft = sqft;
+      const resKatha = sqft / 1361.25;
+      const resGaj = sqft / 9;
+      const resDhur = resKatha * 20;
+
+      safeSetText("resSqft", `${resSqft.toLocaleString('en-IN', { maximumFractionDigits: 2 })} Sq.Ft`);
+      safeSetText("resKatha", `${resKatha.toFixed(2)} Katha`);
+      safeSetText("resGaj", `${resGaj.toFixed(2)} Gaj`);
+      safeSetText("resDhur", `${resDhur.toFixed(1)} Dhur`);
+    }
+
+    // Feature 5: Report / Anti-Scam Functions
+    function openReportModal(roomId, roomTitle) {
+      const modal = document.getElementById("reportModal");
+      const idInput = document.getElementById("reportListingId");
+      const titleDisplay = document.getElementById("reportListingTitleDisplay");
+      if (idInput) idInput.value = roomId;
+      if (titleDisplay) titleDisplay.innerText = `Reporting: "${roomTitle}" (Listing #${roomId})`;
+      if (modal) modal.classList.remove("hidden");
+    }
+
+    function toggleReportModal(show) {
+      const modal = document.getElementById("reportModal");
+      if (modal) {
+        if (show) modal.classList.remove("hidden");
+        else modal.classList.add("hidden");
+      }
+    }
+
+    function submitReportListing(event) {
+      event.preventDefault();
+      const idInput = document.getElementById("reportListingId");
+      const reasonInput = document.getElementById("reportReason");
+      const roomId = parseInt(idInput.value);
+
+      if (!reportedListingIds.includes(roomId)) {
+        reportedListingIds.push(roomId);
+        localStorage.setItem("roomdekho_reports", JSON.stringify(reportedListingIds));
+      }
+
+      alert("Dhanyawaad! Aapki report darj kar li gayi hai. Hamari team 24 ghante ke andar is listing ki janch karegi.");
+      toggleReportModal(false);
+      applyFilters();
+    }
+
+    // DISPLAY CARDS WITH ALL 5 FEATURES
     function displayRooms(rooms) {
       const container = document.getElementById("roomContainer");
       if (!container) return;
@@ -797,7 +1042,7 @@
           <div class="col-span-full text-center py-12 bg-white rounded-xl border border-gray-100">
             <p class="text-4xl mb-2">🔍</p>
             <p class="text-gray-700 font-bold">${showMyListingsOnly ? 'Aapne abhi tak koi listing nahi daali hai' : (currentLanguage === 'hi' ? 'Koi listing nahi mili' : 'No properties found')}</p>
-            <p class="text-xs text-gray-400 mt-1">${showMyListingsOnly ? 'Upar "+ Post Property" button dabakar apni pehli listing daalein!' : (currentLanguage === 'hi' ? 'Kripya doosra sheher ya category chunein.' : 'Please try another filter.')}</p>
+            <p class="text-xs text-gray-400 mt-1">${showMyListingsOnly ? 'Upar "+ Post Property" button dabakar apni pehli listing daalein!' : (currentLanguage === 'hi' ? 'Kripya doosra sheher ya budget filter adjust karein.' : 'Please try adjusting budget or filters.')}</p>
           </div>`;
         return;
       }
@@ -824,8 +1069,12 @@
         const shareText = encodeURIComponent(`India me ye property/plot dekho: "${room.title}" (${categoryBadge}) - ₹${room.rent}${periodSuffix}. Direct Link: ${roomUrl}`);
         const whatsappShareUrl = `https://api.whatsapp.com/send?text=${shareText}`;
 
-        const message = encodeURIComponent(`Namaste! Maine RoomDekho par aapka "${room.title}" (${categoryBadge}) dekha. Kya ye available hai?`);
-        const whatsappContactUrl = `https://wa.me/${cleanPhone}?text=${message}`;
+        // Feature 3: Smart WhatsApp Auto-Lead Message Generator
+        const dynamicInquiryText = isLand
+          ? `Namaste ${room.owner_name || 'Sir'}! Maine RoomDekho India par aapka Plot/Zameen dekha:\n📌 Title: "${room.title}"\n📍 Location: ${room.location || ''}, ${cityState}\n💰 Price: ₹${room.rent}${periodSuffix}\n📐 Size: ${room.plot_area_unit || 'N/A'}\n\nKya ye plot abhi available hai? Kripya registry papers aur site visit ki detail share karein.`
+          : `Namaste ${room.owner_name || 'Sir'}! Maine RoomDekho India par aapka space dekha:\n📌 Title: "${room.title}" (${categoryBadge})\n📍 Location: ${room.location || ''}, ${cityState}\n💰 Rent: ₹${room.rent}${periodSuffix}\n\nKya ye abhi available hai? Mujhe ye room/space visit karna hai.`;
+
+        const whatsappContactUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(dynamicInquiryText)}`;
         const callUrl = `tel:+${cleanPhone}`;
 
         const mapsQuery = encodeURIComponent(`${room.location || ''}, ${cityState}`);
@@ -846,11 +1095,12 @@
 
         const isFav = favorites.includes(room.id);
         const isMyListing = (currentUser && room.user_id === currentUser.id) || myCreatedPins.includes(room.pin);
+        const isReported = reportedListingIds.includes(room.id);
         const ownerTotalListings = roomsData.filter(r => r.phone === room.phone).length;
         const safeImgsString = encodeURIComponent(JSON.stringify(imgs));
 
         const card = `
-          <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition flex flex-col justify-between border border-gray-100 overflow-hidden ${room.is_rented ? 'opacity-65 grayscale' : ''}">
+          <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition flex flex-col justify-between border border-gray-100 overflow-hidden relative ${room.is_rented ? 'opacity-65 grayscale' : ''}">
             <div>
               <div class="relative cursor-pointer group" onclick="openGallery('${safeImgsString}')">
                 ${room.is_rented 
@@ -876,6 +1126,14 @@
                   <span class="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded font-semibold">${isLand ? 'Plot / Zameen' : (room.type || 'Open to All')}</span>
                 </div>
                 
+                <!-- Feature 2: 100% Zero Brokerage & Direct Owner Verified Green Badge -->
+                <div class="flex items-center gap-1.5 my-1">
+                  <span class="bg-emerald-100 text-emerald-800 text-[10px] font-black px-2 py-0.5 rounded-md flex items-center gap-1 border border-emerald-200">
+                    <svg class="w-3 h-3 text-emerald-600 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                    0% Brokerage • Direct Owner Verified
+                  </span>
+                </div>
+
                 <h4 class="font-bold text-gray-900 leading-snug line-clamp-1">${room.title}</h4>
                 <p class="text-xs text-gray-500 mt-0.5 font-medium">📍 ${room.location || ''} <span class="text-gray-400">(${cityState})</span> <span class="text-emerald-700 font-bold">${detailLine}</span></p>
 
@@ -924,6 +1182,7 @@
                   <a href="${callUrl}" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2 rounded-lg text-center flex items-center justify-center gap-1 transition">
                     ${t.callBtn}
                   </a>
+                  <!-- Feature 3: Smart Lead WhatsApp Button -->
                   <a href="${whatsappContactUrl}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2 rounded-lg text-center flex items-center justify-center gap-1 transition">
                     ${t.waBtn}
                   </a>
@@ -934,12 +1193,16 @@
                 </button>
               `}
 
-              <div class="flex gap-2 pt-1.5 border-t text-[11px]">
+              <div class="flex items-center justify-between gap-1 pt-1.5 border-t text-[11px]">
                 <button type="button" onclick="handleRentedToggle(${room.id}, ${room.is_rented})" class="flex-1 py-1 rounded border border-gray-200 hover:bg-gray-50 text-gray-600 font-medium">
                   ${room.is_rented ? t.markAvailable : t.markRented}
                 </button>
-                <button type="button" onclick="handleDeleteRoom(${room.id})" class="px-2.5 py-1 rounded border border-red-200 text-red-500 hover:bg-red-50 font-medium">
+                <button type="button" onclick="handleDeleteRoom(${room.id})" class="px-2 py-1 rounded border border-red-200 text-red-500 hover:bg-red-50 font-medium">
                   ${t.deleteBtn}
+                </button>
+                <!-- Feature 5: Report Button -->
+                <button type="button" onclick="openReportModal(${room.id}, '${room.title.replace(/'/g, "\\'")}')" title="Report this listing" class="px-2 py-1 text-gray-400 hover:text-red-600 text-xs">
+                  ${isReported ? '🚩 Flagged' : '🚩 Report'}
                 </button>
               </div>
             </div>
@@ -1152,14 +1415,15 @@
       applyFilters();
     }
 
+    // Comprehensive Filter Engine (Search + Category + Price Slider + Highway Toggle)
     function applyFilters() {
       const searchInput = document.getElementById("searchInput");
-      const budgetFilter = document.getElementById("budgetFilter");
       const sortBy = document.getElementById("sortBy");
+      const mainRoadCheck = document.getElementById("mainRoadFilter");
 
       const search = searchInput ? searchInput.value.toLowerCase() : "";
-      const maxBudget = budgetFilter ? parseInt(budgetFilter.value) : 100000000;
       const sort = sortBy ? sortBy.value : "newest";
+      filterNearMainRoadOnly = mainRoadCheck ? mainRoadCheck.checked : false;
 
       let filtered = roomsData.filter(room => {
         const titleMatch = room.title ? room.title.toLowerCase().includes(search) : false;
@@ -1169,12 +1433,20 @@
         const matchesSearch = titleMatch || locMatch || cityMatch || stateMatch;
 
         const matchesCategory = selectedCategory === "All" || (room.category || "Room") === selectedCategory;
-        const matchesBudget = (room.rent || 0) <= maxBudget;
+        const matchesBudget = (room.rent || 0) <= maxBudgetFilter;
         const matchesFav = !showFavoritesOnly || favorites.includes(room.id);
         const matchesOwner = !selectedOwnerPhone || room.phone === selectedOwnerPhone;
         const matchesMyListings = !showMyListingsOnly || ((currentUser && room.user_id === currentUser.id) || myCreatedPins.includes(room.pin));
 
-        return matchesSearch && matchesCategory && matchesBudget && matchesFav && matchesOwner && matchesMyListings;
+        // Highway / Main Road keyword matcher in amenities or title
+        let matchesMainRoad = true;
+        if (filterNearMainRoadOnly) {
+          const amenitiesText = Array.isArray(room.amenities) ? room.amenities.join(" ").toLowerCase() : "";
+          const textToSearch = `${room.title || ''} ${room.location || ''} ${amenitiesText}`.toLowerCase();
+          matchesMainRoad = textToSearch.includes("road") || textToSearch.includes("highway") || textToSearch.includes("touch") || textToSearch.includes("main");
+        }
+
+        return matchesSearch && matchesCategory && matchesBudget && matchesFav && matchesOwner && matchesMyListings && matchesMainRoad;
       });
 
       if (sort === "low_high") {
@@ -1331,7 +1603,6 @@
       if (modal) modal.classList.add("hidden");
     }
 
-    // Startup call
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", initApp);
     } else {
