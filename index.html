@@ -3,33 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RoomDekho India - Zero Brokerage Space Marketplace</title>
+  <title>RoomDekho India - Zero Brokerage Space & Land Marketplace</title>
 
-  <!-- SEO Meta Tags -->
-  <meta name="description" content="India's zero-brokerage marketplace for Rooms, PGs, Hostels, Flats, Shops, Hotels, and Commercial Spaces. Direct owner contacts.">
-  <meta name="keywords" content="rooms in india, flat on rent, pg hostel booking, shop on rent india, commercial coaching space">
+  <meta name="description" content="India's zero-brokerage marketplace for Rooms, PGs, Hostels, Flats, Shops, Hotels, Commercial Spaces, and Land/Plots. Direct owner contacts.">
+  <meta name="keywords" content="rooms in india, flat on rent, pg hostel booking, plot for sale, land sell, commercial space">
 
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="https://img.icons8.com/color/192/home--v1.png">
 
-  <!-- Tailwind CSS & Supabase CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <!-- PWA Manifest -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#4f46e5">
 </head>
 <body class="bg-gray-50 font-sans text-gray-800 flex flex-col min-h-screen">
 
-  <!-- Navigation Bar -->
+  <!-- Header -->
   <header class="bg-white shadow-sm sticky top-0 z-40 border-b">
     <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
       <div>
         <a href="javascript:void(0)" onclick="showSection('home')" class="text-2xl font-black text-indigo-600 tracking-tight flex items-center gap-1">
           🏢 RoomDekho<span class="text-xs bg-orange-500 text-white font-extrabold px-1.5 py-0.5 rounded">INDIA</span>
         </a>
-        <p id="langSubHeader" class="text-[10px] text-gray-400 font-medium">Pan-India Direct Space & Room Marketplace</p>
+        <p id="langSubHeader" class="text-[10px] text-gray-400 font-medium">Pan-India Direct Space & Land Marketplace</p>
       </div>
 
       <div class="flex items-center gap-2">
@@ -41,7 +37,6 @@
           ❤️ (<span id="favCount">0</span>)
         </button>
 
-        <!-- Auth Section Button -->
         <div id="authContainer">
           <button id="loginOpenBtn" onclick="toggleAuthModal(true)" class="text-xs font-bold px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-800 transition">
             Sign In / Register
@@ -60,8 +55,8 @@
     
     <!-- Hero Banner with Category Tabs -->
     <section class="bg-gradient-to-r from-indigo-700 via-indigo-800 to-indigo-950 text-white py-10 px-4 text-center">
-      <h2 id="t_hero_title" class="text-2xl sm:text-4xl font-extrabold mb-2">Poore Bharat Me Kisi Bhi Sheher Me Space Ya Room Dhundhein</h2>
-      <p id="t_hero_sub" class="text-indigo-200 text-xs sm:text-sm max-w-2xl mx-auto mb-6">Zero Brokerage • Direct Owner Contact • Rooms, Flats, Hostels, Hotels, Shops & Commercial Spaces</p>
+      <h2 id="t_hero_title" class="text-2xl sm:text-4xl font-extrabold mb-2">Poore Bharat Me Space, Room Ya Land Dhundhein</h2>
+      <p id="t_hero_sub" class="text-indigo-200 text-xs sm:text-sm max-w-2xl mx-auto mb-6">Zero Brokerage • Direct Owner Contact • Rooms, Flats, Hostels, Hotels, Shops, Commercial Spaces & Land/Plots</p>
 
       <div class="flex flex-wrap justify-center gap-2 max-w-5xl mx-auto" id="categoryTabs">
         <button type="button" onclick="setCategoryFilter('All', this)" class="category-btn bg-white text-indigo-900 font-bold px-3 py-1.5 rounded-full text-xs shadow">🌐 All Listings</button>
@@ -76,6 +71,7 @@
         <button type="button" onclick="setCategoryFilter('Dukan', this)" class="category-btn bg-indigo-800/80 hover:bg-indigo-800 text-white font-medium px-3 py-1.5 rounded-full text-xs transition">🛍️ Dukaan / Retail</button>
         <button type="button" onclick="setCategoryFilter('Commercial', this)" class="category-btn bg-indigo-800/80 hover:bg-indigo-800 text-white font-medium px-3 py-1.5 rounded-full text-xs transition">🏦 Commercial / Bank / Coaching</button>
         <button type="button" onclick="setCategoryFilter('Hotel', this)" class="category-btn bg-indigo-800/80 hover:bg-indigo-800 text-white font-medium px-3 py-1.5 rounded-full text-xs transition">🏨 Hotel / Guest House</button>
+        <button type="button" onclick="setCategoryFilter('Land', this)" class="category-btn bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-full text-xs transition shadow">🌾 Land / Plot (Sale)</button>
       </div>
     </section>
 
@@ -86,18 +82,18 @@
           <input type="text" id="searchInput" oninput="applyFilters()" placeholder="🔍 Sheher, Area ya Landmark search karein (e.g. Patna, Delhi, Boring Rd)..." class="sm:col-span-2 border p-2.5 rounded-lg bg-gray-50 focus:outline-indigo-500 text-sm">
           
           <select id="budgetFilter" onchange="applyFilters()" class="border p-2.5 rounded-lg bg-gray-50 focus:outline-indigo-500 text-sm">
-            <option value="10000000">Budget: No Limit</option>
-            <option value="4000">Upto ₹4,000</option>
-            <option value="8000">Upto ₹8,000</option>
+            <option value="100000000">Budget: No Limit</option>
+            <option value="5000">Upto ₹5,000</option>
             <option value="15000">Upto ₹15,000</option>
-            <option value="30000">Upto ₹30,000</option>
-            <option value="100000">Upto ₹1 Lakh+ (Commercial/Hotels)</option>
+            <option value="50000">Upto ₹50,000</option>
+            <option value="500000">Upto ₹5 Lakh</option>
+            <option value="2500000">Upto ₹25 Lakh+ (Plot/Land)</option>
           </select>
 
           <select id="sortBy" onchange="applyFilters()" class="border p-2.5 rounded-lg bg-gray-50 focus:outline-indigo-500 text-sm">
             <option value="newest">Sabse Naya (Newest First)</option>
-            <option value="low_high">Rent: Kam se Jyada</option>
-            <option value="high_low">Rent: Jyada se Kam</option>
+            <option value="low_high">Price: Kam se Jyada</option>
+            <option value="high_low">Price: Jyada se Kam</option>
           </select>
         </div>
 
@@ -133,10 +129,9 @@
 
   <!-- Sign In / Register Modal -->
   <section id="authModal" class="hidden fixed inset-0 bg-black/70 z-50 overflow-y-auto p-4 flex items-center justify-center">
-    <div class="bg-white max-w-md w-full p-6 rounded-2xl shadow-2xl relative">
+    <div class="bg-white max-w-md w-full p-6 rounded-2xl shadow-2xl relative my-6">
       <button type="button" onclick="toggleAuthModal(false)" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl font-bold">&times;</button>
       
-      <!-- Tab Headers -->
       <div class="flex border-b mb-4">
         <button id="tabLoginBtn" onclick="switchAuthTab('login')" class="flex-1 py-2 font-bold text-sm border-b-2 border-indigo-600 text-indigo-600">Sign In</button>
         <button id="tabRegisterBtn" onclick="switchAuthTab('register')" class="flex-1 py-2 font-bold text-sm border-b-2 border-transparent text-gray-400 hover:text-gray-700">Naya Khata (Register)</button>
@@ -157,7 +152,7 @@
         </button>
       </form>
 
-      <!-- Register Form -->
+      <!-- Register Form with All Detailed Roles -->
       <form id="registerForm" onsubmit="handleRegister(event)" class="hidden space-y-3">
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1">Pura Naam (Full Name)</label>
@@ -167,13 +162,27 @@
           <label class="block text-xs font-bold text-gray-700 mb-1">Mobile / WhatsApp Number</label>
           <input type="tel" id="regPhone" required placeholder="e.g. 9876543210" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
         </div>
+        
+        <!-- Aapka Role Section -->
         <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1">Aapka Role (Kaun hain aap?)</label>
-          <select id="regRole" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500 font-semibold">
-            <option value="Owner">🏠 Property / Room Owner (Kiraye par dene wale)</option>
-            <option value="Tenant">🔍 Student / Kirayedaar (Room dhoondhne wale)</option>
+          <label class="block text-xs font-bold text-indigo-700 mb-1">Aapka Role (Kaun Hain Aap?)</label>
+          <select id="regRole" class="w-full border-2 border-indigo-100 p-2.5 rounded-lg bg-indigo-50/40 text-xs sm:text-sm focus:outline-indigo-600 font-semibold text-gray-800">
+            <option value="Customer">🔍 Student / Kirayedaar (Searching Room/Space/Land)</option>
+            <option value="Room Boys Owner">👦 Room Boys Owner</option>
+            <option value="Room Girls Owner">👧 Room Girls Owner</option>
+            <option value="Hostel Owner">🏫 Hostel Owner / Manager</option>
+            <option value="Lodge Owner">🏡 Lodge Owner</option>
+            <option value="PG Owner">🛏️ PG Owner</option>
+            <option value="Flat Owner">🏠 Flat Owner</option>
+            <option value="Apartment Owner">🏢 Apartment Floor Owner</option>
+            <option value="Family House Owner">👨‍👩‍👧 Family Homes Owner</option>
+            <option value="Dukan Owner">🛍️ Dukaan / Retail Shop Owner</option>
+            <option value="Commercial Space Owner">🏦 Commercial Hall / Coaching / Bank Owner</option>
+            <option value="Hotel Owner">🏨 Hotel / Guest House Owner</option>
+            <option value="Land/Plot Owner">🌾 Land / Plot Owner (Zameen Bechne Wale)</option>
           </select>
         </div>
+
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1">Sheher (City)</label>
           <input type="text" id="regCity" required placeholder="e.g. Patna, Delhi, Kota" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
@@ -191,7 +200,7 @@
         </button>
       </form>
 
-      <!-- Google Sign-in Divider -->
+      <!-- Google Sign-in Notification Alert -->
       <div class="mt-4 pt-4 border-t text-center">
         <button type="button" onclick="handleGoogleSignIn()" class="w-full border border-gray-300 hover:bg-gray-50 text-gray-700 font-bold py-2 rounded-lg flex items-center justify-center gap-2 text-xs transition">
           <svg class="w-4 h-4" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/></svg>
@@ -201,17 +210,18 @@
     </div>
   </section>
 
-  <!-- Multi-Category Add Property Form Modal -->
+  <!-- Multi-Category & Land Selling Add Property Form Modal -->
   <section id="formSection" class="hidden fixed inset-0 bg-black/70 z-50 overflow-y-auto p-4 flex items-center justify-center">
     <div class="bg-white max-w-2xl w-full p-6 rounded-2xl shadow-2xl my-8 relative">
       <button type="button" onclick="toggleForm()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl font-bold">&times;</button>
-      <h3 id="t_modal_title" class="text-xl font-black text-gray-800 mb-1">Nayi Property / Space List Karein</h3>
-      <p class="text-xs text-gray-500 mb-4">Poore Bharat me kisi bhi jagah ka room, dukan ya space seedhe grahak tak pahuchayein</p>
+      <h3 id="t_modal_title" class="text-xl font-black text-gray-800 mb-1">Nayi Property, Space Ya Land List Karein</h3>
+      <p class="text-xs text-gray-500 mb-4">Poore Bharat me kisi bhi jagah ka room, dukan, space ya zameen direct khareeddaar tak pahuchayein</p>
 
       <form id="roomForm" onsubmit="addNewRoom(event)" class="space-y-4">
+        
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1">Property Category</label>
-          <select id="category" onchange="handleCategoryFieldChanges()" class="w-full border p-2.5 rounded-lg bg-gray-50 font-semibold focus:outline-indigo-500 text-sm">
+          <select id="category" onchange="handleCategoryFieldChanges()" class="w-full border-2 border-indigo-100 p-2.5 rounded-lg bg-indigo-50/30 font-bold focus:outline-indigo-500 text-sm text-indigo-900">
             <option value="Room Boys">👦 Room Boys (Hostel / Single / Shared)</option>
             <option value="Room Girls">👧 Room Girls (PG / Single / Shared)</option>
             <option value="Hostel">🏫 Hostel (Students & Working)</option>
@@ -223,24 +233,25 @@
             <option value="Dukan">🛍️ Dukaan / Retail Shop</option>
             <option value="Commercial">🏦 Commercial Hall (Bank, Coaching, Mall, Office)</option>
             <option value="Hotel">🏨 Hotel / Lodge / Guest House (Family & Travelers)</option>
+            <option value="Land">🌾 Land / Plot (Zameen Bechne Ke Liye)</option>
           </select>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-bold text-gray-700 mb-1">Property Title</label>
-            <input type="text" id="title" required placeholder="e.g. 2nd Floor 2BHK ya Deluxe AC Family Room" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
+            <label class="block text-xs font-bold text-gray-700 mb-1">Property / Plot Title</label>
+            <input type="text" id="title" required placeholder="e.g. 2 Katha Highway Touch Plot ya 2BHK Flat" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
           </div>
           <div>
-            <label class="block text-xs font-bold text-gray-700 mb-1">Owner / Manager Name</label>
-            <input type="text" id="owner_name" required placeholder="Aapka ya Building ka naam" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
+            <label class="block text-xs font-bold text-gray-700 mb-1">Owner / Seller Name</label>
+            <input type="text" id="owner_name" required placeholder="Zameen malik ya owner ka naam" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
           </div>
         </div>
 
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
           <div class="col-span-2 sm:col-span-1">
             <label class="block text-xs font-bold text-gray-700 mb-1">Area / Landmark</label>
-            <input type="text" id="location" required placeholder="e.g. Boring Road ya Karol Bagh" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
+            <input type="text" id="location" required placeholder="e.g. Bihta Road, Boring Road" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
           </div>
           <div>
             <label class="block text-xs font-bold text-gray-700 mb-1">City (Sheher)</label>
@@ -254,19 +265,64 @@
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-bold text-gray-700 mb-1">Rent / Price (₹)</label>
-            <input type="number" id="rent" required placeholder="e.g. 5000" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
+            <label id="lblRent" class="block text-xs font-bold text-gray-700 mb-1">Price / Total Cost (₹)</label>
+            <input type="number" id="rent" required placeholder="e.g. 2500000" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
           </div>
           <div>
-            <label class="block text-xs font-bold text-gray-700 mb-1">Pricing Model</label>
+            <label class="block text-xs font-bold text-gray-700 mb-1">Payment Model</label>
             <select id="price_period" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500 font-medium">
-              <option value="month">Per Month (Mahine ka)</option>
-              <option value="day">Per Day (Hotels / Daily Stays)</option>
+              <option value="month">Per Month (Kiraya)</option>
+              <option value="day">Per Day (Hotels)</option>
+              <option value="total">One Time Total Price (Zameen/Plot)</option>
             </select>
           </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-3">
+        <!-- Land / Plot Specific Fields (Hidden by default, shows when Land is selected) -->
+        <div id="landFieldsSection" class="hidden bg-emerald-50/60 p-3 rounded-xl border border-emerald-200 space-y-3">
+          <p class="text-xs font-black text-emerald-800 uppercase tracking-wide">🌾 Zameen / Plot Ki Zaroori Jankari</p>
+          
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[11px] font-bold text-gray-700 mb-1">Area / Measurement Unit</label>
+              <input type="text" id="plot_area_unit" placeholder="e.g. 2 Katha, 1500 Sq Ft, 1 Bigha" class="w-full border p-2 rounded-lg bg-white text-xs focus:outline-emerald-500">
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-gray-700 mb-1">Front Road Width</label>
+              <input type="text" id="road_width" placeholder="e.g. 20 Feet, 30 Feet Road" class="w-full border p-2 rounded-lg bg-white text-xs focus:outline-emerald-500">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2">
+            <div>
+              <label class="block text-[11px] font-bold text-gray-700 mb-1">Facing (Disha)</label>
+              <select id="facing" class="w-full border p-2 rounded-lg bg-white text-xs">
+                <option value="East">East (Purab)</option>
+                <option value="North">North (Uttar)</option>
+                <option value="West">West (Paschim)</option>
+                <option value="South">South (Dakshin)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-gray-700 mb-1">Boundary Wall?</label>
+              <select id="boundary_wall" class="w-full border p-2 rounded-lg bg-white text-xs">
+                <option value="Yes">Yes (Hai)</option>
+                <option value="No">No (Nahi Hai)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-gray-700 mb-1">Registry Papers</label>
+              <select id="doc_status" class="w-full border p-2 rounded-lg bg-white text-xs font-semibold text-emerald-700">
+                <option value="Registry & Mutation Done">Registry & Dakhil-Kharij Ready</option>
+                <option value="Clean Khatiyan">Khatiyan Paper Clear</option>
+                <option value="Under Process">In Process</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Normal Space / Room Fields -->
+        <div id="roomFieldsSection" class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-xs font-bold text-gray-700 mb-1">Floor No. / Space Size</label>
             <input type="text" id="space_size" placeholder="e.g. 3rd Floor, 1500 Sq Ft, 2BHK" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
@@ -275,11 +331,11 @@
             <label class="block text-xs font-bold text-gray-700 mb-1">Suitable For (Guests/Tenants)</label>
             <select id="type" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
               <option value="Anyone / Open to All">Anyone / Open to All</option>
-              <option value="Family Allowed (Hotels/Flats)">Family Allowed (Hotels & Flats)</option>
-              <option value="Boys Only">Boys Only (Students/Job)</option>
-              <option value="Girls Only">Girls Only (Students/Working)</option>
+              <option value="Family Allowed">Family Allowed</option>
+              <option value="Boys Only">Boys Only</option>
+              <option value="Girls Only">Girls Only</option>
               <option value="Family Only">Family Only</option>
-              <option value="Commercial Business / Shop">Commercial Business / Shop</option>
+              <option value="Commercial Business">Commercial Business / Shop</option>
             </select>
           </div>
         </div>
@@ -296,14 +352,14 @@
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1">Photos (Unlimited Select Karein)</label>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Photos / Paper Photos (Unlimited Select Karein)</label>
           <input type="file" id="imageFiles" accept="image/*" multiple required class="w-full border p-2 rounded-lg bg-gray-50 text-xs file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-bold file:bg-indigo-100 file:text-indigo-800">
-          <p class="text-[11px] text-gray-400 mt-1">Sabhi photos (Front View, Rooms, Washroom, Kitchen/Hall) ek sath chunein.</p>
+          <p class="text-[11px] text-gray-400 mt-1">Zameen ya room ke front road, boundary wall ya papers ki photos chunein.</p>
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1">Suvidhayein / Amenities (Comma Separated)</label>
-          <input type="text" id="amenities" placeholder="e.g. AC, Lift, 24x7 Reception, Family Safe, Parking, Wi-Fi" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
+          <label class="block text-xs font-bold text-gray-700 mb-1">Suvidhayein / Key Features (Comma Separated)</label>
+          <input type="text" id="amenities" placeholder="e.g. Highway Touch, Electricity Pole, Corner Plot, 24x7 Water" class="w-full border p-2.5 rounded-lg bg-gray-50 text-sm focus:outline-indigo-500">
         </div>
 
         <div class="flex gap-2 pt-2">
@@ -326,7 +382,7 @@
         <span class="text-xs bg-indigo-50 text-indigo-700 font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Bharat Ka Sabse Vishwasniya Platform</span>
         <h2 class="text-3xl sm:text-4xl font-black text-gray-900 mt-3">About RoomDekho India</h2>
         <p class="text-gray-600 text-base sm:text-lg mt-2 leading-relaxed">
-          <strong>RoomDekho India</strong> Bharat ka 100% Zero Brokerage Rental aur Commercial Property Marketplace hai jo bina kisi dalal ke direct owners aur tenants ko jodta hai.
+          <strong>RoomDekho India</strong> Bharat ka 100% Zero Brokerage Rental, Commercial Space aur Land/Plot Selling Marketplace hai jo bina kisi dalal ke direct owners aur buyers/tenants ko jodta hai.
         </p>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -336,9 +392,9 @@
           <p class="text-xs text-gray-600 mt-1">Zero commission model.</p>
         </div>
         <div class="bg-emerald-50/60 p-5 rounded-xl border border-emerald-100">
-          <div class="text-2xl mb-2">🇮🇳 Pan-India</div>
-          <h4 class="font-bold text-gray-900 text-sm">Sabhi Sheher</h4>
-          <p class="text-xs text-gray-600 mt-1">Patna, Delhi, Kota aur har state ke liye.</p>
+          <div class="text-2xl mb-2">🌾 Land & Plots</div>
+          <h4 class="font-bold text-gray-900 text-sm">Direct Zameen Kharid</h4>
+          <p class="text-xs text-gray-600 mt-1">Seedhe real plot owners se sampark karein.</p>
         </div>
         <div class="bg-amber-50/60 p-5 rounded-xl border border-amber-100">
           <div class="text-2xl mb-2">📞 Direct Contact</div>
@@ -347,8 +403,8 @@
         </div>
         <div class="bg-rose-50/60 p-5 rounded-xl border border-rose-100">
           <div class="text-2xl mb-2">👨‍👩‍👧 Verified</div>
-          <h4 class="font-bold text-gray-900 text-sm">Safe Environment</h4>
-          <p class="text-xs text-gray-600 mt-1">Family aur students ke liye safe.</p>
+          <h4 class="font-bold text-gray-900 text-sm">Safe Deals</h4>
+          <p class="text-xs text-gray-600 mt-1">Family, students aur investors ke liye safe.</p>
         </div>
       </div>
     </div>
@@ -366,7 +422,7 @@
         <p><strong>1. Data Transparency:</strong> Hum sirf listing ke liye zaroori contact aur property details display karte hain. Koi bhi data kisi third party ko sell nahi kiya jata.</p>
         <p><strong>2. Owner PIN Security:</strong> Har owner ka secret PIN listing ko unauthorized modification se bachata hai.</p>
         <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-xl text-red-900 text-xs">
-          <strong>⚠️ Fraud Alert:</strong> Kisi ko bhi room visit karne se pehle online advance token amount na bhejein.
+          <strong>⚠️ Fraud Alert:</strong> Kisi ko bhi room ya plot visit karne se pehle online advance token amount na bhejein. Hamesha zameen ke registry paper physically check karein.
         </div>
       </div>
     </div>
@@ -388,7 +444,7 @@
     <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs">
       <div>
         <p class="font-bold text-white text-sm">RoomDekho India</p>
-        <p>100% Zero Brokerage Rental, Commercial & Hotel Marketplace</p>
+        <p>100% Zero Brokerage Rental, Commercial, Hotel & Land Marketplace</p>
       </div>
       <div class="flex gap-4 font-medium">
         <button type="button" onclick="showSection('home')" class="hover:text-white">Home</button>
@@ -401,7 +457,7 @@
     </div>
   </footer>
 
-  <!-- Direct Embedded Logic with Full Auth & Database -->
+  <!-- Complete Embedded JS with Google Fallback, Land Features & Role Mapping -->
   <script>
     const SUPABASE_URL = "https://ndegekylfrhroyyhumyo.supabase.co";
     const SUPABASE_KEY = "sb_publishable_hwBUpVWGEoWrQgiiG8ZgBw_ZM_aJyH2";
@@ -440,45 +496,46 @@
     const translations = {
       en: {
         langBtn: "हिन्दी",
-        subHeader: "Pan-India Direct Space & Room Marketplace",
-        heroTitle: "Find Any Room, Flat, Hotel or Commercial Space Across India",
-        heroSub: "Zero Brokerage • Direct Owner Contact • Verified Commercial & Residential Listings",
+        subHeader: "Pan-India Direct Space & Land Marketplace",
+        heroTitle: "Find Any Room, Flat, Hotel, Commercial Space or Land Across India",
+        heroSub: "Zero Brokerage • Direct Owner Contact • Verified Residential, Commercial & Land Listings",
         myListings: "My Listings",
-        postBtn: "+ Post Property",
-        modalTitle: "Post New Property or Space",
+        postBtn: "+ Post Property / Land",
+        modalTitle: "Post New Property, Space or Land",
         availableListings: "All India Available Listings",
         rentSuffixMonth: "/month",
         rentSuffixDay: "/day",
+        rentSuffixTotal: " (Total)",
         callBtn: "📞 Call",
         waBtn: "💬 WhatsApp",
         mapBtn: "📍 View on Google Maps",
-        rentedBadge: "Rented / Booked",
-        markRented: "Mark as Rented",
+        rentedBadge: "Sold / Rented",
+        markRented: "Mark as Sold/Rented",
         markAvailable: "Mark Available",
         deleteBtn: "Delete"
       },
       hi: {
         langBtn: "English",
-        subHeader: "Poore Bharat Ka Direct Space & Room Marketplace",
-        heroTitle: "Poore Bharat Me Kisi Bhi Sheher Me Space Ya Room Dhundhein",
-        heroSub: "Zero Brokerage • Direct Owner Contact • Rooms, Flats, Hostels, Hotels, Shops & Commercial Spaces",
+        subHeader: "Poore Bharat Ka Direct Space & Land Marketplace",
+        heroTitle: "Poore Bharat Me Space, Room Ya Land Dhundhein",
+        heroSub: "Zero Brokerage • Direct Owner Contact • Rooms, Flats, Hostels, Hotels, Shops, Commercial Spaces & Land/Plots",
         myListings: "Mere Listings",
-        postBtn: "+ Property Post Karein",
-        modalTitle: "Nayi Property / Space List Karein",
+        postBtn: "+ Property / Land Post Karein",
+        modalTitle: "Nayi Property, Space Ya Land List Karein",
         availableListings: "Bharat Me Uplabdh Sabhi Listings",
         rentSuffixMonth: "/mahina",
         rentSuffixDay: "/din",
+        rentSuffixTotal: " (Kul Mulya)",
         callBtn: "📞 Call Karein",
         waBtn: "💬 WhatsApp",
         mapBtn: "📍 Google Maps Par Rasta Dekhein",
-        rentedBadge: "Rented / Full",
-        markRented: "Mark as Rented",
+        rentedBadge: "Sold / Booked",
+        markRented: "Mark as Sold/Rented",
         markAvailable: "Mark Available",
         deleteBtn: "Delete Karein"
       }
     };
 
-    // Initialize Supabase & Check Auth Session
     async function initApp() {
       if (!window.supabase) {
         setTimeout(initApp, 200);
@@ -489,7 +546,6 @@
         dbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
       }
 
-      // Check current user session
       const { data: { session } } = await dbClient.auth.getSession();
       if (session && session.user) {
         currentUser = session.user;
@@ -497,7 +553,6 @@
       }
       renderAuthUI();
 
-      // Listen for auth changes
       dbClient.auth.onAuthStateChange(async (event, session) => {
         if (session && session.user) {
           currentUser = session.user;
@@ -516,7 +571,7 @@
 
     async function fetchUserProfile(userId) {
       try {
-        const { data, error } = await dbClient.from('profiles').select('*').eq('id', userId).single();
+        const { data } = await dbClient.from('profiles').select('*').eq('id', userId).single();
         if (data) userProfile = data;
       } catch (err) {
         console.error("Profile load error:", err);
@@ -546,7 +601,6 @@
       }
     }
 
-    // Auth Modals
     function toggleAuthModal(show) {
       const modal = document.getElementById("authModal");
       if (modal) {
@@ -620,7 +674,6 @@
 
         if (error) throw error;
 
-        // Insert into public.profiles
         if (data && data.user) {
           await dbClient.from('profiles').insert([{
             id: data.user.id,
@@ -641,15 +694,18 @@
       }
     }
 
+    // Google Sign-in Friendly Warning & Graceful Handler
     async function handleGoogleSignIn() {
       try {
         const { error } = await dbClient.auth.signInWithOAuth({
           provider: 'google',
           options: { redirectTo: window.location.href }
         });
-        if (error) throw error;
+        if (error) {
+          alert("Google Provider abhi Supabase me active nahi hai. Kripya upar diye gaye Email aur Password form se login/register karein!");
+        }
       } catch (err) {
-        alert("Google sign in error: " + err.message);
+        alert("Google Provider abhi Supabase me enable nahi kiya gaya hai. Kripya Email/Password use karein.");
       }
     }
 
@@ -661,7 +717,6 @@
     }
 
     function handlePostPropertyClick() {
-      // Form auto-fill agar user logged in hai
       if (currentUser && userProfile) {
         const nameInput = document.getElementById("owner_name");
         const phoneInput = document.getElementById("phone");
@@ -669,11 +724,20 @@
         if (nameInput && !nameInput.value) nameInput.value = userProfile.full_name || '';
         if (phoneInput && !phoneInput.value) phoneInput.value = userProfile.phone || '';
         if (cityInput && !cityInput.value) cityInput.value = userProfile.city || '';
+        
+        // Auto select role category if owner
+        const categorySelect = document.getElementById("category");
+        if (userProfile.role && userProfile.role.includes("Owner")) {
+          const matchedOption = Array.from(categorySelect.options).find(opt => userProfile.role.includes(opt.value));
+          if (matchedOption) {
+            categorySelect.value = matchedOption.value;
+            handleCategoryFieldChanges();
+          }
+        }
       }
       toggleForm();
     }
 
-    // Fetch Properties
     async function fetchRooms() {
       const container = document.getElementById("roomContainer");
       if (!dbClient) return;
@@ -696,8 +760,6 @@
 
     function updateHeaderCounts() {
       safeSetText("favCount", favorites.length);
-      const myRooms = roomsData.filter(r => (currentUser && r.user_id === currentUser.id) || myCreatedPins.includes(r.pin));
-      safeSetText("myCount", myRooms.length);
     }
 
     function toggleLanguage() {
@@ -741,15 +803,25 @@
         const cleanPhone = rawPhone.length === 10 ? `91${rawPhone}` : rawPhone;
         const roomUrl = window.location.href.split('?')[0];
 
-        const categoryBadge = room.category || "Room";
-        const spaceDetail = room.space_size ? `• ${room.space_size}` : '';
-        const cityState = `${room.city || ''}${room.state ? ', ' + room.state : ''}`;
-        const periodSuffix = room.price_period === 'day' ? t.rentSuffixDay : t.rentSuffixMonth;
+        const isLand = room.category === "Land";
+        const categoryBadge = isLand ? "🌾 Land / Plot" : (room.category || "Room");
+        
+        let periodSuffix = t.rentSuffixMonth;
+        if (room.price_period === 'day') periodSuffix = t.rentSuffixDay;
+        else if (room.price_period === 'total' || isLand) periodSuffix = t.rentSuffixTotal;
 
-        const shareText = encodeURIComponent(`India me ye property dekho: "${room.title}" (${categoryBadge}) - ₹${room.rent}${periodSuffix}. Direct Link: ${roomUrl}`);
+        const cityState = `${room.city || ''}${room.state ? ', ' + room.state : ''}`;
+        
+        // Detail tag
+        let detailLine = room.space_size ? `• ${room.space_size}` : '';
+        if (isLand && room.plot_area_unit) {
+          detailLine = `• 📐 ${room.plot_area_unit} | Road: ${room.road_width || 'N/A'}`;
+        }
+
+        const shareText = encodeURIComponent(`India me ye property/plot dekho: "${room.title}" (${categoryBadge}) - ₹${room.rent}${periodSuffix}. Direct Link: ${roomUrl}`);
         const whatsappShareUrl = `https://api.whatsapp.com/send?text=${shareText}`;
 
-        const message = encodeURIComponent(`Namaste! Maine RoomDekho par aapka "${room.title}" dekha. Kya ye available hai?`);
+        const message = encodeURIComponent(`Namaste! Maine RoomDekho par aapka "${room.title}" (${categoryBadge}) dekha. Kya ye available hai?`);
         const whatsappContactUrl = `https://wa.me/${cleanPhone}?text=${message}`;
         const callUrl = `tel:+${cleanPhone}`;
 
@@ -763,7 +835,7 @@
         } else if (room.image) {
           imgs = [room.image];
         } else {
-          imgs = ['https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=600'];
+          imgs = ['https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600'];
         }
 
         const isFav = favorites.includes(room.id);
@@ -777,7 +849,7 @@
               <div class="relative cursor-pointer group" onclick="openGallery('${safeImgsString}')">
                 ${room.is_rented 
                   ? `<span class="absolute top-3 left-3 bg-red-600 text-white text-[10px] px-2.5 py-0.5 rounded-md font-bold uppercase z-10 shadow">${t.rentedBadge}</span>` 
-                  : `<span class="absolute top-3 left-3 bg-indigo-600 text-white text-[10px] px-2.5 py-0.5 rounded-md font-bold z-10 shadow">${categoryBadge}</span>`}
+                  : `<span class="absolute top-3 left-3 ${isLand ? 'bg-emerald-600' : 'bg-indigo-600'} text-white text-[10px] px-2.5 py-0.5 rounded-md font-bold z-10 shadow">${categoryBadge}</span>`}
 
                 ${isMyListing ? '<span class="absolute bottom-2 left-2 bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow z-10">Aapki Listing</span>' : ''}
                 
@@ -785,7 +857,7 @@
                   ${isFav ? '❤️' : '🤍'}
                 </button>
 
-                <img src="${imgs[0]}" alt="${room.title}" class="h-48 w-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=600'">
+                <img src="${imgs[0]}" alt="${room.title}" class="h-48 w-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600'">
                 
                 <div class="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] px-2 py-0.5 rounded flex items-center gap-1 font-semibold">
                   📷 ${imgs.length} Photo${imgs.length > 1 ? 's' : ''}
@@ -794,18 +866,27 @@
 
               <div class="p-4 pb-2">
                 <div class="flex justify-between items-baseline mb-1">
-                  <span class="text-xl font-black text-indigo-700">₹${room.rent}<span class="text-xs text-gray-500 font-normal">${periodSuffix}</span></span>
-                  <span class="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded font-semibold">${room.type || 'Open to All'}</span>
+                  <span class="text-xl font-black ${isLand ? 'text-emerald-700' : 'text-indigo-700'}">₹${room.rent}<span class="text-xs text-gray-500 font-normal">${periodSuffix}</span></span>
+                  <span class="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded font-semibold">${isLand ? 'Plot / Zameen' : (room.type || 'Open to All')}</span>
                 </div>
                 
                 <h4 class="font-bold text-gray-900 leading-snug line-clamp-1">${room.title}</h4>
-                <p class="text-xs text-gray-500 mt-0.5 font-medium">📍 ${room.location || ''} <span class="text-gray-400">(${cityState})</span> <span class="text-indigo-600 font-semibold">${spaceDetail}</span></p>
+                <p class="text-xs text-gray-500 mt-0.5 font-medium">📍 ${room.location || ''} <span class="text-gray-400">(${cityState})</span> <span class="text-emerald-700 font-bold">${detailLine}</span></p>
 
-                ${room.owner_name ? `<p class="text-[11px] text-gray-600 mt-1 font-medium">👤 Owner/Manager: <strong class="text-gray-800">${room.owner_name}</strong></p>` : ''}
+                <!-- Land Special Verification Badge -->
+                ${isLand ? `
+                  <div class="flex flex-wrap gap-1 mt-2 text-[10px] font-bold">
+                    <span class="bg-emerald-50 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded">📜 ${room.doc_status || 'Papers Clear'}</span>
+                    <span class="bg-blue-50 text-blue-800 border border-blue-200 px-2 py-0.5 rounded">🧭 Facing: ${room.facing || 'East'}</span>
+                    <span class="bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded">🧱 Boundary: ${room.boundary_wall || 'Yes'}</span>
+                  </div>
+                ` : ''}
+
+                ${room.owner_name ? `<p class="text-[11px] text-gray-600 mt-1.5 font-medium">👤 Owner/Seller: <strong class="text-gray-800">${room.owner_name}</strong></p>` : ''}
 
                 ${ownerTotalListings > 1 ? `
                   <button type="button" onclick="filterByOwnerPhone('${room.phone}', '${room.owner_name || 'Owner'}')" class="mt-2 text-xs bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold px-2.5 py-1 rounded-md border border-amber-200 flex items-center gap-1 w-full justify-center transition">
-                    🏢 Is Owner ke pass ${ownerTotalListings} spaces hain (Sabhi Dekhein)
+                    🏢 Is Owner ke pass ${ownerTotalListings} properties hain (Sabhi Dekhein)
                   </button>
                 ` : ''}
 
@@ -860,10 +941,23 @@
       if (formSec) formSec.classList.toggle("hidden");
     }
 
+    // Category changes dynamically between Room & Land Plot
     function handleCategoryFieldChanges() {
       const cat = document.getElementById("category").value;
       const pricePeriod = document.getElementById("price_period");
-      if (pricePeriod) {
+      const landSec = document.getElementById("landFieldsSection");
+      const roomSec = document.getElementById("roomFieldsSection");
+      const lblRent = document.getElementById("lblRent");
+
+      if (cat === "Land") {
+        landSec.classList.remove("hidden");
+        roomSec.classList.add("hidden");
+        pricePeriod.value = "total";
+        lblRent.innerText = "Total Sale Price (Kul Keemat ₹)";
+      } else {
+        landSec.classList.add("hidden");
+        roomSec.classList.remove("hidden");
+        lblRent.innerText = "Monthly Rent / Price (₹)";
         pricePeriod.value = (cat === "Hotel") ? "day" : "month";
       }
     }
@@ -910,9 +1004,10 @@
         const rawAmenities = document.getElementById("amenities").value;
         const amenitiesArray = rawAmenities ? rawAmenities.split(",").map(i => i.trim()).filter(Boolean) : [];
         const ownerPin = document.getElementById("ownerPin").value;
+        const cat = document.getElementById("category").value;
 
         const newProperty = {
-          category: document.getElementById("category").value,
+          category: cat,
           title: document.getElementById("title").value,
           owner_name: document.getElementById("owner_name").value,
           location: document.getElementById("location").value,
@@ -928,7 +1023,13 @@
           images: uploadedUrls,
           is_rented: false,
           amenities: amenitiesArray,
-          user_id: currentUser ? currentUser.id : null // Authenticated user ID link
+          user_id: currentUser ? currentUser.id : null,
+          // Land specific
+          plot_area_unit: cat === "Land" ? document.getElementById("plot_area_unit").value : null,
+          road_width: cat === "Land" ? document.getElementById("road_width").value : null,
+          facing: cat === "Land" ? document.getElementById("facing").value : null,
+          boundary_wall: cat === "Land" ? document.getElementById("boundary_wall").value : null,
+          doc_status: cat === "Land" ? document.getElementById("doc_status").value : null
         };
 
         const { error: insertError } = await dbClient.from('rooms').insert([newProperty]);
@@ -939,7 +1040,7 @@
           localStorage.setItem("roomdekho_mypins", JSON.stringify(myCreatedPins));
         }
 
-        alert("Property safaltapoorvak publish ho gayi!");
+        alert("Listing safaltapoorvak publish ho gayi!");
         document.getElementById("roomForm").reset();
         toggleForm();
         fetchRooms();
@@ -975,7 +1076,7 @@
       selectedOwnerPhone = phone;
       const notice = document.getElementById("ownerFilterNotice");
       if (notice) notice.classList.remove("hidden");
-      safeSetText("currentViewTitle", `${ownerName} Ke Sabhi Rooms / Floors`);
+      safeSetText("currentViewTitle", `${ownerName} Ke Sabhi Spaces / Lands`);
       window.scrollTo({ top: 350, behavior: 'smooth' });
       applyFilters();
     }
@@ -985,22 +1086,6 @@
       const notice = document.getElementById("ownerFilterNotice");
       if (notice) notice.classList.add("hidden");
       safeSetText("currentViewTitle", translations[currentLanguage].availableListings);
-      applyFilters();
-    }
-
-    function toggleMyListings() {
-      showMyListingsOnly = !showMyListingsOnly;
-      const btn = document.getElementById("myListingsBtn");
-
-      if (btn) {
-        if (showMyListingsOnly) {
-          btn.classList.add("bg-indigo-600", "text-white");
-          btn.classList.remove("bg-indigo-50/50", "text-indigo-700");
-        } else {
-          btn.classList.remove("bg-indigo-600", "text-white");
-          btn.classList.add("bg-indigo-50/50", "text-indigo-700");
-        }
-      }
       applyFilters();
     }
 
@@ -1035,7 +1120,7 @@
       const sortBy = document.getElementById("sortBy");
 
       const search = searchInput ? searchInput.value.toLowerCase() : "";
-      const maxBudget = budgetFilter ? parseInt(budgetFilter.value) : 10000000;
+      const maxBudget = budgetFilter ? parseInt(budgetFilter.value) : 100000000;
       const sort = sortBy ? sortBy.value : "newest";
 
       let filtered = roomsData.filter(room => {
@@ -1048,10 +1133,9 @@
         const matchesCategory = selectedCategory === "All" || (room.category || "Room") === selectedCategory;
         const matchesBudget = (room.rent || 0) <= maxBudget;
         const matchesFav = !showFavoritesOnly || favorites.includes(room.id);
-        const matchesMyListings = !showMyListingsOnly || ((currentUser && room.user_id === currentUser.id) || myCreatedPins.includes(room.pin));
         const matchesOwner = !selectedOwnerPhone || room.phone === selectedOwnerPhone;
 
-        return matchesSearch && matchesCategory && matchesBudget && matchesFav && matchesMyListings && matchesOwner;
+        return matchesSearch && matchesCategory && matchesBudget && matchesFav && matchesOwner;
       });
 
       if (sort === "low_high") {
@@ -1165,7 +1249,6 @@
       if (modal) modal.classList.add("hidden");
     }
 
-    // Startup
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", initApp);
     } else {
